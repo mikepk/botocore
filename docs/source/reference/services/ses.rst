@@ -39,6 +39,9 @@ Client
   *   :py:meth:`~SES.Client.create_configuration_set_tracking_options`
 
   
+  *   :py:meth:`~SES.Client.create_custom_verification_email_template`
+
+  
   *   :py:meth:`~SES.Client.create_receipt_filter`
 
   
@@ -58,6 +61,9 @@ Client
 
   
   *   :py:meth:`~SES.Client.delete_configuration_set_tracking_options`
+
+  
+  *   :py:meth:`~SES.Client.delete_custom_verification_email_template`
 
   
   *   :py:meth:`~SES.Client.delete_identity`
@@ -99,6 +105,9 @@ Client
   *   :py:meth:`~SES.Client.get_account_sending_enabled`
 
   
+  *   :py:meth:`~SES.Client.get_custom_verification_email_template`
+
+  
   *   :py:meth:`~SES.Client.get_identity_dkim_attributes`
 
   
@@ -132,6 +141,9 @@ Client
   *   :py:meth:`~SES.Client.list_configuration_sets`
 
   
+  *   :py:meth:`~SES.Client.list_custom_verification_email_templates`
+
+  
   *   :py:meth:`~SES.Client.list_identities`
 
   
@@ -160,6 +172,9 @@ Client
 
   
   *   :py:meth:`~SES.Client.send_bulk_templated_email`
+
+  
+  *   :py:meth:`~SES.Client.send_custom_verification_email`
 
   
   *   :py:meth:`~SES.Client.send_email`
@@ -208,6 +223,9 @@ Client
 
   
   *   :py:meth:`~SES.Client.update_configuration_set_tracking_options`
+
+  
+  *   :py:meth:`~SES.Client.update_custom_verification_email_template`
 
   
   *   :py:meth:`~SES.Client.update_receipt_rule`
@@ -723,6 +741,87 @@ Client
         
     
 
+  .. py:method:: create_custom_verification_email_template(**kwargs)
+
+    
+
+    Creates a new custom verification email template.
+
+     
+
+    For more information about custom verification email templates, see `Using Custom Verification Email Templates <https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html>`__ in the *Amazon SES Developer Guide* .
+
+     
+
+    You can execute this operation no more than once per second.
+
+    
+
+    See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/email-2010-12-01/CreateCustomVerificationEmailTemplate>`_    
+
+
+    **Request Syntax** 
+    ::
+
+      response = client.create_custom_verification_email_template(
+          TemplateName='string',
+          FromEmailAddress='string',
+          TemplateSubject='string',
+          TemplateContent='string',
+          SuccessRedirectionURL='string',
+          FailureRedirectionURL='string'
+      )
+    :type TemplateName: string
+    :param TemplateName: **[REQUIRED]** 
+
+      The name of the custom verification email template.
+
+      
+
+    
+    :type FromEmailAddress: string
+    :param FromEmailAddress: **[REQUIRED]** 
+
+      The email address that the custom verification email is sent from.
+
+      
+
+    
+    :type TemplateSubject: string
+    :param TemplateSubject: **[REQUIRED]** 
+
+      The subject line of the custom verification email.
+
+      
+
+    
+    :type TemplateContent: string
+    :param TemplateContent: **[REQUIRED]** 
+
+      The content of the custom verification email. The total size of the email must be less than 10 MB. The message body may contain HTML, with some limitations. For more information, see `Custom Verification Email Frequently Asked Questions <http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html#custom-verification-emails-faq>`__ in the *Amazon SES Developer Guide* .
+
+      
+
+    
+    :type SuccessRedirectionURL: string
+    :param SuccessRedirectionURL: **[REQUIRED]** 
+
+      The URL that the recipient of the verification email is sent to if his or her address is successfully verified.
+
+      
+
+    
+    :type FailureRedirectionURL: string
+    :param FailureRedirectionURL: **[REQUIRED]** 
+
+      The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.
+
+      
+
+    
+    
+    :returns: None
+
   .. py:method:: create_receipt_filter(**kwargs)
 
     
@@ -1060,7 +1159,7 @@ Client
 
                  
 
-                Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the `AWS Java SDK <http://aws.amazon.com/sdk-for-java/>`__ and `AWS Ruby SDK <http://aws.amazon.com/sdk-for-ruby/>`__ only. For more information about client-side encryption using AWS KMS master keys, see the `Amazon S3 Developer Guide <AmazonS3/latest/dev/UsingClientSideEncryption.html>`__ .
+                Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the `AWS Java SDK <http://aws.amazon.com/sdk-for-java/>`__ and `AWS Ruby SDK <http://aws.amazon.com/sdk-for-ruby/>`__ only. For more information about client-side encryption using AWS KMS master keys, see the `Amazon S3 Developer Guide <http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html>`__ .
 
                  
 
@@ -1648,6 +1747,42 @@ Client
 
         
     
+
+  .. py:method:: delete_custom_verification_email_template(**kwargs)
+
+    
+
+    Deletes an existing custom verification email template. 
+
+     
+
+    For more information about custom verification email templates, see `Using Custom Verification Email Templates <https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html>`__ in the *Amazon SES Developer Guide* .
+
+     
+
+    You can execute this operation no more than once per second.
+
+    
+
+    See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/email-2010-12-01/DeleteCustomVerificationEmailTemplate>`_    
+
+
+    **Request Syntax** 
+    ::
+
+      response = client.delete_custom_verification_email_template(
+          TemplateName='string'
+      )
+    :type TemplateName: string
+    :param TemplateName: **[REQUIRED]** 
+
+      The name of the custom verification email template that you want to delete.
+
+      
+
+    
+    
+    :returns: None
 
   .. py:method:: delete_identity(**kwargs)
 
@@ -2440,7 +2575,7 @@ Client
 
                        
 
-                      Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the `AWS Java SDK <http://aws.amazon.com/sdk-for-java/>`__ and `AWS Ruby SDK <http://aws.amazon.com/sdk-for-ruby/>`__ only. For more information about client-side encryption using AWS KMS master keys, see the `Amazon S3 Developer Guide <AmazonS3/latest/dev/UsingClientSideEncryption.html>`__ .
+                      Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the `AWS Java SDK <http://aws.amazon.com/sdk-for-java/>`__ and `AWS Ruby SDK <http://aws.amazon.com/sdk-for-ruby/>`__ only. For more information about client-side encryption using AWS KMS master keys, see the `Amazon S3 Developer Guide <http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html>`__ .
 
                        
 
@@ -3245,7 +3380,7 @@ Client
 
                      
 
-                    Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the `AWS Java SDK <http://aws.amazon.com/sdk-for-java/>`__ and `AWS Ruby SDK <http://aws.amazon.com/sdk-for-ruby/>`__ only. For more information about client-side encryption using AWS KMS master keys, see the `Amazon S3 Developer Guide <AmazonS3/latest/dev/UsingClientSideEncryption.html>`__ .
+                    Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the `AWS Java SDK <http://aws.amazon.com/sdk-for-java/>`__ and `AWS Ruby SDK <http://aws.amazon.com/sdk-for-ruby/>`__ only. For more information about client-side encryption using AWS KMS master keys, see the `Amazon S3 Developer Guide <http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html>`__ .
 
                      
 
@@ -3743,7 +3878,7 @@ Client
 
                        
 
-                      Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the `AWS Java SDK <http://aws.amazon.com/sdk-for-java/>`__ and `AWS Ruby SDK <http://aws.amazon.com/sdk-for-ruby/>`__ only. For more information about client-side encryption using AWS KMS master keys, see the `Amazon S3 Developer Guide <AmazonS3/latest/dev/UsingClientSideEncryption.html>`__ .
+                      Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the `AWS Java SDK <http://aws.amazon.com/sdk-for-java/>`__ and `AWS Ruby SDK <http://aws.amazon.com/sdk-for-ruby/>`__ only. For more information about client-side encryption using AWS KMS master keys, see the `Amazon S3 Developer Guide <http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html>`__ .
 
                        
 
@@ -4043,6 +4178,109 @@ Client
         - **Enabled** *(boolean) --* 
 
           Describes whether email sending is enabled or disabled for your Amazon SES account.
+
+          
+    
+
+  .. py:method:: get_custom_verification_email_template(**kwargs)
+
+    
+
+    Returns the custom email verification template for the template name you specify.
+
+     
+
+    For more information about custom verification email templates, see `Using Custom Verification Email Templates <https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html>`__ in the *Amazon SES Developer Guide* .
+
+     
+
+    You can execute this operation no more than once per second.
+
+    
+
+    See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/email-2010-12-01/GetCustomVerificationEmailTemplate>`_    
+
+
+    **Request Syntax** 
+    ::
+
+      response = client.get_custom_verification_email_template(
+          TemplateName='string'
+      )
+    :type TemplateName: string
+    :param TemplateName: **[REQUIRED]** 
+
+      The name of the custom verification email template that you want to retrieve.
+
+      
+
+    
+    
+    :rtype: dict
+    :returns: 
+      
+      **Response Syntax** 
+
+      
+      ::
+
+        {
+            'TemplateName': 'string',
+            'FromEmailAddress': 'string',
+            'TemplateSubject': 'string',
+            'TemplateContent': 'string',
+            'SuccessRedirectionURL': 'string',
+            'FailureRedirectionURL': 'string'
+        }
+      **Response Structure** 
+
+      
+
+      - *(dict) --* 
+
+        The content of the custom verification email template.
+
+        
+        
+
+        - **TemplateName** *(string) --* 
+
+          The name of the custom verification email template.
+
+          
+        
+
+        - **FromEmailAddress** *(string) --* 
+
+          The email address that the custom verification email is sent from.
+
+          
+        
+
+        - **TemplateSubject** *(string) --* 
+
+          The subject line of the custom verification email.
+
+          
+        
+
+        - **TemplateContent** *(string) --* 
+
+          The content of the custom verification email.
+
+          
+        
+
+        - **SuccessRedirectionURL** *(string) --* 
+
+          The URL that the recipient of the verification email is sent to if his or her address is successfully verified.
+
+          
+        
+
+        - **FailureRedirectionURL** *(string) --* 
+
+          The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.
 
           
     
@@ -5269,6 +5507,138 @@ Client
         - **NextToken** *(string) --* 
 
           A token indicating that there are additional configuration sets available to be listed. Pass this token to successive calls of ``ListConfigurationSets`` . 
+
+          
+    
+
+  .. py:method:: list_custom_verification_email_templates(**kwargs)
+
+    
+
+    Lists the existing custom verification email templates for your account.
+
+     
+
+    For more information about custom verification email templates, see `Using Custom Verification Email Templates <https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html>`__ in the *Amazon SES Developer Guide* .
+
+     
+
+    You can execute this operation no more than once per second.
+
+    
+
+    See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/email-2010-12-01/ListCustomVerificationEmailTemplates>`_    
+
+
+    **Request Syntax** 
+    ::
+
+      response = client.list_custom_verification_email_templates(
+          NextToken='string',
+          MaxResults=123
+      )
+    :type NextToken: string
+    :param NextToken: 
+
+      A token returned from a previous call to ``ListCustomVerificationEmailTemplates`` to indicate the position in the list of email templates.
+
+      
+
+    
+    :type MaxResults: integer
+    :param MaxResults: 
+
+      The maximum number of custom verification email templates to return. This value must be at least 1 and less than or equal to 50. If you do not specify a value, or if you specify a value less than 1 or greater than 50, the operation will return up to 50 results.
+
+      
+
+    
+    
+    :rtype: dict
+    :returns: 
+      
+      **Response Syntax** 
+
+      
+      ::
+
+        {
+            'CustomVerificationEmailTemplates': [
+                {
+                    'TemplateName': 'string',
+                    'FromEmailAddress': 'string',
+                    'TemplateSubject': 'string',
+                    'SuccessRedirectionURL': 'string',
+                    'FailureRedirectionURL': 'string'
+                },
+            ],
+            'NextToken': 'string'
+        }
+      **Response Structure** 
+
+      
+
+      - *(dict) --* 
+
+        A paginated list of custom verification email templates.
+
+        
+        
+
+        - **CustomVerificationEmailTemplates** *(list) --* 
+
+          A list of the custom verification email templates that exist in your account.
+
+          
+          
+
+          - *(dict) --* 
+
+            Contains information about a custom verification email template.
+
+            
+            
+
+            - **TemplateName** *(string) --* 
+
+              The name of the custom verification email template.
+
+              
+            
+
+            - **FromEmailAddress** *(string) --* 
+
+              The email address that the custom verification email is sent from.
+
+              
+            
+
+            - **TemplateSubject** *(string) --* 
+
+              The subject line of the custom verification email.
+
+              
+            
+
+            - **SuccessRedirectionURL** *(string) --* 
+
+              The URL that the recipient of the verification email is sent to if his or her address is successfully verified.
+
+              
+            
+
+            - **FailureRedirectionURL** *(string) --* 
+
+              The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.
+
+              
+        
+      
+        
+
+        - **NextToken** *(string) --* 
+
+          A token indicating that there are additional custom verification email templates available to be listed. Pass this token to a subsequent call to ``ListCustomVerificationEmailTemplates`` to retrieve the next 50 custom verification email templates.
 
           
     
@@ -6606,7 +6976,13 @@ Client
 
        
 
-      In all cases, the email address must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: ``=?charset?encoding?encoded-text?=`` . For more information, see `RFC 2047 <https://tools.ietf.org/html/rfc2047>`__ . 
+      .. note::
+
+         
+
+        Amazon SES does not support the SMTPUTF8 extension, as described in `RFC6531 <https://tools.ietf.org/html/rfc6531>`__ . For this reason, the *local part* of a source email address (the part of the email address that precedes the @ sign) may only contain `7-bit ASCII characters <https://en.wikipedia.org/wiki/Email_address#Local-part>`__ . If the *domain part* of an address (the part after the @ sign) contains non-ASCII characters, they must be encoded using Punycode, as described in `RFC3492 <https://tools.ietf.org/html/rfc3492.html>`__ . The sender name (also known as the *friendly name* ) may contain non-ASCII characters. These characters must be encoded using MIME encoded-word syntax, as described in `RFC 2047 <https://tools.ietf.org/html/rfc2047>`__ . MIME encoded-word syntax uses the following form: ``=?charset?encoding?encoded-text?=`` .
+
+         
 
       
 
@@ -6771,7 +7147,13 @@ Client
 
            
 
-          By default, the string must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: ``=?charset?encoding?encoded-text?=`` . For more information, see `RFC 2047 <https://tools.ietf.org/html/rfc2047>`__ . 
+          .. note::
+
+             
+
+            Amazon SES does not support the SMTPUTF8 extension, as described in `RFC6531 <https://tools.ietf.org/html/rfc6531>`__ . For this reason, the *local part* of a destination email address (the part of the email address that precedes the @ sign) may only contain `7-bit ASCII characters <https://en.wikipedia.org/wiki/Email_address#Local-part>`__ . If the *domain part* of an address (the part after the @ sign) contains non-ASCII characters, they must be encoded using Punycode, as described in `RFC3492 <https://tools.ietf.org/html/rfc3492.html>`__ .
+
+             
 
           
 
@@ -6967,6 +7349,83 @@ Client
       
     
 
+  .. py:method:: send_custom_verification_email(**kwargs)
+
+    
+
+    Sends a custom verification email to a specified recipient. Verification emails sent using this operation are counted against your 24-hour sending quota and per-second sending rate.
+
+     
+
+    For more information about custom verification email templates, see `Using Custom Verification Email Templates <https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html>`__ in the *Amazon SES Developer Guide* .
+
+    
+
+    See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/email-2010-12-01/SendCustomVerificationEmail>`_    
+
+
+    **Request Syntax** 
+    ::
+
+      response = client.send_custom_verification_email(
+          EmailAddress='string',
+          TemplateName='string',
+          ConfigurationSetName='string'
+      )
+    :type EmailAddress: string
+    :param EmailAddress: **[REQUIRED]** 
+
+      The email address to verify.
+
+      
+
+    
+    :type TemplateName: string
+    :param TemplateName: **[REQUIRED]** 
+
+      The name of the custom verification email template to use when sending the verification email.
+
+      
+
+    
+    :type ConfigurationSetName: string
+    :param ConfigurationSetName: 
+
+      Name of a configuration set to use when sending the verification email.
+
+      
+
+    
+    
+    :rtype: dict
+    :returns: 
+      
+      **Response Syntax** 
+
+      
+      ::
+
+        {
+            'MessageId': 'string'
+        }
+      **Response Structure** 
+
+      
+
+      - *(dict) --* 
+
+        The response received when attempting to send the custom verification email.
+
+        
+        
+
+        - **MessageId** *(string) --* 
+
+          The unique message identifier returned from the ``SendCustomVerificationEmail`` operation.
+
+          
+    
+
   .. py:method:: send_email(**kwargs)
 
     
@@ -7059,7 +7518,13 @@ Client
 
        
 
-      In all cases, the email address must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: ``=?charset?encoding?encoded-text?=`` . For more information, see `RFC 2047 <https://tools.ietf.org/html/rfc2047>`__ . 
+      .. note::
+
+         
+
+        Amazon SES does not support the SMTPUTF8 extension, as described in `RFC6531 <https://tools.ietf.org/html/rfc6531>`__ . For this reason, the *local part* of a source email address (the part of the email address that precedes the @ sign) may only contain `7-bit ASCII characters <https://en.wikipedia.org/wiki/Email_address#Local-part>`__ . If the *domain part* of an address (the part after the @ sign) contains non-ASCII characters, they must be encoded using Punycode, as described in `RFC3492 <https://tools.ietf.org/html/rfc3492.html>`__ . The sender name (also known as the *friendly name* ) may contain non-ASCII characters. These characters must be encoded using MIME encoded-word syntax, as described in `RFC 2047 <https://tools.ietf.org/html/rfc2047>`__ . MIME encoded-word syntax uses the following form: ``=?charset?encoding?encoded-text?=`` .
+
+         
 
       
 
@@ -7490,17 +7955,17 @@ Client
 
        
 
-      By default, the string must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: ``=?charset?encoding?encoded-text?=`` . For more information, see `RFC 2047 <https://tools.ietf.org/html/rfc2047>`__ . 
-
-       
-
       .. note::
 
          
 
-        If you specify the ``Source`` parameter and have feedback forwarding enabled, then bounces and complaints will be sent to this email address. This takes precedence over any Return-Path header that you might include in the raw text of the message.
+        Amazon SES does not support the SMTPUTF8 extension, as described in`RFC6531 <https://tools.ietf.org/html/rfc6531>`__ . For this reason, the *local part* of a source email address (the part of the email address that precedes the @ sign) may only contain `7-bit ASCII characters <https://en.wikipedia.org/wiki/Email_address#Local-part>`__ . If the *domain part* of an address (the part after the @ sign) contains non-ASCII characters, they must be encoded using Punycode, as described in `RFC3492 <https://tools.ietf.org/html/rfc3492.html>`__ . The sender name (also known as the *friendly name* ) may contain non-ASCII characters. These characters must be encoded using MIME encoded-word syntax, as described in `RFC 2047 <https://tools.ietf.org/html/rfc2047>`__ . MIME encoded-word syntax uses the following form: ``=?charset?encoding?encoded-text?=`` .
 
          
+
+       
+
+      If you specify the ``Source`` parameter and have feedback forwarding enabled, then bounces and complaints will be sent to this email address. This takes precedence over any Return-Path header that you might include in the raw text of the message.
 
       
 
@@ -7841,7 +8306,13 @@ Client
 
        
 
-      In all cases, the email address must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: ``=?charset?encoding?encoded-text?=`` . For more information, see `RFC 2047 <https://tools.ietf.org/html/rfc2047>`__ . 
+      .. note::
+
+         
+
+        Amazon SES does not support the SMTPUTF8 extension, as described in `RFC6531 <https://tools.ietf.org/html/rfc6531>`__ . For this reason, the *local part* of a source email address (the part of the email address that precedes the @ sign) may only contain `7-bit ASCII characters <https://en.wikipedia.org/wiki/Email_address#Local-part>`__ . If the *domain part* of an address (the part after the @ sign) contains non-ASCII characters, they must be encoded using Punycode, as described in `RFC3492 <https://tools.ietf.org/html/rfc3492.html>`__ . The sender name (also known as the *friendly name* ) may contain non-ASCII characters. These characters must be encoded using MIME encoded-word syntax, as described in`RFC 2047 <https://tools.ietf.org/html/rfc2047>`__ . MIME encoded-word syntax uses the following form: ``=?charset?encoding?encoded-text?=`` .
+
+         
 
       
 
@@ -9231,6 +9702,87 @@ Client
         
     
 
+  .. py:method:: update_custom_verification_email_template(**kwargs)
+
+    
+
+    Updates an existing custom verification email template.
+
+     
+
+    For more information about custom verification email templates, see `Using Custom Verification Email Templates <https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html>`__ in the *Amazon SES Developer Guide* .
+
+     
+
+    You can execute this operation no more than once per second.
+
+    
+
+    See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/email-2010-12-01/UpdateCustomVerificationEmailTemplate>`_    
+
+
+    **Request Syntax** 
+    ::
+
+      response = client.update_custom_verification_email_template(
+          TemplateName='string',
+          FromEmailAddress='string',
+          TemplateSubject='string',
+          TemplateContent='string',
+          SuccessRedirectionURL='string',
+          FailureRedirectionURL='string'
+      )
+    :type TemplateName: string
+    :param TemplateName: **[REQUIRED]** 
+
+      The name of the custom verification email template that you want to update.
+
+      
+
+    
+    :type FromEmailAddress: string
+    :param FromEmailAddress: 
+
+      The email address that the custom verification email is sent from.
+
+      
+
+    
+    :type TemplateSubject: string
+    :param TemplateSubject: 
+
+      The subject line of the custom verification email.
+
+      
+
+    
+    :type TemplateContent: string
+    :param TemplateContent: 
+
+      The content of the custom verification email. The total size of the email must be less than 10 MB. The message body may contain HTML, with some limitations. For more information, see `Custom Verification Email Frequently Asked Questions <http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html#custom-verification-emails-faq>`__ in the *Amazon SES Developer Guide* .
+
+      
+
+    
+    :type SuccessRedirectionURL: string
+    :param SuccessRedirectionURL: 
+
+      The URL that the recipient of the verification email is sent to if his or her address is successfully verified.
+
+      
+
+    
+    :type FailureRedirectionURL: string
+    :param FailureRedirectionURL: 
+
+      The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.
+
+      
+
+    
+    
+    :returns: None
+
   .. py:method:: update_receipt_rule(**kwargs)
 
     
@@ -9429,7 +9981,7 @@ Client
 
                  
 
-                Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the `AWS Java SDK <http://aws.amazon.com/sdk-for-java/>`__ and `AWS Ruby SDK <http://aws.amazon.com/sdk-for-ruby/>`__ only. For more information about client-side encryption using AWS KMS master keys, see the `Amazon S3 Developer Guide <AmazonS3/latest/dev/UsingClientSideEncryption.html>`__ .
+                Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the `AWS Java SDK <http://aws.amazon.com/sdk-for-java/>`__ and `AWS Ruby SDK <http://aws.amazon.com/sdk-for-ruby/>`__ only. For more information about client-side encryption using AWS KMS master keys, see the `Amazon S3 Developer Guide <http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html>`__ .
 
                  
 

@@ -105,6 +105,9 @@ Client
   *   :py:meth:`~CloudDirectory.Client.generate_presigned_url`
 
   
+  *   :py:meth:`~CloudDirectory.Client.get_applied_schema_version`
+
+  
   *   :py:meth:`~CloudDirectory.Client.get_directory`
 
   
@@ -213,6 +216,12 @@ Client
   *   :py:meth:`~CloudDirectory.Client.update_typed_link_facet`
 
   
+  *   :py:meth:`~CloudDirectory.Client.upgrade_applied_schema`
+
+  
+  *   :py:meth:`~CloudDirectory.Client.upgrade_published_schema`
+
+  
 
   .. py:method:: add_facet_to_object(**kwargs)
 
@@ -265,14 +274,14 @@ Client
     :type SchemaFacet: dict
     :param SchemaFacet: **[REQUIRED]** 
 
-      Identifiers for the facet that you are adding to the object.
+      Identifiers for the facet that you are adding to the object. See  SchemaFacet for details.
 
       
 
     
       - **SchemaArn** *(string) --* 
 
-        The ARN of the schema that contains the facet.
+        The ARN of the schema that contains the facet with no minor component. See  arns and `In-Place Schema Upgrade <http://docs.aws.amazon.com/directoryservice/latest/admin-guide/inplaceschemaupgrade.html>`__ for a description of when to provide minor versions.
 
         
 
@@ -422,7 +431,7 @@ Client
 
     
 
-    Copies the input published schema into the  Directory with the same name and version as that of the published schema .
+    Copies the input published schema, at the specified version, into the  Directory with the same name and version as that of the published schema.
 
     
 
@@ -1459,7 +1468,7 @@ Client
           
             - **SchemaArn** *(string) --* 
 
-              The ARN of the schema that contains the facet.
+              The ARN of the schema that contains the facet with no minor component. See  arns and `In-Place Schema Upgrade <http://docs.aws.amazon.com/directoryservice/latest/admin-guide/inplaceschemaupgrade.html>`__ for a description of when to provide minor versions.
 
               
 
@@ -2781,7 +2790,7 @@ Client
 
                     - **SchemaArn** *(string) --* 
 
-                      The ARN of the schema that contains the facet.
+                      The ARN of the schema that contains the facet with no minor component. See  arns and `In-Place Schema Upgrade <http://docs.aws.amazon.com/directoryservice/latest/admin-guide/inplaceschemaupgrade.html>`__ for a description of when to provide minor versions.
 
                       
                     
@@ -2914,7 +2923,7 @@ Client
 
                     - **ObjectIdentifier** *(string) --* 
 
-                      The ``ObjectIdentifier`` of the object attached to the index.
+                      In response to  ListIndex , the ``ObjectIdentifier`` of the object attached to the index. In response to  ListAttachedIndices , the ``ObjectIdentifier`` of the index attached to the object. This field will always contain the ``ObjectIdentifier`` of the object on the opposite side of the attachment specified in the query.
 
                       
                 
@@ -3216,7 +3225,7 @@ Client
 
                     - **ObjectIdentifier** *(string) --* 
 
-                      The ``ObjectIdentifier`` of the object attached to the index.
+                      In response to  ListIndex , the ``ObjectIdentifier`` of the object attached to the index. In response to  ListAttachedIndices , the ``ObjectIdentifier`` of the index attached to the object. This field will always contain the ``ObjectIdentifier`` of the object on the opposite side of the attachment specified in the query.
 
                       
                 
@@ -3598,7 +3607,7 @@ Client
 
     
 
-    Performs all the write operations in a batch. Either all the operations succeed or none. Batch writes supports only object-related operations.
+    Performs all the write operations in a batch. Either all the operations succeed or none.
 
     
 
@@ -3866,7 +3875,7 @@ Client
             
               - **SchemaArn** *(string) --* 
 
-                The ARN of the schema that contains the facet.
+                The ARN of the schema that contains the facet with no minor component. See  arns and `In-Place Schema Upgrade <http://docs.aws.amazon.com/directoryservice/latest/admin-guide/inplaceschemaupgrade.html>`__ for a description of when to provide minor versions.
 
                 
 
@@ -4305,7 +4314,7 @@ Client
           
             - **SchemaArn** *(string) --* 
 
-              The ARN of the schema that contains the facet.
+              The ARN of the schema that contains the facet with no minor component. See  arns and `In-Place Schema Upgrade <http://docs.aws.amazon.com/directoryservice/latest/admin-guide/inplaceschemaupgrade.html>`__ for a description of when to provide minor versions.
 
               
 
@@ -4448,7 +4457,7 @@ Client
           
             - **SchemaArn** *(string) --* 
 
-              The ARN of the schema that contains the facet.
+              The ARN of the schema that contains the facet with no minor component. See  arns and `In-Place Schema Upgrade <http://docs.aws.amazon.com/directoryservice/latest/admin-guide/inplaceschemaupgrade.html>`__ for a description of when to provide minor versions.
 
               
 
@@ -6088,7 +6097,7 @@ Client
     :type SchemaFacets: list
     :param SchemaFacets: **[REQUIRED]** 
 
-      A list of schema facets to be associated with the object that contains ``SchemaArn`` and facet name. For more information, see  arns .
+      A list of schema facets to be associated with the object. Do not provide minor version components. See  SchemaFacet for details.
 
       
 
@@ -6102,7 +6111,7 @@ Client
       
         - **SchemaArn** *(string) --* 
 
-          The ARN of the schema that contains the facet.
+          The ARN of the schema that contains the facet with no minor component. See  arns and `In-Place Schema Upgrade <http://docs.aws.amazon.com/directoryservice/latest/admin-guide/inplaceschemaupgrade.html>`__ for a description of when to provide minor versions.
 
           
 
@@ -7455,6 +7464,57 @@ Client
     :returns: The presigned url
 
 
+  .. py:method:: get_applied_schema_version(**kwargs)
+
+    
+
+    Returns current applied schema version ARN, including the minor version in use.
+
+    
+
+    See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/clouddirectory-2016-05-10/GetAppliedSchemaVersion>`_    
+
+
+    **Request Syntax** 
+    ::
+
+      response = client.get_applied_schema_version(
+          SchemaArn='string'
+      )
+    :type SchemaArn: string
+    :param SchemaArn: **[REQUIRED]** 
+
+      The ARN of the applied schema.
+
+      
+
+    
+    
+    :rtype: dict
+    :returns: 
+      
+      **Response Syntax** 
+
+      
+      ::
+
+        {
+            'AppliedSchemaArn': 'string'
+        }
+      **Response Structure** 
+
+      
+
+      - *(dict) --* 
+        
+
+        - **AppliedSchemaArn** *(string) --* 
+
+          Current applied schema ARN, including the minor version in use if one was provided.
+
+          
+    
+
   .. py:method:: get_directory(**kwargs)
 
     
@@ -7708,7 +7768,7 @@ Client
 
         - **SchemaFacets** *(list) --* 
 
-          The facets attached to the specified object.
+          The facets attached to the specified object. Although the response does not include minor version information, the most recently applied minor version of each Facet is in effect. See  GetAppliedSchemaVersion for details.
 
           
           
@@ -7722,7 +7782,7 @@ Client
 
             - **SchemaArn** *(string) --* 
 
-              The ARN of the schema that contains the facet.
+              The ARN of the schema that contains the facet with no minor component. See  arns and `In-Place Schema Upgrade <http://docs.aws.amazon.com/directoryservice/latest/admin-guide/inplaceschemaupgrade.html>`__ for a description of when to provide minor versions.
 
               
             
@@ -7898,7 +7958,7 @@ Client
 
     
 
-    Lists schemas applied to a directory.
+    Lists schema major versions applied to a directory. If ``SchemaArn`` is provided, lists the minor version.
 
     
 
@@ -7910,6 +7970,7 @@ Client
 
       response = client.list_applied_schema_arns(
           DirectoryArn='string',
+          SchemaArn='string',
           NextToken='string',
           MaxResults=123
       )
@@ -7917,6 +7978,14 @@ Client
     :param DirectoryArn: **[REQUIRED]** 
 
       The ARN of the directory you are listing.
+
+      
+
+    
+    :type SchemaArn: string
+    :param SchemaArn: 
+
+      The response for ``ListAppliedSchemaArns`` when this parameter is used will list all minor version ARNs for a major version.
 
       
 
@@ -7981,7 +8050,7 @@ Client
 
     
 
-    Lists indices attached to an object.
+    Lists indices attached to the specified object.
 
     
 
@@ -8202,7 +8271,7 @@ Client
 
             - **ObjectIdentifier** *(string) --* 
 
-              The ``ObjectIdentifier`` of the object attached to the index.
+              In response to  ListIndex , the ``ObjectIdentifier`` of the object attached to the index. In response to  ListAttachedIndices , the ``ObjectIdentifier`` of the index attached to the object. This field will always contain the ``ObjectIdentifier`` of the object on the opposite side of the attachment specified in the query.
 
               
         
@@ -9233,7 +9302,7 @@ Client
 
     
 
-    Lists objects attached to the specified index.
+    Lists objects and indexed values attached to the index.
 
     
 
@@ -9470,7 +9539,7 @@ Client
     :type MaxResults: integer
     :param MaxResults: 
 
-      The maximum number of results to retrieve from the index.
+      The maximum number of objects in a single page to retrieve from the index during a request. For more information, see `AWS Directory Service Limits <http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html#limits_cd>`__ .
 
       
 
@@ -9635,7 +9704,7 @@ Client
 
             - **ObjectIdentifier** *(string) --* 
 
-              The ``ObjectIdentifier`` of the object attached to the index.
+              In response to  ListIndex , the ``ObjectIdentifier`` of the object attached to the index. In response to  ListAttachedIndices , the ``ObjectIdentifier`` of the index attached to the object. This field will always contain the ``ObjectIdentifier`` of the object on the opposite side of the attachment specified in the query.
 
               
         
@@ -9744,7 +9813,7 @@ Client
     
       - **SchemaArn** *(string) --* 
 
-        The ARN of the schema that contains the facet.
+        The ARN of the schema that contains the facet with no minor component. See  arns and `In-Place Schema Upgrade <http://docs.aws.amazon.com/directoryservice/latest/admin-guide/inplaceschemaupgrade.html>`__ for a description of when to provide minor versions.
 
         
 
@@ -10996,7 +11065,7 @@ Client
 
     
 
-    Retrieves each published schema Amazon Resource Name (ARN).
+    Lists schema major versions for a published schema. If ``SchemaArn`` is provided, lists the minor version.
 
     
 
@@ -11007,9 +11076,18 @@ Client
     ::
 
       response = client.list_published_schema_arns(
+          SchemaArn='string',
           NextToken='string',
           MaxResults=123
       )
+    :type SchemaArn: string
+    :param SchemaArn: 
+
+      The response for ``ListPublishedSchemaArns`` when this parameter is used will list all minor version ARNs for a major version.
+
+      
+
+    
     :type NextToken: string
     :param NextToken: 
 
@@ -11658,7 +11736,7 @@ Client
 
     
 
-    Publishes a development schema with a version. If description and attributes are specified, ``PublishSchema`` overrides the development schema description and attributes. If not, the development schema description and attributes are used.
+    Publishes a development schema with a major version and a recommended minor version.
 
     
 
@@ -11671,6 +11749,7 @@ Client
       response = client.publish_schema(
           DevelopmentSchemaArn='string',
           Version='string',
+          MinorVersion='string',
           Name='string'
       )
     :type DevelopmentSchemaArn: string
@@ -11684,7 +11763,15 @@ Client
     :type Version: string
     :param Version: **[REQUIRED]** 
 
-      The version under which the schema will be published.
+      The major version under which the schema will be published. Schemas have both a major and minor version associated with them.
+
+      
+
+    
+    :type MinorVersion: string
+    :param MinorVersion: 
+
+      The minor version under which the schema will be published. This parameter is recommended. Schemas have both a major and minor version associated with them.
 
       
 
@@ -11818,14 +11905,14 @@ Client
     :type SchemaFacet: dict
     :param SchemaFacet: **[REQUIRED]** 
 
-      The facet to remove.
+      The facet to remove. See  SchemaFacet for details.
 
       
 
     
       - **SchemaArn** *(string) --* 
 
-        The ARN of the schema that contains the facet.
+        The ARN of the schema that contains the facet with no minor component. See  arns and `In-Place Schema Upgrade <http://docs.aws.amazon.com/directoryservice/latest/admin-guide/inplaceschemaupgrade.html>`__ for a description of when to provide minor versions.
 
         
 
@@ -12797,6 +12884,161 @@ Client
       
 
       - *(dict) --* 
+    
+
+  .. py:method:: upgrade_applied_schema(**kwargs)
+
+    
+
+    Upgrades a single directory in-place using the ``PublishedSchemaArn`` with schema updates found in ``MinorVersion`` . Backwards-compatible minor version upgrades are instantaneously available for readers on all objects in the directory. Note: This is a synchronous API call and upgrades only one schema on a given directory per call. To upgrade multiple directories from one schema, you would need to call this API on each directory.
+
+    
+
+    See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/clouddirectory-2016-05-10/UpgradeAppliedSchema>`_    
+
+
+    **Request Syntax** 
+    ::
+
+      response = client.upgrade_applied_schema(
+          PublishedSchemaArn='string',
+          DirectoryArn='string',
+          DryRun=True|False
+      )
+    :type PublishedSchemaArn: string
+    :param PublishedSchemaArn: **[REQUIRED]** 
+
+      The revision of the published schema to upgrade the directory to.
+
+      
+
+    
+    :type DirectoryArn: string
+    :param DirectoryArn: **[REQUIRED]** 
+
+      The ARN for the directory to which the upgraded schema will be applied.
+
+      
+
+    
+    :type DryRun: boolean
+    :param DryRun: 
+
+      Used for testing whether the major version schemas are backward compatible or not. If schema compatibility fails, an exception would be thrown else the call would succeed but no changes will be saved. This parameter is optional.
+
+      
+
+    
+    
+    :rtype: dict
+    :returns: 
+      
+      **Response Syntax** 
+
+      
+      ::
+
+        {
+            'UpgradedSchemaArn': 'string',
+            'DirectoryArn': 'string'
+        }
+      **Response Structure** 
+
+      
+
+      - *(dict) --* 
+        
+
+        - **UpgradedSchemaArn** *(string) --* 
+
+          The ARN of the upgraded schema that is returned as part of the response.
+
+          
+        
+
+        - **DirectoryArn** *(string) --* 
+
+          The ARN of the directory that is returned as part of the response.
+
+          
+    
+
+  .. py:method:: upgrade_published_schema(**kwargs)
+
+    
+
+    Upgrades a published schema under a new minor version revision using the current contents of ``DevelopmentSchemaArn`` .
+
+    
+
+    See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/clouddirectory-2016-05-10/UpgradePublishedSchema>`_    
+
+
+    **Request Syntax** 
+    ::
+
+      response = client.upgrade_published_schema(
+          DevelopmentSchemaArn='string',
+          PublishedSchemaArn='string',
+          MinorVersion='string',
+          DryRun=True|False
+      )
+    :type DevelopmentSchemaArn: string
+    :param DevelopmentSchemaArn: **[REQUIRED]** 
+
+      The ARN of the development schema with the changes used for the upgrade.
+
+      
+
+    
+    :type PublishedSchemaArn: string
+    :param PublishedSchemaArn: **[REQUIRED]** 
+
+      The ARN of the published schema to be upgraded.
+
+      
+
+    
+    :type MinorVersion: string
+    :param MinorVersion: **[REQUIRED]** 
+
+      Identifies the minor version of the published schema that will be created. This parameter is NOT optional.
+
+      
+
+    
+    :type DryRun: boolean
+    :param DryRun: 
+
+      Used for testing whether the Development schema provided is backwards compatible, or not, with the publish schema provided by the user to be upgraded. If schema compatibility fails, an exception would be thrown else the call would succeed. This parameter is optional and defaults to false.
+
+      
+
+    
+    
+    :rtype: dict
+    :returns: 
+      
+      **Response Syntax** 
+
+      
+      ::
+
+        {
+            'UpgradedSchemaArn': 'string'
+        }
+      **Response Structure** 
+
+      
+
+      - *(dict) --* 
+        
+
+        - **UpgradedSchemaArn** *(string) --* 
+
+          The ARN of the upgraded schema that is returned as part of the response.
+
+          
     
 
 ==========

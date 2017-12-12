@@ -1672,7 +1672,7 @@ Client
 
      
 
-    Amazon Lex stores the utterances that users send to your bot unless the ``childDirected`` field in the bot is set to ``true`` . Utterances are stored for 15 days for use with the  GetUtterancesView operation, and then stored indefinately for use in improving the ability of your bot to respond to user input.
+    Amazon Lex stores the utterances that users send to your bot unless the ``childDirected`` field in the bot is set to ``true`` . Utterances are stored for 15 days for use with the  GetUtterancesView operation, and then stored indefinitely for use in improving the ability of your bot to respond to user input.
 
      
 
@@ -2379,7 +2379,9 @@ Client
             'type': 'Facebook'|'Slack'|'Twilio-Sms',
             'botConfiguration': {
                 'string': 'string'
-            }
+            },
+            'status': 'IN_PROGRESS'|'CREATED'|'FAILED',
+            'failureReason': 'string'
         }
       **Response Structure** 
 
@@ -2443,6 +2445,30 @@ Client
             - *(string) --* 
       
     
+        
+
+        - **status** *(string) --* 
+
+          The status of the bot channel. 
+
+           
+
+           
+          * ``CREATED`` - The channel has been created and is ready for use. 
+           
+          * ``IN_PROGRESS`` - Channel creation is in progress. 
+           
+          * ``FAILED`` - There was an error creating the channel. For information about the reason for the failure, see the ``failureReason`` field. 
+           
+
+          
+        
+
+        - **failureReason** *(string) --* 
+
+          If ``status`` is ``FAILED`` , Amazon Lex provides the reason that it failed to create the association.
+
+          
     
 
   .. py:method:: get_bot_channel_associations(**kwargs)
@@ -2530,7 +2556,9 @@ Client
                     'type': 'Facebook'|'Slack'|'Twilio-Sms',
                     'botConfiguration': {
                         'string': 'string'
-                    }
+                    },
+                    'status': 'IN_PROGRESS'|'CREATED'|'FAILED',
+                    'failureReason': 'string'
                 },
             ],
             'nextToken': 'string'
@@ -2621,6 +2649,30 @@ Client
                 - *(string) --* 
           
         
+            
+
+            - **status** *(string) --* 
+
+              The status of the bot channel. 
+
+               
+
+               
+              * ``CREATED`` - The channel has been created and is ready for use. 
+               
+              * ``IN_PROGRESS`` - Channel creation is in progress. 
+               
+              * ``FAILED`` - There was an error creating the channel. For information about the reason for the failure, see the ``failureReason`` field. 
+               
+
+              
+            
+
+            - **failureReason** *(string) --* 
+
+              If ``status`` is ``FAILED`` , Amazon Lex provides the reason that it failed to create the association.
+
+              
         
       
         
@@ -5766,7 +5818,7 @@ Client
 
      
 
-    If you specify an existing intent name to update the intent, Amazon Lex replaces the values in the ``$LATEST`` version of the slot type with the values in the request. Amazon Lex removes fields that you don't provide in the request. If you don't specify the required fields, Amazon Lex throws an exception.
+    If you specify an existing intent name to update the intent, Amazon Lex replaces the values in the ``$LATEST`` version of the intent with the values in the request. Amazon Lex removes fields that you don't provide in the request. If you don't specify the required fields, Amazon Lex throws an exception. When you update the ``$LATEST`` version of an intent, the ``status`` field of any bot that uses the ``$LATEST`` version of the intent is set to ``NOT_BUILT`` .
 
      
 
@@ -7074,7 +7126,7 @@ Client
 
      
 
-    If you specify the name of an existing slot type, the fields in the request replace the existing values in the ``$LATEST`` version of the slot type. Amazon Lex removes the fields that you don't provide in the request. If you don't specify required fields, Amazon Lex throws an exception.
+    If you specify the name of an existing slot type, the fields in the request replace the existing values in the ``$LATEST`` version of the slot type. Amazon Lex removes the fields that you don't provide in the request. If you don't specify required fields, Amazon Lex throws an exception. When you update the ``$LATEST`` version of a slot type, if a bot uses the ``$LATEST`` version of an intent that contains the slot type, the bot's ``status`` field is set to ``NOT_BUILT`` .
 
      
 

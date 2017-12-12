@@ -716,7 +716,7 @@ Client
       
   
     :type ExecutionRoleArn: string
-    :param ExecutionRoleArn: 
+    :param ExecutionRoleArn: **[REQUIRED]** 
 
       The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker can assume to access model artifacts and docker image for deployment on ML compute instances. Deploying on ML compute instances is part of model hosting. For more information, see `Amazon SageMaker Roles <http://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html>`__ . 
 

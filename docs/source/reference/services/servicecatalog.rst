@@ -200,7 +200,7 @@ Client
 
     
 
-    Accepts an offer to share a portfolio.
+    Accepts an offer to share the specified portfolio.
 
     
 
@@ -307,7 +307,7 @@ Client
     :type PrincipalARN: string
     :param PrincipalARN: **[REQUIRED]** 
 
-      The ARN representing the principal (IAM user, role, or group).
+      The ARN of the principal (IAM user, role, or group).
 
       
 
@@ -315,7 +315,7 @@ Client
     :type PrincipalType: string
     :param PrincipalType: **[REQUIRED]** 
 
-      The principal type. Must be ``IAM``  
+      The principal type. The supported value is ``IAM`` .
 
       
 
@@ -342,7 +342,7 @@ Client
 
     
 
-    Associates a product with a portfolio.
+    Associates the specified product with the specified portfolio.
 
     
 
@@ -395,7 +395,7 @@ Client
     :type SourcePortfolioId: string
     :param SourcePortfolioId: 
 
-      The identifier of the source portfolio to use with this association.
+      The identifier of the source portfolio.
 
       
 
@@ -422,7 +422,7 @@ Client
 
     
 
-    Associate a TagOption identifier with a resource identifier.
+    Associate the specified TagOption with the specified portfolio or product.
 
     
 
@@ -495,7 +495,7 @@ Client
 
      
 
-    You can copy the product to the same account or another account. You can copy the product to the same region or another region.
+    You can copy a product to the same account or another account. You can copy a product to the same region or another region.
 
      
 
@@ -553,7 +553,7 @@ Client
     :type TargetProductId: string
     :param TargetProductId: 
 
-      The ID of the target product. By default, a new product is created.
+      The identifier of the target product. By default, a new product is created.
 
       
 
@@ -569,7 +569,7 @@ Client
     :type SourceProvisioningArtifactIdentifiers: list
     :param SourceProvisioningArtifactIdentifiers: 
 
-      The IDs of the product versions to copy. By default, all provisioning artifacts are copied.
+      The identifiers of the provisioning artifacts (also known as versions) of the product to copy. By default, all provisioning artifacts are copied.
 
       
 
@@ -601,7 +601,7 @@ Client
     :type IdempotencyToken: string
     :param IdempotencyToken: **[REQUIRED]** 
 
-      A token to disambiguate duplicate requests. You can use the same input in multiple requests, provided that you also specify a different idempotency token for each request. 
+      A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request. 
 
       This field is autopopulated if not provided.
 
@@ -627,7 +627,7 @@ Client
 
         - **CopyProductToken** *(string) --* 
 
-          A unique token to pass to ``DescribeCopyProductStatus`` to track the progress of the operation.
+          The token to use to track the progress of the operation.
 
           
     
@@ -636,7 +636,7 @@ Client
 
     
 
-    Creates a new constraint. For more information, see `Using Constraints <http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html>`__ .
+    Creates a constraint.
 
     
 
@@ -692,27 +692,45 @@ Client
     :type Parameters: string
     :param Parameters: **[REQUIRED]** 
 
-      The constraint parameters. Expected values vary depending on which **Type** is specified. For more information, see the Examples section.
+      The constraint parameters, in JSON format. The syntax depends on the constraint type as follows:
+
+        LAUNCH  
+
+      Specify the ``RoleArn`` property as follows:
 
        
 
-      For Type ``LAUNCH`` , the ``RoleArn`` property is required. 
+      \"RoleArn\" : \"arn:aws:iam::123456789012:role/LaunchRole\"
+
+        NOTIFICATION  
+
+      Specify the ``NotificationArns`` property as follows:
 
        
 
-      For Type ``NOTIFICATION`` , the ``NotificationArns`` property is required.
+      \"NotificationArns\" : [\"arn:aws:sns:us-east-1:123456789012:Topic\"]
 
-       
+        TEMPLATE  
 
-      For Type ``TEMPLATE`` , the ``Rules`` property is required.
+      Specify the ``Rules`` property. For more information, see `Template Constraint Rules <http://docs.aws.amazon.com/servicecatalog/latest/adminguide/reference-template_constraint_rules.html>`__ .
 
-      
+        
 
     
     :type Type: string
     :param Type: **[REQUIRED]** 
 
-      The type of the constraint. Case-sensitive valid values are: ``LAUNCH`` , ``NOTIFICATION`` , or ``TEMPLATE`` . 
+      The type of constraint.
+
+       
+
+       
+      * ``LAUNCH``   
+       
+      * ``NOTIFICATION``   
+       
+      * ``TEMPLATE``   
+       
 
       
 
@@ -720,7 +738,7 @@ Client
     :type Description: string
     :param Description: 
 
-      The text description of the constraint.
+      The description of the constraint.
 
       
 
@@ -728,7 +746,7 @@ Client
     :type IdempotencyToken: string
     :param IdempotencyToken: **[REQUIRED]** 
 
-      A token to disambiguate duplicate requests. You can use the same input in multiple requests, provided that you also specify a different idempotency token for each request.
+      A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.
 
       This field is autopopulated if not provided.
 
@@ -761,7 +779,7 @@ Client
 
         - **ConstraintDetail** *(dict) --* 
 
-          The resulting detailed constraint information.
+          Information about the constraint.
 
           
           
@@ -775,14 +793,24 @@ Client
 
           - **Type** *(string) --* 
 
-            The type of the constraint.
+            The type of constraint.
+
+             
+
+             
+            * ``LAUNCH``   
+             
+            * ``NOTIFICATION``   
+             
+            * ``TEMPLATE``   
+             
 
             
           
 
           - **Description** *(string) --* 
 
-            The text description of the constraint.
+            The description of the constraint.
 
             
           
@@ -797,7 +825,7 @@ Client
 
         - **ConstraintParameters** *(string) --* 
 
-          The resulting constraint parameters.
+          The constraint parameters.
 
           
         
@@ -813,7 +841,7 @@ Client
 
     
 
-    Creates a new portfolio.
+    Creates a portfolio.
 
     
 
@@ -865,7 +893,7 @@ Client
     :type Description: string
     :param Description: 
 
-      The text description of the portfolio.
+      The description of the portfolio.
 
       
 
@@ -881,28 +909,28 @@ Client
     :type Tags: list
     :param Tags: 
 
-      Tags to associate with the new portfolio.
+      The tags to associate with the portfolio.
 
       
 
     
       - *(dict) --* 
 
-        Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.
+        Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.
 
         
 
       
         - **Key** *(string) --* **[REQUIRED]** 
 
-          The ``ProvisioningArtifactParameter.TagKey`` parameter from  DescribeProvisioningParameters .
+          The tag key.
 
           
 
         
         - **Value** *(string) --* **[REQUIRED]** 
 
-          The desired value for this key.
+          The value for this key.
 
           
 
@@ -912,7 +940,7 @@ Client
     :type IdempotencyToken: string
     :param IdempotencyToken: **[REQUIRED]** 
 
-      A token to disambiguate duplicate requests. You can use the same input in multiple requests, provided that you also specify a different idempotency token for each request.
+      A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.
 
       This field is autopopulated if not provided.
 
@@ -951,14 +979,14 @@ Client
 
         - **PortfolioDetail** *(dict) --* 
 
-          The resulting detailed portfolio information.
+          Information about the portfolio.
 
           
           
 
           - **Id** *(string) --* 
 
-            The identifier for the portfolio.
+            The portfolio identifier.
 
             
           
@@ -979,7 +1007,7 @@ Client
 
           - **Description** *(string) --* 
 
-            The text description of the portfolio.
+            The description of the portfolio.
 
             
           
@@ -1001,28 +1029,28 @@ Client
 
         - **Tags** *(list) --* 
 
-          Tags successfully associated with the new portfolio.
+          Information about the tags associated with the portfolio.
 
           
           
 
           - *(dict) --* 
 
-            Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.
+            Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.
 
             
             
 
             - **Key** *(string) --* 
 
-              The ``ProvisioningArtifactParameter.TagKey`` parameter from  DescribeProvisioningParameters .
+              The tag key.
 
               
             
 
             - **Value** *(string) --* 
 
-              The desired value for this key.
+              The value for this key.
 
               
         
@@ -1033,7 +1061,7 @@ Client
 
     
 
-    Creates a new portfolio share.
+    Shares the specified portfolio with the specified account.
 
     
 
@@ -1077,7 +1105,7 @@ Client
     :type AccountId: string
     :param AccountId: **[REQUIRED]** 
 
-      The account ID with which to share the portfolio.
+      The AWS account ID.
 
       
 
@@ -1104,7 +1132,7 @@ Client
 
     
 
-    Creates a new product.
+    Creates a product.
 
     
 
@@ -1177,7 +1205,7 @@ Client
     :type Description: string
     :param Description: 
 
-      The text description of the product.
+      The description of the product.
 
       
 
@@ -1193,7 +1221,7 @@ Client
     :type SupportDescription: string
     :param SupportDescription: 
 
-      Support information about the product.
+      The support information about the product.
 
       
 
@@ -1201,7 +1229,7 @@ Client
     :type SupportEmail: string
     :param SupportEmail: 
 
-      Contact email for product support.
+      The contact email for product support.
 
       
 
@@ -1209,7 +1237,7 @@ Client
     :type SupportUrl: string
     :param SupportUrl: 
 
-      Contact URL for product support.
+      The contact URL for product support.
 
       
 
@@ -1217,7 +1245,7 @@ Client
     :type ProductType: string
     :param ProductType: **[REQUIRED]** 
 
-      The type of the product to create.
+      The type of product.
 
       
 
@@ -1225,28 +1253,28 @@ Client
     :type Tags: list
     :param Tags: 
 
-      Tags to associate with the new product.
+      The tags to associate with the product.
 
       
 
     
       - *(dict) --* 
 
-        Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.
+        Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.
 
         
 
       
         - **Key** *(string) --* **[REQUIRED]** 
 
-          The ``ProvisioningArtifactParameter.TagKey`` parameter from  DescribeProvisioningParameters .
+          The tag key.
 
           
 
         
         - **Value** *(string) --* **[REQUIRED]** 
 
-          The desired value for this key.
+          The value for this key.
 
           
 
@@ -1256,28 +1284,32 @@ Client
     :type ProvisioningArtifactParameters: dict
     :param ProvisioningArtifactParameters: **[REQUIRED]** 
 
-      Parameters for the provisioning artifact.
+      The configuration of the provisioning artifact.
 
       
 
     
       - **Name** *(string) --* 
 
-        The name assigned to the provisioning artifact properties.
+        The name of the provisioning artifact (for example, v1 v2beta). No spaces are allowed.
 
         
 
       
       - **Description** *(string) --* 
 
-        The text description of the provisioning artifact properties.
+        The description of the provisioning artifact, including how it differs from the previous provisioning artifact.
 
         
 
       
       - **Info** *(dict) --* **[REQUIRED]** 
 
-        Additional information about the provisioning artifact properties. When using this element in a request, you must specify ``LoadTemplateFromURL`` . For more information, see  CreateProvisioningArtifact .
+        The URL of the CloudFormation template in Amazon S3. Specify the URL in JSON format as follows:
+
+         
+
+         ``"LoadTemplateFromURL": "https://s3.amazonaws.com/cf-templates-ozkq9d3hgiq2-us-east-1/..."``  
 
         
 
@@ -1292,15 +1324,17 @@ Client
   
       - **Type** *(string) --* 
 
-        The type of the provisioning artifact properties. The following provisioning artifact property types are used by AWS Marketplace products:
+        The type of provisioning artifact.
 
          
 
-         ``MARKETPLACE_AMI`` - AMI products.
-
          
-
-         ``MARKETPLACE_CAR`` - CAR (Cluster and AWS Resources) products.
+        * ``CLOUD_FORMATION_TEMPLATE`` - AWS CloudFormation template 
+         
+        * ``MARKETPLACE_AMI`` - AWS Marketplace AMI 
+         
+        * ``MARKETPLACE_CAR`` - AWS Marketplace Clusters and AWS Resources 
+         
 
         
 
@@ -1309,7 +1343,7 @@ Client
     :type IdempotencyToken: string
     :param IdempotencyToken: **[REQUIRED]** 
 
-      A token to disambiguate duplicate requests. You can use the same input in multiple requests, provided that you also specify a different idempotency token for each request.
+      A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.
 
       This field is autopopulated if not provided.
 
@@ -1347,7 +1381,8 @@ Client
                 'Name': 'string',
                 'Description': 'string',
                 'Type': 'CLOUD_FORMATION_TEMPLATE'|'MARKETPLACE_AMI'|'MARKETPLACE_CAR',
-                'CreatedTime': datetime(2015, 1, 1)
+                'CreatedTime': datetime(2015, 1, 1),
+                'Active': True|False
             },
             'Tags': [
                 {
@@ -1365,14 +1400,14 @@ Client
 
         - **ProductViewDetail** *(dict) --* 
 
-          The resulting detailed product view information.
+          Information about the product view.
 
           
           
 
           - **ProductViewSummary** *(dict) --* 
 
-            The summary metadata about the specified product view.
+            Summary information about the product view.
 
             
             
@@ -1428,7 +1463,7 @@ Client
 
             - **HasDefaultPath** *(boolean) --* 
 
-              A value of ``false`` indicates that the product does not have a default path, while a value of ``true`` indicates that it does. If it's false, call  ListLaunchPaths to disambiguate between paths. If true,  ListLaunchPaths is not required, and the output of the  ProductViewSummary operation can be used directly with  DescribeProvisioningParameters .
+              Indicates whether the product has a default path. If the product does not have a default path, call  ListLaunchPaths to disambiguate between paths. Otherwise,  ListLaunchPaths is not required, and the output of  ProductViewSummary can be used directly with  DescribeProvisioningParameters .
 
               
             
@@ -1457,26 +1492,24 @@ Client
 
           - **Status** *(string) --* 
 
-            Current status of the product.
+            The status of the product.
 
              
 
-             ``AVAILABLE`` - Product is available for use.
-
              
-
-             ``CREATING`` - Creation of product started, not ready for use.
-
+            * ``AVAILABLE`` - The product is ready for use. 
              
-
-             ``FAILED`` - Action on product failed.
+            * ``CREATING`` - Product creation has started; the product is not ready for use. 
+             
+            * ``FAILED`` - An action failed. 
+             
 
             
           
 
           - **ProductARN** *(string) --* 
 
-            The ARN associated with the product.
+            The ARN of the product.
 
             
           
@@ -1491,43 +1524,45 @@ Client
 
         - **ProvisioningArtifactDetail** *(dict) --* 
 
-          The resulting detailed provisioning artifact information.
+          Information about the provisioning artifact.
 
           
           
 
           - **Id** *(string) --* 
 
-            The identifier of the provisioning artifact. This is sometimes referred to as the product version.
+            The identifier of the provisioning artifact.
 
             
           
 
           - **Name** *(string) --* 
 
-            The name assigned to the provisioning artifact.
+            The name of the provisioning artifact.
 
             
           
 
           - **Description** *(string) --* 
 
-            The text description of the provisioning artifact.
+            The description of the provisioning artifact.
 
             
           
 
           - **Type** *(string) --* 
 
-            The type of the provisioning artifact. The following provisioning artifact types are used by AWS Marketplace products:
+            The type of provisioning artifact.
 
              
 
-             ``MARKETPLACE_AMI`` - AMI products.
-
              
-
-             ``MARKETPLACE_CAR`` - CAR (Cluster and AWS Resources) products.
+            * ``CLOUD_FORMATION_TEMPLATE`` - AWS CloudFormation template 
+             
+            * ``MARKETPLACE_AMI`` - AWS Marketplace AMI 
+             
+            * ``MARKETPLACE_CAR`` - AWS Marketplace Clusters and AWS Resources 
+             
 
             
           
@@ -1537,33 +1572,40 @@ Client
             The UTC timestamp of the creation time.
 
             
+          
+
+          - **Active** *(boolean) --* 
+
+            Indicates whether the product version is active.
+
+            
       
         
 
         - **Tags** *(list) --* 
 
-          Tags successfully associated with the new product.
+          Information about the tags associated with the product.
 
           
           
 
           - *(dict) --* 
 
-            Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.
+            Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.
 
             
             
 
             - **Key** *(string) --* 
 
-              The ``ProvisioningArtifactParameter.TagKey`` parameter from  DescribeProvisioningParameters .
+              The tag key.
 
               
             
 
             - **Value** *(string) --* 
 
-              The desired value for this key.
+              The value for this key.
 
               
         
@@ -1574,7 +1616,11 @@ Client
 
     
 
-    Create a new provisioning artifact for the specified product. This operation does not work with a product that has been shared with you.
+    Creates a provisioning artifact (also known as a version) for the specified product.
+
+     
+
+    You cannot create a provisioning artifact for a product that was shared with you.
 
     
 
@@ -1626,28 +1672,32 @@ Client
     :type Parameters: dict
     :param Parameters: **[REQUIRED]** 
 
-      The parameters to use when creating the new provisioning artifact.
+      The configuration for the provisioning artifact.
 
       
 
     
       - **Name** *(string) --* 
 
-        The name assigned to the provisioning artifact properties.
+        The name of the provisioning artifact (for example, v1 v2beta). No spaces are allowed.
 
         
 
       
       - **Description** *(string) --* 
 
-        The text description of the provisioning artifact properties.
+        The description of the provisioning artifact, including how it differs from the previous provisioning artifact.
 
         
 
       
       - **Info** *(dict) --* **[REQUIRED]** 
 
-        Additional information about the provisioning artifact properties. When using this element in a request, you must specify ``LoadTemplateFromURL`` . For more information, see  CreateProvisioningArtifact .
+        The URL of the CloudFormation template in Amazon S3. Specify the URL in JSON format as follows:
+
+         
+
+         ``"LoadTemplateFromURL": "https://s3.amazonaws.com/cf-templates-ozkq9d3hgiq2-us-east-1/..."``  
 
         
 
@@ -1662,15 +1712,17 @@ Client
   
       - **Type** *(string) --* 
 
-        The type of the provisioning artifact properties. The following provisioning artifact property types are used by AWS Marketplace products:
+        The type of provisioning artifact.
 
          
 
-         ``MARKETPLACE_AMI`` - AMI products.
-
          
-
-         ``MARKETPLACE_CAR`` - CAR (Cluster and AWS Resources) products.
+        * ``CLOUD_FORMATION_TEMPLATE`` - AWS CloudFormation template 
+         
+        * ``MARKETPLACE_AMI`` - AWS Marketplace AMI 
+         
+        * ``MARKETPLACE_CAR`` - AWS Marketplace Clusters and AWS Resources 
+         
 
         
 
@@ -1679,7 +1731,7 @@ Client
     :type IdempotencyToken: string
     :param IdempotencyToken: **[REQUIRED]** 
 
-      A token to disambiguate duplicate requests. You can use the same input in multiple requests, provided that you also specify a different idempotency token for each request.
+      A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.
 
       This field is autopopulated if not provided.
 
@@ -1699,7 +1751,8 @@ Client
                 'Name': 'string',
                 'Description': 'string',
                 'Type': 'CLOUD_FORMATION_TEMPLATE'|'MARKETPLACE_AMI'|'MARKETPLACE_CAR',
-                'CreatedTime': datetime(2015, 1, 1)
+                'CreatedTime': datetime(2015, 1, 1),
+                'Active': True|False
             },
             'Info': {
                 'string': 'string'
@@ -1715,43 +1768,45 @@ Client
 
         - **ProvisioningArtifactDetail** *(dict) --* 
 
-          The resulting detailed provisioning artifact information.
+          Information about the provisioning artifact.
 
           
           
 
           - **Id** *(string) --* 
 
-            The identifier of the provisioning artifact. This is sometimes referred to as the product version.
+            The identifier of the provisioning artifact.
 
             
           
 
           - **Name** *(string) --* 
 
-            The name assigned to the provisioning artifact.
+            The name of the provisioning artifact.
 
             
           
 
           - **Description** *(string) --* 
 
-            The text description of the provisioning artifact.
+            The description of the provisioning artifact.
 
             
           
 
           - **Type** *(string) --* 
 
-            The type of the provisioning artifact. The following provisioning artifact types are used by AWS Marketplace products:
+            The type of provisioning artifact.
 
              
 
-             ``MARKETPLACE_AMI`` - AMI products.
-
              
-
-             ``MARKETPLACE_CAR`` - CAR (Cluster and AWS Resources) products.
+            * ``CLOUD_FORMATION_TEMPLATE`` - AWS CloudFormation template 
+             
+            * ``MARKETPLACE_AMI`` - AWS Marketplace AMI 
+             
+            * ``MARKETPLACE_CAR`` - AWS Marketplace Clusters and AWS Resources 
+             
 
             
           
@@ -1761,12 +1816,19 @@ Client
             The UTC timestamp of the creation time.
 
             
+          
+
+          - **Active** *(boolean) --* 
+
+            Indicates whether the product version is active.
+
+            
       
         
 
         - **Info** *(dict) --* 
 
-          Additional information about the creation request for the provisioning artifact.
+          The URL of the CloudFormation template in Amazon S3, in JSON format.
 
           
           
@@ -1790,7 +1852,7 @@ Client
 
     
 
-    Create a new TagOption.
+    Creates a TagOption.
 
     
 
@@ -1846,35 +1908,35 @@ Client
 
         - **TagOptionDetail** *(dict) --* 
 
-          The resulting detailed TagOption information.
+          Information about the TagOption.
 
           
           
 
           - **Key** *(string) --* 
 
-            The TagOptionDetail key.
+            The TagOption key.
 
             
           
 
           - **Value** *(string) --* 
 
-            The TagOptionDetail value.
+            The TagOption value.
 
             
           
 
           - **Active** *(boolean) --* 
 
-            The TagOptionDetail active state.
+            The TagOption active state.
 
             
           
 
           - **Id** *(string) --* 
 
-            The TagOptionDetail identifier.
+            The TagOption identifier.
 
             
       
@@ -1919,7 +1981,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The identifier of the constraint to delete.
+      The identifier of the constraint.
 
       
 
@@ -1946,7 +2008,11 @@ Client
 
     
 
-    Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.
+    Deletes the specified portfolio.
+
+     
+
+    You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.
 
     
 
@@ -1981,7 +2047,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The identifier of the portfolio for the delete request.
+      The portfolio identifier.
 
       
 
@@ -2008,7 +2074,7 @@ Client
 
     
 
-    Deletes the specified portfolio share.
+    Stops sharing the specified portfolio with the specified account.
 
     
 
@@ -2052,7 +2118,7 @@ Client
     :type AccountId: string
     :param AccountId: **[REQUIRED]** 
 
-      The account ID associated with the share to delete.
+      The AWS account ID.
 
       
 
@@ -2079,7 +2145,11 @@ Client
 
     
 
-    Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. 
+    Deletes the specified product.
+
+     
+
+    You cannot delete a product if it was shared with you or is associated with a portfolio.
 
     
 
@@ -2114,7 +2184,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The identifier of the product for the delete request.
+      The product identifier.
 
       
 
@@ -2141,7 +2211,11 @@ Client
 
     
 
-    Deletes the specified provisioning artifact. This operation does not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).
+    Deletes the specified provisioning artifact (also known as a version) for the specified product.
+
+     
+
+    You cannot delete a provisioning artifact associated with a product that was shared with you. You cannot delete the last provisioning artifact for a product, because a product must have at least one provisioning artifact.
 
     
 
@@ -2185,7 +2259,7 @@ Client
     :type ProvisioningArtifactId: string
     :param ProvisioningArtifactId: **[REQUIRED]** 
 
-      The identifier of the provisioning artifact for the delete request. This is sometimes referred to as the product version.
+      The identifier of the provisioning artifact.
 
       
 
@@ -2212,7 +2286,7 @@ Client
 
     
 
-    Retrieves detailed information for a specified constraint.
+    Gets information about the specified constraint.
 
     
 
@@ -2280,7 +2354,7 @@ Client
 
         - **ConstraintDetail** *(dict) --* 
 
-          Detailed constraint information.
+          Information about the constraint.
 
           
           
@@ -2294,14 +2368,24 @@ Client
 
           - **Type** *(string) --* 
 
-            The type of the constraint.
+            The type of constraint.
+
+             
+
+             
+            * ``LAUNCH``   
+             
+            * ``NOTIFICATION``   
+             
+            * ``TEMPLATE``   
+             
 
             
           
 
           - **Description** *(string) --* 
 
-            The text description of the constraint.
+            The description of the constraint.
 
             
           
@@ -2316,7 +2400,7 @@ Client
 
         - **ConstraintParameters** *(string) --* 
 
-          The current parameters associated with the specified constraint.
+          The constraint parameters.
 
           
         
@@ -2332,7 +2416,7 @@ Client
 
     
 
-    Describes the status of the specified copy product operation.
+    Gets the status of the specified copy product operation.
 
     
 
@@ -2367,7 +2451,7 @@ Client
     :type CopyProductToken: string
     :param CopyProductToken: **[REQUIRED]** 
 
-      The token returned from the call to ``CopyProduct`` that initiated the operation.
+      The token for the copy product operation. This token is returned by  CopyProduct .
 
       
 
@@ -2402,7 +2486,7 @@ Client
 
         - **TargetProductId** *(string) --* 
 
-          The ID of the copied product.
+          The identifier of the copied product.
 
           
         
@@ -2418,7 +2502,7 @@ Client
 
     
 
-    Retrieves detailed information and any tags associated with the specified portfolio.
+    Gets information about the specified portfolio.
 
     
 
@@ -2453,7 +2537,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The identifier of the portfolio for which to retrieve information.
+      The portfolio identifier.
 
       
 
@@ -2500,14 +2584,14 @@ Client
 
         - **PortfolioDetail** *(dict) --* 
 
-          Detailed portfolio information.
+          Information about the portfolio.
 
           
           
 
           - **Id** *(string) --* 
 
-            The identifier for the portfolio.
+            The portfolio identifier.
 
             
           
@@ -2528,7 +2612,7 @@ Client
 
           - **Description** *(string) --* 
 
-            The text description of the portfolio.
+            The description of the portfolio.
 
             
           
@@ -2550,28 +2634,28 @@ Client
 
         - **Tags** *(list) --* 
 
-          Tags associated with the portfolio.
+          Information about the tags associated with the portfolio.
 
           
           
 
           - *(dict) --* 
 
-            Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.
+            Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.
 
             
             
 
             - **Key** *(string) --* 
 
-              The ``ProvisioningArtifactParameter.TagKey`` parameter from  DescribeProvisioningParameters .
+              The tag key.
 
               
             
 
             - **Value** *(string) --* 
 
-              The desired value for this key.
+              The value for this key.
 
               
         
@@ -2580,42 +2664,42 @@ Client
 
         - **TagOptions** *(list) --* 
 
-          TagOptions associated with the portfolio.
+          Information about the TagOptions associated with the portfolio.
 
           
           
 
           - *(dict) --* 
 
-            The TagOption details.
+            Information about a TagOption.
 
             
             
 
             - **Key** *(string) --* 
 
-              The TagOptionDetail key.
+              The TagOption key.
 
               
             
 
             - **Value** *(string) --* 
 
-              The TagOptionDetail value.
+              The TagOption value.
 
               
             
 
             - **Active** *(boolean) --* 
 
-              The TagOptionDetail active state.
+              The TagOption active state.
 
               
             
 
             - **Id** *(string) --* 
 
-              The TagOptionDetail identifier.
+              The TagOption identifier.
 
               
         
@@ -2626,11 +2710,7 @@ Client
 
     
 
-    Retrieves information about a specified product.
-
-     
-
-    This operation is functionally identical to  DescribeProductView except that it takes as input ``ProductId`` instead of ``ProductViewId`` .
+    Gets information about the specified product.
 
     
 
@@ -2665,7 +2745,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The ``ProductId`` of the product to describe.
+      The product identifier.
 
       
 
@@ -2711,7 +2791,7 @@ Client
 
         - **ProductViewSummary** *(dict) --* 
 
-          The summary metadata about the specified product.
+          Summary information about the product view.
 
           
           
@@ -2767,7 +2847,7 @@ Client
 
           - **HasDefaultPath** *(boolean) --* 
 
-            A value of ``false`` indicates that the product does not have a default path, while a value of ``true`` indicates that it does. If it's false, call  ListLaunchPaths to disambiguate between paths. If true,  ListLaunchPaths is not required, and the output of the  ProductViewSummary operation can be used directly with  DescribeProvisioningParameters .
+            Indicates whether the product has a default path. If the product does not have a default path, call  ListLaunchPaths to disambiguate between paths. Otherwise,  ListLaunchPaths is not required, and the output of  ProductViewSummary can be used directly with  DescribeProvisioningParameters .
 
             
           
@@ -2796,35 +2876,35 @@ Client
 
         - **ProvisioningArtifacts** *(list) --* 
 
-          A list of provisioning artifact objects for the specified product. The ``ProvisioningArtifacts`` parameter represent the ways the specified product can be provisioned.
+          Information about the provisioning artifacts for the specified product.
 
           
           
 
           - *(dict) --* 
 
-            Contains information indicating the ways in which a product can be provisioned.
+            Information about a provisioning artifact. A provisioning artifact is also known as a product version.
 
             
             
 
             - **Id** *(string) --* 
 
-              The identifier for the artifact. This is sometimes referred to as the product version.
+              The identifier of the provisioning artifact.
 
               
             
 
             - **Name** *(string) --* 
 
-              The name of the artifact.
+              The name of the provisioning artifact.
 
               
             
 
             - **Description** *(string) --* 
 
-              The text description of the artifact.
+              The description of the provisioning artifact.
 
               
             
@@ -2842,7 +2922,7 @@ Client
 
     
 
-    Retrieves information about a specified product, run with administrator access.
+    Gets information about the specified product. This operation is run with administrator access.
 
     
 
@@ -2877,7 +2957,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The identifier of the product for which to retrieve information.
+      The product identifier.
 
       
 
@@ -2945,14 +3025,14 @@ Client
 
         - **ProductViewDetail** *(dict) --* 
 
-          Detailed product view information.
+          Information about the product view.
 
           
           
 
           - **ProductViewSummary** *(dict) --* 
 
-            The summary metadata about the specified product view.
+            Summary information about the product view.
 
             
             
@@ -3008,7 +3088,7 @@ Client
 
             - **HasDefaultPath** *(boolean) --* 
 
-              A value of ``false`` indicates that the product does not have a default path, while a value of ``true`` indicates that it does. If it's false, call  ListLaunchPaths to disambiguate between paths. If true,  ListLaunchPaths is not required, and the output of the  ProductViewSummary operation can be used directly with  DescribeProvisioningParameters .
+              Indicates whether the product has a default path. If the product does not have a default path, call  ListLaunchPaths to disambiguate between paths. Otherwise,  ListLaunchPaths is not required, and the output of  ProductViewSummary can be used directly with  DescribeProvisioningParameters .
 
               
             
@@ -3037,26 +3117,24 @@ Client
 
           - **Status** *(string) --* 
 
-            Current status of the product.
+            The status of the product.
 
              
 
-             ``AVAILABLE`` - Product is available for use.
-
              
-
-             ``CREATING`` - Creation of product started, not ready for use.
-
+            * ``AVAILABLE`` - The product is ready for use. 
              
-
-             ``FAILED`` - Action on product failed.
+            * ``CREATING`` - Product creation has started; the product is not ready for use. 
+             
+            * ``FAILED`` - An action failed. 
+             
 
             
           
 
           - **ProductARN** *(string) --* 
 
-            The ARN associated with the product.
+            The ARN of the product.
 
             
           
@@ -3071,14 +3149,14 @@ Client
 
         - **ProvisioningArtifactSummaries** *(list) --* 
 
-          A list of provisioning artifact summaries for the product.
+          Information about the provisioning artifacts (also known as versions) for the specified product.
 
           
           
 
           - *(dict) --* 
 
-            Stores summary information about a provisioning artifact.
+            Summary information about a provisioning artifact (also known as a version) for a product.
 
             
             
@@ -3113,7 +3191,7 @@ Client
 
             - **ProvisioningArtifactMetadata** *(dict) --* 
 
-              The provisioning artifact metadata. This data is used with products created by AWS Marketplace.
+              The metadata for the provisioning artifact. This is used with AWS Marketplace products.
 
               
               
@@ -3130,28 +3208,28 @@ Client
 
         - **Tags** *(list) --* 
 
-          Tags associated with the product.
+          Information about the tags associated with the product.
 
           
           
 
           - *(dict) --* 
 
-            Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.
+            Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.
 
             
             
 
             - **Key** *(string) --* 
 
-              The ``ProvisioningArtifactParameter.TagKey`` parameter from  DescribeProvisioningParameters .
+              The tag key.
 
               
             
 
             - **Value** *(string) --* 
 
-              The desired value for this key.
+              The value for this key.
 
               
         
@@ -3160,42 +3238,42 @@ Client
 
         - **TagOptions** *(list) --* 
 
-          List of TagOptions associated with the product.
+          Information about the TagOptions associated with the product.
 
           
           
 
           - *(dict) --* 
 
-            The TagOption details.
+            Information about a TagOption.
 
             
             
 
             - **Key** *(string) --* 
 
-              The TagOptionDetail key.
+              The TagOption key.
 
               
             
 
             - **Value** *(string) --* 
 
-              The TagOptionDetail value.
+              The TagOption value.
 
               
             
 
             - **Active** *(boolean) --* 
 
-              The TagOptionDetail active state.
+              The TagOption active state.
 
               
             
 
             - **Id** *(string) --* 
 
-              The TagOptionDetail identifier.
+              The TagOption identifier.
 
               
         
@@ -3206,11 +3284,7 @@ Client
 
     
 
-    Retrieves information about a specified product.
-
-     
-
-    This operation is functionally identical to  DescribeProduct except that it takes as input ``ProductViewId`` instead of ``ProductId`` .
+    Gets information about the specified product.
 
     
 
@@ -3245,7 +3319,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The ``ProductViewId`` of the product to describe.
+      The product view identifier.
 
       
 
@@ -3291,7 +3365,7 @@ Client
 
         - **ProductViewSummary** *(dict) --* 
 
-          The summary metadata about the specified product.
+          Summary information about the product.
 
           
           
@@ -3347,7 +3421,7 @@ Client
 
           - **HasDefaultPath** *(boolean) --* 
 
-            A value of ``false`` indicates that the product does not have a default path, while a value of ``true`` indicates that it does. If it's false, call  ListLaunchPaths to disambiguate between paths. If true,  ListLaunchPaths is not required, and the output of the  ProductViewSummary operation can be used directly with  DescribeProvisioningParameters .
+            Indicates whether the product has a default path. If the product does not have a default path, call  ListLaunchPaths to disambiguate between paths. Otherwise,  ListLaunchPaths is not required, and the output of  ProductViewSummary can be used directly with  DescribeProvisioningParameters .
 
             
           
@@ -3376,35 +3450,35 @@ Client
 
         - **ProvisioningArtifacts** *(list) --* 
 
-          A list of provisioning artifact objects for the specified product. The ``ProvisioningArtifacts`` represent the ways in which the specified product can be provisioned.
+          Information about the provisioning artifacts for the product.
 
           
           
 
           - *(dict) --* 
 
-            Contains information indicating the ways in which a product can be provisioned.
+            Information about a provisioning artifact. A provisioning artifact is also known as a product version.
 
             
             
 
             - **Id** *(string) --* 
 
-              The identifier for the artifact. This is sometimes referred to as the product version.
+              The identifier of the provisioning artifact.
 
               
             
 
             - **Name** *(string) --* 
 
-              The name of the artifact.
+              The name of the provisioning artifact.
 
               
             
 
             - **Description** *(string) --* 
 
-              The text description of the artifact.
+              The description of the provisioning artifact.
 
               
             
@@ -3422,7 +3496,7 @@ Client
 
     
 
-    Retrieve detailed information about the provisioned product.
+    Gets information about the specified provisioned product.
 
     
 
@@ -3493,65 +3567,61 @@ Client
 
         - **ProvisionedProductDetail** *(dict) --* 
 
-          Detailed provisioned product information.
+          Information about the provisioned product.
 
           
           
 
           - **Name** *(string) --* 
 
-            The user-friendly name of the ProvisionedProduct object.
+            The user-friendly name of the provisioned product.
 
             
           
 
           - **Arn** *(string) --* 
 
-            The ARN associated with the ProvisionedProduct object.
+            The ARN of the provisioned product.
 
             
           
 
           - **Type** *(string) --* 
 
-            The type of the ProvisionedProduct object.
+            The type of provisioned product. The supported value is ``CFN_STACK`` .
 
             
           
 
           - **Id** *(string) --* 
 
-            The identifier of the ProvisionedProduct object.
+            The identifier of the provisioned product.
 
             
           
 
           - **Status** *(string) --* 
 
-            The current status of the ProvisionedProduct.
+            The current status of the provisioned product.
 
              
 
-             ``AVAILABLE`` - Stable state, ready to perform any operation. The most recent action request succeeded and completed.
-
              
-
-             ``UNDER_CHANGE`` - Transitive state, operations performed may or may not have valid results. Wait for an ``AVAILABLE`` status before performing operations.
-
+            * ``AVAILABLE`` - Stable state, ready to perform any operation. The most recent operation succeeded and completed. 
              
-
-             ``TAINTED`` - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version. 
-
+            * ``UNDER_CHANGE`` - Transitive state, operations performed might not have valid results. Wait for an ``AVAILABLE`` status before performing operations. 
              
-
-             ``ERROR`` - Something unexpected happened such that the provisioned product exists but the stack is not running. For example, CloudFormation received an invalid parameter value and could not launch the stack.
+            * ``TAINTED`` - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version. 
+             
+            * ``ERROR`` - An unexpected error occurred, the provisioned product exists but the stack is not running. For example, CloudFormation received a parameter value that was not valid and could not launch the stack. 
+             
 
             
           
 
           - **StatusMessage** *(string) --* 
 
-            The current status message of the ProvisionedProduct.
+            The current status message of the provisioned product.
 
             
           
@@ -3565,14 +3635,14 @@ Client
 
           - **IdempotencyToken** *(string) --* 
 
-            A token to disambiguate duplicate requests. You can use the same input in multiple requests, provided that you also specify a different idempotency token for each request.
+            A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.
 
             
           
 
           - **LastRecordId** *(string) --* 
 
-            The record identifier of the last request performed on this ProvisionedProduct object.
+            The record identifier of the last request performed on this provisioned product.
 
             
       
@@ -3582,7 +3652,7 @@ Client
 
     
 
-    Retrieves detailed information about the specified provisioning artifact.
+    Gets information about the specified provisioning artifact (also known as a version) for the specified product.
 
     
 
@@ -3619,7 +3689,7 @@ Client
     :type ProvisioningArtifactId: string
     :param ProvisioningArtifactId: **[REQUIRED]** 
 
-      The identifier of the provisioning artifact. This is sometimes referred to as the product version.
+      The identifier of the provisioning artifact.
 
       
 
@@ -3635,7 +3705,7 @@ Client
     :type Verbose: boolean
     :param Verbose: 
 
-      Enable a verbose level of details for the provisioning artifact.
+      Indicates whether a verbose level of detail is enabled.
 
       
 
@@ -3655,7 +3725,8 @@ Client
                 'Name': 'string',
                 'Description': 'string',
                 'Type': 'CLOUD_FORMATION_TEMPLATE'|'MARKETPLACE_AMI'|'MARKETPLACE_CAR',
-                'CreatedTime': datetime(2015, 1, 1)
+                'CreatedTime': datetime(2015, 1, 1),
+                'Active': True|False
             },
             'Info': {
                 'string': 'string'
@@ -3671,43 +3742,45 @@ Client
 
         - **ProvisioningArtifactDetail** *(dict) --* 
 
-          Detailed provisioning artifact information.
+          Information about the provisioning artifact.
 
           
           
 
           - **Id** *(string) --* 
 
-            The identifier of the provisioning artifact. This is sometimes referred to as the product version.
+            The identifier of the provisioning artifact.
 
             
           
 
           - **Name** *(string) --* 
 
-            The name assigned to the provisioning artifact.
+            The name of the provisioning artifact.
 
             
           
 
           - **Description** *(string) --* 
 
-            The text description of the provisioning artifact.
+            The description of the provisioning artifact.
 
             
           
 
           - **Type** *(string) --* 
 
-            The type of the provisioning artifact. The following provisioning artifact types are used by AWS Marketplace products:
+            The type of provisioning artifact.
 
              
 
-             ``MARKETPLACE_AMI`` - AMI products.
-
              
-
-             ``MARKETPLACE_CAR`` - CAR (Cluster and AWS Resources) products.
+            * ``CLOUD_FORMATION_TEMPLATE`` - AWS CloudFormation template 
+             
+            * ``MARKETPLACE_AMI`` - AWS Marketplace AMI 
+             
+            * ``MARKETPLACE_CAR`` - AWS Marketplace Clusters and AWS Resources 
+             
 
             
           
@@ -3717,12 +3790,19 @@ Client
             The UTC timestamp of the creation time.
 
             
+          
+
+          - **Active** *(boolean) --* 
+
+            Indicates whether the product version is active.
+
+            
       
         
 
         - **Info** *(dict) --* 
 
-          Additional information about the provisioning artifact.
+          The URL of the CloudFormation template in Amazon S3.
 
           
           
@@ -3746,11 +3826,11 @@ Client
 
     
 
-    Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of ``ProvisioningArtifactParameters`` parameters available to call the  ProvisionProduct operation for the specified product.
+    Gets information about the configuration required to provision the specified product using the specified provisioning artifact.
 
      
 
-    If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to the ``ProvisionProduct`` operation, do not include conflicted TagOption keys as tags. Calls to ``ProvisionProduct`` with empty TagOption values cause the error "Parameter validation failed: Missing required parameter in Tags[*N* ]:*Value* ". Calls to ``ProvisionProduct`` with conflicted TagOption keys automatically tag the provisioned product with the conflicted keys with the value "``sc-tagoption-conflict-portfolioId-productId`` ".
+    If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to  ProvisionProduct , do not include conflicted TagOption keys as tags, or this will cause the error "Parameter validation failed: Missing required parameter in Tags[*N* ]:*Value* " and tag the provisioned product with the value ``sc-tagoption-conflict-portfolioId-productId`` .
 
     
 
@@ -3795,7 +3875,7 @@ Client
     :type ProvisioningArtifactId: string
     :param ProvisioningArtifactId: **[REQUIRED]** 
 
-      The provisioning artifact identifier for this product. This is sometimes referred to as the product version.
+      The identifier of the provisioning artifact.
 
       
 
@@ -3803,7 +3883,7 @@ Client
     :type PathId: string
     :param PathId: 
 
-      The identifier of the path for this product's provisioning. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.
+      The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use  ListLaunchPaths .
 
       
 
@@ -3862,28 +3942,28 @@ Client
 
         - **ProvisioningArtifactParameters** *(list) --* 
 
-          The list of parameters used to successfully provision the product. Each parameter includes a list of allowable values and additional metadata about each parameter.
+          Information about the parameters used to provision the product.
 
           
           
 
           - *(dict) --* 
 
-            A parameter used to successfully provision the product. This value includes a list of allowable values and additional metadata. 
+            Information about a parameter used to provision a product.
 
             
             
 
             - **ParameterKey** *(string) --* 
 
-              The parameter key. 
+              The parameter key.
 
               
             
 
             - **DefaultValue** *(string) --* 
 
-              The default value for this parameter.
+              The default value.
 
               
             
@@ -3904,14 +3984,14 @@ Client
 
             - **Description** *(string) --* 
 
-              The text description of the parameter.
+              The description of the parameter.
 
               
             
 
             - **ParameterConstraints** *(dict) --* 
 
-              The list of constraints that the administrator has put on the parameter.
+              Constraints that the administrator has put on a parameter.
 
               
               
@@ -3932,28 +4012,38 @@ Client
 
         - **ConstraintSummaries** *(list) --* 
 
-          The list of constraint summaries that apply to provisioning this product.
+          Information about the constraints used to provision the product.
 
           
           
 
           - *(dict) --* 
 
-            An administrator-specified constraint to apply when provisioning a product.
+            Summary information about a constraint.
 
             
             
 
             - **Type** *(string) --* 
 
-              The type of the constraint. 
+              The type of constraint.
+
+               
+
+               
+              * ``LAUNCH``   
+               
+              * ``NOTIFICATION``   
+               
+              * ``TEMPLATE``   
+               
 
               
             
 
             - **Description** *(string) --* 
 
-              The text description of the constraint.
+              The description of the constraint.
 
               
         
@@ -3992,28 +4082,28 @@ Client
 
         - **TagOptions** *(list) --* 
 
-          List of TagOptions associated with the provisioned provisioning parameters.
+          Information about the TagOptions associated with the resource.
 
           
           
 
           - *(dict) --* 
 
-            The TagOption summary key-value pair.
+            Summary information about a TagOption.
 
             
             
 
             - **Key** *(string) --* 
 
-              The TagOptionSummary key.
+              The TagOption key.
 
               
             
 
             - **Values** *(list) --* 
 
-              The TagOptionSummary value.
+              The TagOption value.
 
               
               
@@ -4028,7 +4118,11 @@ Client
 
     
 
-    Retrieves a paginated list of the full details of a specific request. Use this operation after calling a request operation ( ProvisionProduct ,  TerminateProvisionedProduct , or  UpdateProvisionedProduct ). 
+    Gets information about the specified request operation.
+
+     
+
+    Use this operation after calling a request operation (for example,  ProvisionProduct ,  TerminateProvisionedProduct , or  UpdateProvisionedProduct ). 
 
     
 
@@ -4065,7 +4159,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The record identifier of the ProvisionedProduct object for which to retrieve output information. This is the ``RecordDetail.RecordId`` obtained from the request operation's response.
+      The record identifier of the provisioned product. This identifier is returned by the request operation.
 
       
 
@@ -4073,7 +4167,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -4081,7 +4175,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -4139,48 +4233,42 @@ Client
 
         - **RecordDetail** *(dict) --* 
 
-          Detailed record information for the specified product. 
+          Information about the product.
 
           
           
 
           - **RecordId** *(string) --* 
 
-            The identifier of the ProvisionedProduct object record.
+            The identifier of the record.
 
             
           
 
           - **ProvisionedProductName** *(string) --* 
 
-            The user-friendly name of the ProvisionedProduct object.
+            The user-friendly name of the provisioned product.
 
             
           
 
           - **Status** *(string) --* 
 
-            The status of the ProvisionedProduct object.
+            The status of the provisioned product.
 
              
 
-             ``CREATED`` - Request created but the operation has not yet started.
-
              
-
-             ``IN_PROGRESS`` - The requested operation is in-progress.
-
+            * ``CREATED`` - The request was created but the operation has not started. 
              
-
-             ``IN_PROGRESS_IN_ERROR`` - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback.
-
+            * ``IN_PROGRESS`` - The requested operation is in progress. 
              
-
-             ``SUCCEEDED`` - The requested operation has successfully completed.
-
+            * ``IN_PROGRESS_IN_ERROR`` - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback. 
              
-
-             ``FAILED`` - The requested operation has completed but has failed. Investigate using the error messages returned.
+            * ``SUCCEEDED`` - The requested operation has successfully completed. 
+             
+            * ``FAILED`` - The requested operation has unsuccessfully completed. Investigate using the error messages returned. 
+             
 
             
           
@@ -4194,14 +4282,14 @@ Client
 
           - **UpdatedTime** *(datetime) --* 
 
-            The time when the record for the ProvisionedProduct object was last updated.
+            The time when the record was last updated.
 
             
           
 
           - **ProvisionedProductType** *(string) --* 
 
-            The type of the ProvisionedProduct object.
+            The type of provisioned product. The supported value is ``CFN_STACK`` .
 
             
           
@@ -4210,12 +4298,22 @@ Client
 
             The record type for this record.
 
+             
+
+             
+            * ``PROVISION_PRODUCT``   
+             
+            * ``UPDATE_PROVISIONED_PRODUCT``   
+             
+            * ``TERMINATE_PROVISIONED_PRODUCT``   
+             
+
             
           
 
           - **ProvisionedProductId** *(string) --* 
 
-            The identifier of the ProvisionedProduct object.
+            The identifier of the provisioned product.
 
             
           
@@ -4229,21 +4327,21 @@ Client
 
           - **ProvisioningArtifactId** *(string) --* 
 
-            The provisioning artifact identifier for this product. This is sometimes referred to as the product version.
+            The identifier of the provisioning artifact.
 
             
           
 
           - **PathId** *(string) --* 
 
-            The identifier of the path for this product's provisioning.
+            The path identifier.
 
             
           
 
           - **RecordErrors** *(list) --* 
 
-            A list of errors that occurred while processing the request.
+            The errors that occurred while processing the request.
 
             
             
@@ -4264,7 +4362,7 @@ Client
 
               - **Description** *(string) --* 
 
-                The text description of the error.
+                The description of the error.
 
                 
           
@@ -4273,7 +4371,7 @@ Client
 
           - **RecordTags** *(list) --* 
 
-            List of tags associated with this record.
+            The tags associated with this record.
 
             
             
@@ -4304,14 +4402,14 @@ Client
 
         - **RecordOutputs** *(list) --* 
 
-          A list of outputs for the specified Product object created as the result of a request. For example, a CloudFormation-backed product that creates an S3 bucket would have an output for the S3 bucket URL.
+          Information about the product created as the result of a request. For example, the output for a CloudFormation-backed product that creates an S3 bucket would include the S3 bucket URL.
 
           
           
 
           - *(dict) --* 
 
-            An output for the specified Product object created as the result of a request. For example, a CloudFormation-backed product that creates an S3 bucket would have an output for the S3 bucket URL.
+            The output for the product created as the result of a request. For example, the output for a CloudFormation-backed product that creates an S3 bucket would include the S3 bucket URL.
 
             
             
@@ -4332,7 +4430,7 @@ Client
 
             - **Description** *(string) --* 
 
-              The text description of the output.
+              The description of the output.
 
               
         
@@ -4341,7 +4439,7 @@ Client
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -4350,7 +4448,7 @@ Client
 
     
 
-    Describes a TagOption.
+    Gets information about the specified TagOption.
 
     
 
@@ -4366,7 +4464,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The identifier of the TagOption.
+      The TagOption identifier.
 
       
 
@@ -4397,35 +4495,35 @@ Client
 
         - **TagOptionDetail** *(dict) --* 
 
-          The resulting detailed TagOption information.
+          Information about the TagOption.
 
           
           
 
           - **Key** *(string) --* 
 
-            The TagOptionDetail key.
+            The TagOption key.
 
             
           
 
           - **Value** *(string) --* 
 
-            The TagOptionDetail value.
+            The TagOption value.
 
             
           
 
           - **Active** *(boolean) --* 
 
-            The TagOptionDetail active state.
+            The TagOption active state.
 
             
           
 
           - **Id** *(string) --* 
 
-            The TagOptionDetail identifier.
+            The TagOption identifier.
 
             
       
@@ -4479,7 +4577,7 @@ Client
     :type PrincipalARN: string
     :param PrincipalARN: **[REQUIRED]** 
 
-      The ARN representing the principal (IAM user, role, or group).
+      The ARN of the principal (IAM user, role, or group).
 
       
 
@@ -4577,7 +4675,7 @@ Client
 
     
 
-    Disassociates a TagOption from a resource.
+    Disassociates the specified TagOption from the specified resource.
 
     
 
@@ -4594,7 +4692,7 @@ Client
     :type ResourceId: string
     :param ResourceId: **[REQUIRED]** 
 
-      Identifier of the resource from which to disassociate the TagOption.
+      The resource identifier.
 
       
 
@@ -4602,7 +4700,7 @@ Client
     :type TagOptionId: string
     :param TagOptionId: **[REQUIRED]** 
 
-      Identifier of the TagOption to disassociate from the resource.
+      The TagOption identifier.
 
       
 
@@ -4678,7 +4776,7 @@ Client
 
     
 
-    Lists details of all portfolios for which sharing was accepted by this account.
+    Lists all portfolios for which sharing was accepted by this account.
 
     
 
@@ -4714,7 +4812,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -4722,7 +4820,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -4758,21 +4856,21 @@ Client
 
         - **PortfolioDetails** *(list) --* 
 
-          List of detailed portfolio information objects.
+          Information about the portfolios.
 
           
           
 
           - *(dict) --* 
 
-            Detailed portfolio information.
+            Information about a portfolio.
 
             
             
 
             - **Id** *(string) --* 
 
-              The identifier for the portfolio.
+              The portfolio identifier.
 
               
             
@@ -4793,7 +4891,7 @@ Client
 
             - **Description** *(string) --* 
 
-              The text description of the portfolio.
+              The description of the portfolio.
 
               
             
@@ -4816,7 +4914,7 @@ Client
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -4825,7 +4923,7 @@ Client
 
     
 
-    Retrieves detailed constraint information for the specified portfolio and product.
+    Lists the constraints for the specified portfolio and product.
 
     
 
@@ -4879,7 +4977,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -4887,7 +4985,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -4921,14 +5019,14 @@ Client
 
         - **ConstraintDetails** *(list) --* 
 
-          List of detailed constraint information objects.
+          Information about the constraints.
 
           
           
 
           - *(dict) --* 
 
-            Detailed constraint information.
+            Information about a constraint.
 
             
             
@@ -4942,14 +5040,24 @@ Client
 
             - **Type** *(string) --* 
 
-              The type of the constraint.
+              The type of constraint.
+
+               
+
+               
+              * ``LAUNCH``   
+               
+              * ``NOTIFICATION``   
+               
+              * ``TEMPLATE``   
+               
 
               
             
 
             - **Description** *(string) --* 
 
-              The text description of the constraint.
+              The description of the constraint.
 
               
             
@@ -4965,7 +5073,7 @@ Client
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -4974,7 +5082,7 @@ Client
 
     
 
-    Returns a paginated list of all paths to a specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.
+    Lists the paths to the specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.
 
     
 
@@ -5011,7 +5119,7 @@ Client
     :type ProductId: string
     :param ProductId: **[REQUIRED]** 
 
-      The product identifier. Identifies the product for which to retrieve ``LaunchPathSummaries`` information.
+      The product identifier.
 
       
 
@@ -5019,7 +5127,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -5027,7 +5135,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -5071,49 +5179,59 @@ Client
 
         - **LaunchPathSummaries** *(list) --* 
 
-          List of launch path information summaries for the specified ``PageToken`` .
+          Information about the launch path.
 
           
           
 
           - *(dict) --* 
 
-            Summary information about a path for a user to have access to a specified product.
+            Summary information about a product path for a user.
 
             
             
 
             - **Id** *(string) --* 
 
-              The unique identifier of the product path.
+              The identifier of the product path.
 
               
             
 
             - **ConstraintSummaries** *(list) --* 
 
-              List of constraints on the portfolio-product relationship.
+              The constraints on the portfolio-product relationship.
 
               
               
 
               - *(dict) --* 
 
-                An administrator-specified constraint to apply when provisioning a product.
+                Summary information about a constraint.
 
                 
                 
 
                 - **Type** *(string) --* 
 
-                  The type of the constraint. 
+                  The type of constraint.
+
+                   
+
+                   
+                  * ``LAUNCH``   
+                   
+                  * ``NOTIFICATION``   
+                   
+                  * ``TEMPLATE``   
+                   
 
                   
                 
 
                 - **Description** *(string) --* 
 
-                  The text description of the constraint.
+                  The description of the constraint.
 
                   
             
@@ -5122,28 +5240,28 @@ Client
 
             - **Tags** *(list) --* 
 
-              List of tags used by this launch path.
+              The tags associated with this product path.
 
               
               
 
               - *(dict) --* 
 
-                Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.
+                Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.
 
                 
                 
 
                 - **Key** *(string) --* 
 
-                  The ``ProvisioningArtifactParameter.TagKey`` parameter from  DescribeProvisioningParameters .
+                  The tag key.
 
                   
                 
 
                 - **Value** *(string) --* 
 
-                  The desired value for this key.
+                  The value for this key.
 
                   
             
@@ -5152,7 +5270,7 @@ Client
 
             - **Name** *(string) --* 
 
-              Corresponds to the name of the portfolio to which the user was assigned.
+              The name of the portfolio to which the user was assigned.
 
               
         
@@ -5161,7 +5279,7 @@ Client
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -5170,7 +5288,7 @@ Client
 
     
 
-    Lists the account IDs that have been authorized sharing of the specified portfolio.
+    Lists the account IDs that have access to the specified portfolio.
 
     
 
@@ -5234,7 +5352,7 @@ Client
 
         - **AccountIds** *(list) --* 
 
-          List of account IDs associated with access to the portfolio.
+          Information about the AWS accounts with access to the portfolio.
 
           
           
@@ -5245,7 +5363,7 @@ Client
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -5290,7 +5408,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -5298,7 +5416,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -5334,21 +5452,21 @@ Client
 
         - **PortfolioDetails** *(list) --* 
 
-          List of detailed portfolio information objects.
+          Information about the portfolios.
 
           
           
 
           - *(dict) --* 
 
-            Detailed portfolio information.
+            Information about a portfolio.
 
             
             
 
             - **Id** *(string) --* 
 
-              The identifier for the portfolio.
+              The portfolio identifier.
 
               
             
@@ -5369,7 +5487,7 @@ Client
 
             - **Description** *(string) --* 
 
-              The text description of the portfolio.
+              The description of the portfolio.
 
               
             
@@ -5392,7 +5510,7 @@ Client
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -5446,7 +5564,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -5454,7 +5572,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -5490,21 +5608,21 @@ Client
 
         - **PortfolioDetails** *(list) --* 
 
-          List of detailed portfolio information objects.
+          Information about the portfolios.
 
           
           
 
           - *(dict) --* 
 
-            Detailed portfolio information.
+            Information about a portfolio.
 
             
             
 
             - **Id** *(string) --* 
 
-              The identifier for the portfolio.
+              The portfolio identifier.
 
               
             
@@ -5525,7 +5643,7 @@ Client
 
             - **Description** *(string) --* 
 
-              The text description of the portfolio.
+              The description of the portfolio.
 
               
             
@@ -5548,7 +5666,7 @@ Client
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -5602,7 +5720,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -5610,7 +5728,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -5649,21 +5767,21 @@ Client
 
           - *(dict) --* 
 
-            A principal's ARN and type.
+            Information about a principal.
 
             
             
 
             - **PrincipalARN** *(string) --* 
 
-              The ARN representing the principal (IAM user, role, or group).
+              The ARN of the principal (IAM user, role, or group).
 
               
             
 
             - **PrincipalType** *(string) --* 
 
-              The principal type. Must be ``IAM``  
+              The principal type. The supported value is ``IAM`` .
 
               
         
@@ -5672,7 +5790,7 @@ Client
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -5681,7 +5799,7 @@ Client
 
     
 
-    Lists all provisioning artifacts associated with the specified product.
+    Lists all provisioning artifacts (also known as versions) for the specified product.
 
     
 
@@ -5737,7 +5855,8 @@ Client
                     'Name': 'string',
                     'Description': 'string',
                     'Type': 'CLOUD_FORMATION_TEMPLATE'|'MARKETPLACE_AMI'|'MARKETPLACE_CAR',
-                    'CreatedTime': datetime(2015, 1, 1)
+                    'CreatedTime': datetime(2015, 1, 1),
+                    'Active': True|False
                 },
             ],
             'NextPageToken': 'string'
@@ -5751,50 +5870,52 @@ Client
 
         - **ProvisioningArtifactDetails** *(list) --* 
 
-          List of detailed provisioning artifact information objects.
+          Information about the provisioning artifacts.
 
           
           
 
           - *(dict) --* 
 
-            Detailed provisioning artifact information.
+            Information about a provisioning artifact (also known as a version) for a product.
 
             
             
 
             - **Id** *(string) --* 
 
-              The identifier of the provisioning artifact. This is sometimes referred to as the product version.
+              The identifier of the provisioning artifact.
 
               
             
 
             - **Name** *(string) --* 
 
-              The name assigned to the provisioning artifact.
+              The name of the provisioning artifact.
 
               
             
 
             - **Description** *(string) --* 
 
-              The text description of the provisioning artifact.
+              The description of the provisioning artifact.
 
               
             
 
             - **Type** *(string) --* 
 
-              The type of the provisioning artifact. The following provisioning artifact types are used by AWS Marketplace products:
+              The type of provisioning artifact.
 
                
 
-               ``MARKETPLACE_AMI`` - AMI products.
-
                
-
-               ``MARKETPLACE_CAR`` - CAR (Cluster and AWS Resources) products.
+              * ``CLOUD_FORMATION_TEMPLATE`` - AWS CloudFormation template 
+               
+              * ``MARKETPLACE_AMI`` - AWS Marketplace AMI 
+               
+              * ``MARKETPLACE_CAR`` - AWS Marketplace Clusters and AWS Resources 
+               
 
               
             
@@ -5804,13 +5925,20 @@ Client
               The UTC timestamp of the creation time.
 
               
+            
+
+            - **Active** *(boolean) --* 
+
+              Indicates whether the product version is active.
+
+              
         
       
         
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -5819,7 +5947,7 @@ Client
 
     
 
-    Returns a paginated list of all performed requests, in the form of RecordDetails objects that are filtered as specified.
+    Lists the specified requests or all performed requests.
 
     
 
@@ -5863,33 +5991,31 @@ Client
     :type AccessLevelFilter: dict
     :param AccessLevelFilter: 
 
-      The access level for obtaining results. If left unspecified, ``User`` level access is used.
+      The access level to use to obtain results. The default is ``User`` .
 
       
 
     
       - **Key** *(string) --* 
 
-        Specifies the access level.
+        The access level.
 
          
 
-         ``Account`` allows results at the account level. 
-
          
-
-         ``Role`` allows results based on the federated role of the specified user.
-
+        * ``Account`` - Filter results based on the account. 
          
-
-         ``User`` allows results limited to the specified user. 
+        * ``Role`` - Filter results based on the federated role of the specified user. 
+         
+        * ``User`` - Filter results based on the specified user. 
+         
 
         
 
       
       - **Value** *(string) --* 
 
-        Specifies the user to which the access level applies. A value of ``Self`` is currently supported.
+        The user to which the access level applies. The only supported value is ``Self`` .
 
         
 
@@ -5898,7 +6024,7 @@ Client
     :type SearchFilter: dict
     :param SearchFilter: 
 
-      The filter to limit search results. 
+      The search filter to scope the results.
 
       
 
@@ -5907,12 +6033,20 @@ Client
 
         The filter key.
 
+         
+
+         
+        * ``product`` - Filter results based on the specified product identifier. 
+         
+        * ``provisionedproduct`` - Filter results based on the provisioned product identifier. 
+         
+
         
 
       
       - **Value** *(string) --* 
 
-        The filter value for ``Key`` .
+        The filter value.
 
         
 
@@ -5921,7 +6055,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -5929,7 +6063,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -5982,55 +6116,49 @@ Client
 
         - **RecordDetails** *(list) --* 
 
-          A list of record detail objects, listed in reverse chronological order.
+          The records, in reverse chronological order.
 
           
           
 
           - *(dict) --* 
 
-            The full details of a specific ProvisionedProduct object.
+            Information about a request operation.
 
             
             
 
             - **RecordId** *(string) --* 
 
-              The identifier of the ProvisionedProduct object record.
+              The identifier of the record.
 
               
             
 
             - **ProvisionedProductName** *(string) --* 
 
-              The user-friendly name of the ProvisionedProduct object.
+              The user-friendly name of the provisioned product.
 
               
             
 
             - **Status** *(string) --* 
 
-              The status of the ProvisionedProduct object.
+              The status of the provisioned product.
 
                
 
-               ``CREATED`` - Request created but the operation has not yet started.
-
                
-
-               ``IN_PROGRESS`` - The requested operation is in-progress.
-
+              * ``CREATED`` - The request was created but the operation has not started. 
                
-
-               ``IN_PROGRESS_IN_ERROR`` - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback.
-
+              * ``IN_PROGRESS`` - The requested operation is in progress. 
                
-
-               ``SUCCEEDED`` - The requested operation has successfully completed.
-
+              * ``IN_PROGRESS_IN_ERROR`` - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback. 
                
-
-               ``FAILED`` - The requested operation has completed but has failed. Investigate using the error messages returned.
+              * ``SUCCEEDED`` - The requested operation has successfully completed. 
+               
+              * ``FAILED`` - The requested operation has unsuccessfully completed. Investigate using the error messages returned. 
+               
 
               
             
@@ -6044,14 +6172,14 @@ Client
 
             - **UpdatedTime** *(datetime) --* 
 
-              The time when the record for the ProvisionedProduct object was last updated.
+              The time when the record was last updated.
 
               
             
 
             - **ProvisionedProductType** *(string) --* 
 
-              The type of the ProvisionedProduct object.
+              The type of provisioned product. The supported value is ``CFN_STACK`` .
 
               
             
@@ -6060,12 +6188,22 @@ Client
 
               The record type for this record.
 
+               
+
+               
+              * ``PROVISION_PRODUCT``   
+               
+              * ``UPDATE_PROVISIONED_PRODUCT``   
+               
+              * ``TERMINATE_PROVISIONED_PRODUCT``   
+               
+
               
             
 
             - **ProvisionedProductId** *(string) --* 
 
-              The identifier of the ProvisionedProduct object.
+              The identifier of the provisioned product.
 
               
             
@@ -6079,21 +6217,21 @@ Client
 
             - **ProvisioningArtifactId** *(string) --* 
 
-              The provisioning artifact identifier for this product. This is sometimes referred to as the product version.
+              The identifier of the provisioning artifact.
 
               
             
 
             - **PathId** *(string) --* 
 
-              The identifier of the path for this product's provisioning.
+              The path identifier.
 
               
             
 
             - **RecordErrors** *(list) --* 
 
-              A list of errors that occurred while processing the request.
+              The errors that occurred while processing the request.
 
               
               
@@ -6114,7 +6252,7 @@ Client
 
                 - **Description** *(string) --* 
 
-                  The text description of the error.
+                  The description of the error.
 
                   
             
@@ -6123,7 +6261,7 @@ Client
 
             - **RecordTags** *(list) --* 
 
-              List of tags associated with this record.
+              The tags associated with this record.
 
               
               
@@ -6155,7 +6293,7 @@ Client
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -6164,7 +6302,7 @@ Client
 
     
 
-    Lists resources associated with a TagOption.
+    Lists the resources associated with the specified TagOption.
 
     
 
@@ -6183,7 +6321,7 @@ Client
     :type TagOptionId: string
     :param TagOptionId: **[REQUIRED]** 
 
-      Identifier of the TagOption.
+      The TagOption identifier.
 
       
 
@@ -6191,7 +6329,15 @@ Client
     :type ResourceType: string
     :param ResourceType: 
 
-      Resource type.
+      The resource type.
+
+       
+
+       
+      * ``Portfolio``   
+       
+      * ``Product``   
+       
 
       
 
@@ -6199,7 +6345,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -6207,7 +6353,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -6242,49 +6388,49 @@ Client
 
         - **ResourceDetails** *(list) --* 
 
-          The resulting detailed resource information.
+          Information about the resources.
 
           
           
 
           - *(dict) --* 
 
-            Detailed resource information.
+            Information about a resource.
 
             
             
 
             - **Id** *(string) --* 
 
-              Identifier of the resource.
+              The identifier of the resource.
 
               
             
 
             - **ARN** *(string) --* 
 
-              ARN of the resource.
+              The ARN of the resource.
 
               
             
 
             - **Name** *(string) --* 
 
-              Name of the resource.
+              The name of the resource.
 
               
             
 
             - **Description** *(string) --* 
 
-              Description of the resource.
+              The description of the resource.
 
               
             
 
             - **CreatedTime** *(datetime) --* 
 
-              Creation time of the resource.
+              The creation time of the resource.
 
               
         
@@ -6293,7 +6439,7 @@ Client
 
         - **PageToken** *(string) --* 
 
-          The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+          The page token for the next set of results. To retrieve the first set of results, use null.
 
           
     
@@ -6302,7 +6448,7 @@ Client
 
     
 
-    Lists detailed TagOptions information.
+    Lists the specified TagOptions or all TagOptions.
 
     
 
@@ -6324,28 +6470,28 @@ Client
     :type Filters: dict
     :param Filters: 
 
-      The list of filters with which to limit search results. If no search filters are specified, the output is all TagOptions. 
+      The search filters. If no search filters are specified, the output includes all TagOptions.
 
       
 
     
       - **Key** *(string) --* 
 
-        The ListTagOptionsFilters key.
+        The TagOption key.
 
         
 
       
       - **Value** *(string) --* 
 
-        The ListTagOptionsFilters value.
+        The TagOption value.
 
         
 
       
       - **Active** *(boolean) --* 
 
-        The ListTagOptionsFilters active state.
+        The active state.
 
         
 
@@ -6354,7 +6500,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -6362,7 +6508,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -6396,42 +6542,42 @@ Client
 
         - **TagOptionDetails** *(list) --* 
 
-          The resulting detailed TagOption information.
+          Information about the TagOptions.
 
           
           
 
           - *(dict) --* 
 
-            The TagOption details.
+            Information about a TagOption.
 
             
             
 
             - **Key** *(string) --* 
 
-              The TagOptionDetail key.
+              The TagOption key.
 
               
             
 
             - **Value** *(string) --* 
 
-              The TagOptionDetail value.
+              The TagOption value.
 
               
             
 
             - **Active** *(boolean) --* 
 
-              The TagOptionDetail active state.
+              The TagOption active state.
 
               
             
 
             - **Id** *(string) --* 
 
-              The TagOptionDetail identifier.
+              The TagOption identifier.
 
               
         
@@ -6440,7 +6586,7 @@ Client
 
         - **PageToken** *(string) --* 
 
-          The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+          The page token for the next set of results. To retrieve the first set of results, use null.
 
           
     
@@ -6449,11 +6595,15 @@ Client
 
     
 
-    Requests a *provision* of a specified product. A *provisioned product* is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. 
+    Provisions the specified product.
 
      
 
-    You can check the status of this request using the  DescribeRecord operation. The error "Parameter validation failed: Missing required parameter in Tags[*N* ]:*Value* " indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a ``DescribeProvisioningParameters`` call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see  DescribeProvisioningParameters .
+    A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using  DescribeRecord .
+
+     
+
+    If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this will cause the error "Parameter validation failed: Missing required parameter in Tags[*N* ]:*Value* ".
 
     
 
@@ -6515,7 +6665,7 @@ Client
     :type ProvisioningArtifactId: string
     :param ProvisioningArtifactId: **[REQUIRED]** 
 
-      The provisioning artifact identifier for this product. This is sometimes referred to as the product version.
+      The identifier of the provisioning artifact.
 
       
 
@@ -6523,7 +6673,7 @@ Client
     :type PathId: string
     :param PathId: 
 
-      The identifier of the path for this product's provisioning. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.
+      The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use  ListLaunchPaths .
 
       
 
@@ -6531,7 +6681,7 @@ Client
     :type ProvisionedProductName: string
     :param ProvisionedProductName: **[REQUIRED]** 
 
-      A user-friendly name to identify the ProvisionedProduct object. This value must be unique for the AWS account and cannot be updated after the product is provisioned.
+      A user-friendly name for the provisioned product. This value must be unique for the AWS account and cannot be updated after the product is provisioned.
 
       
 
@@ -6546,21 +6696,21 @@ Client
     
       - *(dict) --* 
 
-        The parameter key-value pairs used to provision a product.
+        Information about a parameter used to provision a product.
 
         
 
       
         - **Key** *(string) --* 
 
-          The ``ProvisioningArtifactParameter.ParameterKey`` parameter from  DescribeProvisioningParameters .
+          The parameter key.
 
           
 
         
         - **Value** *(string) --* 
 
-          The value to use for provisioning. Any constraints on this value can be found in ``ProvisioningArtifactParameter`` for ``Key`` .
+          The parameter value.
 
           
 
@@ -6570,28 +6720,28 @@ Client
     :type Tags: list
     :param Tags: 
 
-      A list of tags to use as provisioning options.
+      The tags to use as provisioning options.
 
       
 
     
       - *(dict) --* 
 
-        Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.
+        Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.
 
         
 
       
         - **Key** *(string) --* **[REQUIRED]** 
 
-          The ``ProvisioningArtifactParameter.TagKey`` parameter from  DescribeProvisioningParameters .
+          The tag key.
 
           
 
         
         - **Value** *(string) --* **[REQUIRED]** 
 
-          The desired value for this key.
+          The value for this key.
 
           
 
@@ -6613,7 +6763,7 @@ Client
     :type ProvisionToken: string
     :param ProvisionToken: **[REQUIRED]** 
 
-      An idempotency token that uniquely identifies the provisioning request. 
+      An idempotency token that uniquely identifies the provisioning request.
 
       This field is autopopulated if not provided.
 
@@ -6663,48 +6813,42 @@ Client
 
         - **RecordDetail** *(dict) --* 
 
-          The detailed result of the  ProvisionProduct request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object of the request, and a list of any errors that the request encountered. 
+          Information about the result of  ProvisionProduct .
 
           
           
 
           - **RecordId** *(string) --* 
 
-            The identifier of the ProvisionedProduct object record.
+            The identifier of the record.
 
             
           
 
           - **ProvisionedProductName** *(string) --* 
 
-            The user-friendly name of the ProvisionedProduct object.
+            The user-friendly name of the provisioned product.
 
             
           
 
           - **Status** *(string) --* 
 
-            The status of the ProvisionedProduct object.
+            The status of the provisioned product.
 
              
 
-             ``CREATED`` - Request created but the operation has not yet started.
-
              
-
-             ``IN_PROGRESS`` - The requested operation is in-progress.
-
+            * ``CREATED`` - The request was created but the operation has not started. 
              
-
-             ``IN_PROGRESS_IN_ERROR`` - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback.
-
+            * ``IN_PROGRESS`` - The requested operation is in progress. 
              
-
-             ``SUCCEEDED`` - The requested operation has successfully completed.
-
+            * ``IN_PROGRESS_IN_ERROR`` - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback. 
              
-
-             ``FAILED`` - The requested operation has completed but has failed. Investigate using the error messages returned.
+            * ``SUCCEEDED`` - The requested operation has successfully completed. 
+             
+            * ``FAILED`` - The requested operation has unsuccessfully completed. Investigate using the error messages returned. 
+             
 
             
           
@@ -6718,14 +6862,14 @@ Client
 
           - **UpdatedTime** *(datetime) --* 
 
-            The time when the record for the ProvisionedProduct object was last updated.
+            The time when the record was last updated.
 
             
           
 
           - **ProvisionedProductType** *(string) --* 
 
-            The type of the ProvisionedProduct object.
+            The type of provisioned product. The supported value is ``CFN_STACK`` .
 
             
           
@@ -6734,12 +6878,22 @@ Client
 
             The record type for this record.
 
+             
+
+             
+            * ``PROVISION_PRODUCT``   
+             
+            * ``UPDATE_PROVISIONED_PRODUCT``   
+             
+            * ``TERMINATE_PROVISIONED_PRODUCT``   
+             
+
             
           
 
           - **ProvisionedProductId** *(string) --* 
 
-            The identifier of the ProvisionedProduct object.
+            The identifier of the provisioned product.
 
             
           
@@ -6753,21 +6907,21 @@ Client
 
           - **ProvisioningArtifactId** *(string) --* 
 
-            The provisioning artifact identifier for this product. This is sometimes referred to as the product version.
+            The identifier of the provisioning artifact.
 
             
           
 
           - **PathId** *(string) --* 
 
-            The identifier of the path for this product's provisioning.
+            The path identifier.
 
             
           
 
           - **RecordErrors** *(list) --* 
 
-            A list of errors that occurred while processing the request.
+            The errors that occurred while processing the request.
 
             
             
@@ -6788,7 +6942,7 @@ Client
 
               - **Description** *(string) --* 
 
-                The text description of the error.
+                The description of the error.
 
                 
           
@@ -6797,7 +6951,7 @@ Client
 
           - **RecordTags** *(list) --* 
 
-            List of tags associated with this record.
+            The tags associated with this record.
 
             
             
@@ -6830,7 +6984,7 @@ Client
 
     
 
-    Rejects an offer to share a portfolio.
+    Rejects an offer to share the specified portfolio.
 
     
 
@@ -6892,7 +7046,7 @@ Client
 
     
 
-    Returns a paginated list of all the ProvisionedProduct objects that are currently available (not terminated). 
+    Lists the provisioned products that are available (not terminated).
 
     
 
@@ -6932,33 +7086,31 @@ Client
     :type AccessLevelFilter: dict
     :param AccessLevelFilter: 
 
-      The access level for obtaining results. If left unspecified, ``User`` level access is used.
+      The access level to use to obtain results. The default is ``User`` .
 
       
 
     
       - **Key** *(string) --* 
 
-        Specifies the access level.
+        The access level.
 
          
 
-         ``Account`` allows results at the account level. 
-
          
-
-         ``Role`` allows results based on the federated role of the specified user.
-
+        * ``Account`` - Filter results based on the account. 
          
-
-         ``User`` allows results limited to the specified user. 
+        * ``Role`` - Filter results based on the federated role of the specified user. 
+         
+        * ``User`` - Filter results based on the specified user. 
+         
 
         
 
       
       - **Value** *(string) --* 
 
-        Specifies the user to which the access level applies. A value of ``Self`` is currently supported.
+        The user to which the access level applies. The only supported value is ``Self`` .
 
         
 
@@ -6967,7 +7119,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -6975,7 +7127,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -7014,72 +7166,68 @@ Client
 
         - **ProvisionedProducts** *(list) --* 
 
-          A list of ProvisionedProduct detail objects.
+          Information about the provisioned products.
 
           
           
 
           - *(dict) --* 
 
-            Detailed information about a ProvisionedProduct object.
+            Information about a provisioned product.
 
             
             
 
             - **Name** *(string) --* 
 
-              The user-friendly name of the ProvisionedProduct object.
+              The user-friendly name of the provisioned product.
 
               
             
 
             - **Arn** *(string) --* 
 
-              The ARN associated with the ProvisionedProduct object.
+              The ARN of the provisioned product.
 
               
             
 
             - **Type** *(string) --* 
 
-              The type of the ProvisionedProduct object.
+              The type of provisioned product. The supported value is ``CFN_STACK`` .
 
               
             
 
             - **Id** *(string) --* 
 
-              The identifier of the ProvisionedProduct object.
+              The identifier of the provisioned product.
 
               
             
 
             - **Status** *(string) --* 
 
-              The current status of the ProvisionedProduct.
+              The current status of the provisioned product.
 
                
 
-               ``AVAILABLE`` - Stable state, ready to perform any operation. The most recent action request succeeded and completed.
-
                
-
-               ``UNDER_CHANGE`` - Transitive state, operations performed may or may not have valid results. Wait for an ``AVAILABLE`` status before performing operations.
-
+              * ``AVAILABLE`` - Stable state, ready to perform any operation. The most recent operation succeeded and completed. 
                
-
-               ``TAINTED`` - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version. 
-
+              * ``UNDER_CHANGE`` - Transitive state, operations performed might not have valid results. Wait for an ``AVAILABLE`` status before performing operations. 
                
-
-               ``ERROR`` - Something unexpected happened such that the provisioned product exists but the stack is not running. For example, CloudFormation received an invalid parameter value and could not launch the stack.
+              * ``TAINTED`` - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version. 
+               
+              * ``ERROR`` - An unexpected error occurred, the provisioned product exists but the stack is not running. For example, CloudFormation received a parameter value that was not valid and could not launch the stack. 
+               
 
               
             
 
             - **StatusMessage** *(string) --* 
 
-              The current status message of the ProvisionedProduct.
+              The current status message of the provisioned product.
 
               
             
@@ -7093,14 +7241,14 @@ Client
 
             - **IdempotencyToken** *(string) --* 
 
-              A token to disambiguate duplicate requests. You can use the same input in multiple requests, provided that you also specify a different idempotency token for each request.
+              A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.
 
               
             
 
             - **LastRecordId** *(string) --* 
 
-              The record identifier of the last request performed on this ProvisionedProduct object.
+              The record identifier of the last request performed on this provisioned product.
 
               
         
@@ -7109,7 +7257,7 @@ Client
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -7118,11 +7266,7 @@ Client
 
     
 
-    Returns a paginated list all of the ``Products`` objects to which the caller has access. 
-
-     
-
-    The output of this operation can be used as input for other operations, such as  DescribeProductView .
+    Gets information about the products to which the caller has access.
 
     
 
@@ -7165,7 +7309,7 @@ Client
     :type Filters: dict
     :param Filters: 
 
-      The list of filters with which to limit search results. If no search filters are specified, the output is all the products to which the calling user has access. 
+      The search filters. If no search filters are specified, the output includes all products to which the caller has access.
 
       
 
@@ -7185,7 +7329,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -7193,7 +7337,7 @@ Client
     :type SortBy: string
     :param SortBy: 
 
-      The sort field specifier. If no value is specified, results are not sorted.
+      The sort field. If no value is specified, the results are not sorted.
 
       
 
@@ -7201,7 +7345,7 @@ Client
     :type SortOrder: string
     :param SortOrder: 
 
-      The sort order specifier. If no value is specified, results are not sorted.
+      The sort order. If no value is specified, the results are not sorted.
 
       
 
@@ -7209,7 +7353,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -7258,14 +7402,14 @@ Client
 
         - **ProductViewSummaries** *(list) --* 
 
-          A list of the product view summary objects.
+          Information about the product views.
 
           
           
 
           - *(dict) --* 
 
-            The summary metadata about the specified product.
+            Summary information about a product view.
 
             
             
@@ -7321,7 +7465,7 @@ Client
 
             - **HasDefaultPath** *(boolean) --* 
 
-              A value of ``false`` indicates that the product does not have a default path, while a value of ``true`` indicates that it does. If it's false, call  ListLaunchPaths to disambiguate between paths. If true,  ListLaunchPaths is not required, and the output of the  ProductViewSummary operation can be used directly with  DescribeProvisioningParameters .
+              Indicates whether the product has a default path. If the product does not have a default path, call  ListLaunchPaths to disambiguate between paths. Otherwise,  ListLaunchPaths is not required, and the output of  ProductViewSummary can be used directly with  DescribeProvisioningParameters .
 
               
             
@@ -7351,7 +7495,7 @@ Client
 
         - **ProductViewAggregations** *(dict) --* 
 
-          A list of the product view aggregation value objects.
+          The product view aggregations.
 
           
           
@@ -7389,7 +7533,7 @@ Client
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -7398,7 +7542,7 @@ Client
 
     
 
-    Retrieves summary and status information about all products created within the caller's account. If a portfolio ID is provided, this operation retrieves information for only those products that are associated with the specified portfolio.
+    Gets information about the products for the specified portfolio or all products.
 
     
 
@@ -7451,7 +7595,7 @@ Client
     :type Filters: dict
     :param Filters: 
 
-      The list of filters with which to limit search results. If no search filters are specified, the output is all the products to which the administrator has access.
+      The search filters. If no search filters are specified, the output includes all products to which the administrator has access.
 
       
 
@@ -7471,7 +7615,7 @@ Client
     :type SortBy: string
     :param SortBy: 
 
-      The sort field specifier. If no value is specified, results are not sorted.
+      The sort field. If no value is specified, the results are not sorted.
 
       
 
@@ -7479,7 +7623,7 @@ Client
     :type SortOrder: string
     :param SortOrder: 
 
-      The sort order specifier. If no value is specified, results are not sorted.
+      The sort order. If no value is specified, the results are not sorted.
 
       
 
@@ -7487,7 +7631,7 @@ Client
     :type PageToken: string
     :param PageToken: 
 
-      The page token of the first page retrieved. If null, this retrieves the first page of size ``PageSize`` .
+      The page token for the next set of results. To retrieve the first set of results, use null.
 
       
 
@@ -7495,7 +7639,7 @@ Client
     :type PageSize: integer
     :param PageSize: 
 
-      The maximum number of items to return in the results. If more results exist than fit in the specified ``PageSize`` , the value of ``NextPageToken`` in the response is non-null.
+      The maximum number of items to return with this call.
 
       
 
@@ -7549,21 +7693,21 @@ Client
 
         - **ProductViewDetails** *(list) --* 
 
-          List of detailed product view information objects.
+          Information about the product views.
 
           
           
 
           - *(dict) --* 
 
-            Detailed product view information.
+            Information about a product view.
 
             
             
 
             - **ProductViewSummary** *(dict) --* 
 
-              The summary metadata about the specified product view.
+              Summary information about the product view.
 
               
               
@@ -7619,7 +7763,7 @@ Client
 
               - **HasDefaultPath** *(boolean) --* 
 
-                A value of ``false`` indicates that the product does not have a default path, while a value of ``true`` indicates that it does. If it's false, call  ListLaunchPaths to disambiguate between paths. If true,  ListLaunchPaths is not required, and the output of the  ProductViewSummary operation can be used directly with  DescribeProvisioningParameters .
+                Indicates whether the product has a default path. If the product does not have a default path, call  ListLaunchPaths to disambiguate between paths. Otherwise,  ListLaunchPaths is not required, and the output of  ProductViewSummary can be used directly with  DescribeProvisioningParameters .
 
                 
               
@@ -7648,26 +7792,24 @@ Client
 
             - **Status** *(string) --* 
 
-              Current status of the product.
+              The status of the product.
 
                
 
-               ``AVAILABLE`` - Product is available for use.
-
                
-
-               ``CREATING`` - Creation of product started, not ready for use.
-
+              * ``AVAILABLE`` - The product is ready for use. 
                
-
-               ``FAILED`` - Action on product failed.
+              * ``CREATING`` - Product creation has started; the product is not ready for use. 
+               
+              * ``FAILED`` - An action failed. 
+               
 
               
             
 
             - **ProductARN** *(string) --* 
 
-              The ARN associated with the product.
+              The ARN of the product.
 
               
             
@@ -7683,7 +7825,7 @@ Client
 
         - **NextPageToken** *(string) --* 
 
-          The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+          The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
 
           
     
@@ -7692,15 +7834,15 @@ Client
 
     
 
-    Requests termination of an existing ProvisionedProduct object. If there are ``Tags`` associated with the object, they are terminated when the ProvisionedProduct object is terminated. 
+    Terminates the specified provisioned product.
 
      
 
-    This operation does not delete any records associated with the ProvisionedProduct object.
+    This operation does not delete any records associated with the provisioned product.
 
      
 
-    You can check the status of this request using the  DescribeRecord operation.
+    You can check the status of this request using  DescribeRecord .
 
     
 
@@ -7720,7 +7862,7 @@ Client
     :type ProvisionedProductName: string
     :param ProvisionedProductName: 
 
-      The name of the ProvisionedProduct object to terminate. Specify either ``ProvisionedProductName`` or ``ProvisionedProductId`` , but not both.
+      The name of the provisioned product. You cannot specify both ``ProvisionedProductName`` and ``ProvisionedProductId`` .
 
       
 
@@ -7728,7 +7870,7 @@ Client
     :type ProvisionedProductId: string
     :param ProvisionedProductId: 
 
-      The identifier of the ProvisionedProduct object to terminate. Specify either ``ProvisionedProductName`` or ``ProvisionedProductId`` , but not both.
+      The identifier of the provisioned product. You cannot specify both ``ProvisionedProductName`` and ``ProvisionedProductId`` .
 
       
 
@@ -7736,7 +7878,7 @@ Client
     :type TerminateToken: string
     :param TerminateToken: **[REQUIRED]** 
 
-      An idempotency token that uniquely identifies the termination request. This token is only valid during the termination process. After the ProvisionedProduct object is terminated, further requests to terminate the same ProvisionedProduct object always return **ResourceNotFound** regardless of the value of ``TerminateToken`` .
+      An idempotency token that uniquely identifies the termination request. This token is only valid during the termination process. After the provisioned product is terminated, subsequent requests to terminate the same provisioned product always return **ResourceNotFound** .
 
       This field is autopopulated if not provided.
 
@@ -7744,7 +7886,7 @@ Client
     :type IgnoreErrors: boolean
     :param IgnoreErrors: 
 
-      If set to true, AWS Service Catalog stops managing the specified ProvisionedProduct object even if it cannot delete the underlying resources.
+      If set to true, AWS Service Catalog stops managing the specified provisioned product even if it cannot delete the underlying resources.
 
       
 
@@ -7812,48 +7954,42 @@ Client
 
         - **RecordDetail** *(dict) --* 
 
-          The detailed result of the  TerminateProvisionedProduct request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object that the request is modifying, and a list of any errors that the request encountered.
+          Information about the result of this request.
 
           
           
 
           - **RecordId** *(string) --* 
 
-            The identifier of the ProvisionedProduct object record.
+            The identifier of the record.
 
             
           
 
           - **ProvisionedProductName** *(string) --* 
 
-            The user-friendly name of the ProvisionedProduct object.
+            The user-friendly name of the provisioned product.
 
             
           
 
           - **Status** *(string) --* 
 
-            The status of the ProvisionedProduct object.
+            The status of the provisioned product.
 
              
 
-             ``CREATED`` - Request created but the operation has not yet started.
-
              
-
-             ``IN_PROGRESS`` - The requested operation is in-progress.
-
+            * ``CREATED`` - The request was created but the operation has not started. 
              
-
-             ``IN_PROGRESS_IN_ERROR`` - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback.
-
+            * ``IN_PROGRESS`` - The requested operation is in progress. 
              
-
-             ``SUCCEEDED`` - The requested operation has successfully completed.
-
+            * ``IN_PROGRESS_IN_ERROR`` - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback. 
              
-
-             ``FAILED`` - The requested operation has completed but has failed. Investigate using the error messages returned.
+            * ``SUCCEEDED`` - The requested operation has successfully completed. 
+             
+            * ``FAILED`` - The requested operation has unsuccessfully completed. Investigate using the error messages returned. 
+             
 
             
           
@@ -7867,14 +8003,14 @@ Client
 
           - **UpdatedTime** *(datetime) --* 
 
-            The time when the record for the ProvisionedProduct object was last updated.
+            The time when the record was last updated.
 
             
           
 
           - **ProvisionedProductType** *(string) --* 
 
-            The type of the ProvisionedProduct object.
+            The type of provisioned product. The supported value is ``CFN_STACK`` .
 
             
           
@@ -7883,12 +8019,22 @@ Client
 
             The record type for this record.
 
+             
+
+             
+            * ``PROVISION_PRODUCT``   
+             
+            * ``UPDATE_PROVISIONED_PRODUCT``   
+             
+            * ``TERMINATE_PROVISIONED_PRODUCT``   
+             
+
             
           
 
           - **ProvisionedProductId** *(string) --* 
 
-            The identifier of the ProvisionedProduct object.
+            The identifier of the provisioned product.
 
             
           
@@ -7902,21 +8048,21 @@ Client
 
           - **ProvisioningArtifactId** *(string) --* 
 
-            The provisioning artifact identifier for this product. This is sometimes referred to as the product version.
+            The identifier of the provisioning artifact.
 
             
           
 
           - **PathId** *(string) --* 
 
-            The identifier of the path for this product's provisioning.
+            The path identifier.
 
             
           
 
           - **RecordErrors** *(list) --* 
 
-            A list of errors that occurred while processing the request.
+            The errors that occurred while processing the request.
 
             
             
@@ -7937,7 +8083,7 @@ Client
 
               - **Description** *(string) --* 
 
-                The text description of the error.
+                The description of the error.
 
                 
           
@@ -7946,7 +8092,7 @@ Client
 
           - **RecordTags** *(list) --* 
 
-            List of tags associated with this record.
+            The tags associated with this record.
 
             
             
@@ -7979,7 +8125,7 @@ Client
 
     
 
-    Updates an existing constraint.
+    Updates the specified constraint.
 
     
 
@@ -8015,7 +8161,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The identifier of the constraint to update.
+      The identifier of the constraint.
 
       
 
@@ -8023,7 +8169,7 @@ Client
     :type Description: string
     :param Description: 
 
-      The updated text description of the constraint.
+      The updated description of the constraint.
 
       
 
@@ -8056,7 +8202,7 @@ Client
 
         - **ConstraintDetail** *(dict) --* 
 
-          The resulting detailed constraint information.
+          Information about the constraint.
 
           
           
@@ -8070,14 +8216,24 @@ Client
 
           - **Type** *(string) --* 
 
-            The type of the constraint.
+            The type of constraint.
+
+             
+
+             
+            * ``LAUNCH``   
+             
+            * ``NOTIFICATION``   
+             
+            * ``TEMPLATE``   
+             
 
             
           
 
           - **Description** *(string) --* 
 
-            The text description of the constraint.
+            The description of the constraint.
 
             
           
@@ -8092,7 +8248,7 @@ Client
 
         - **ConstraintParameters** *(string) --* 
 
-          The resulting updated constraint parameters.
+          The constraint parameters.
 
           
         
@@ -8108,7 +8264,11 @@ Client
 
     
 
-    Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.
+    Updates the specified portfolio.
+
+     
+
+    You cannot update a product that was shared with you.
 
     
 
@@ -8155,7 +8315,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The identifier of the portfolio for the update request.
+      The portfolio identifier.
 
       
 
@@ -8171,7 +8331,7 @@ Client
     :type Description: string
     :param Description: 
 
-      The updated text description of the portfolio.
+      The updated description of the portfolio.
 
       
 
@@ -8187,28 +8347,28 @@ Client
     :type AddTags: list
     :param AddTags: 
 
-      Tags to add to the existing list of tags associated with the portfolio.
+      The tags to add.
 
       
 
     
       - *(dict) --* 
 
-        Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.
+        Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.
 
         
 
       
         - **Key** *(string) --* **[REQUIRED]** 
 
-          The ``ProvisioningArtifactParameter.TagKey`` parameter from  DescribeProvisioningParameters .
+          The tag key.
 
           
 
         
         - **Value** *(string) --* **[REQUIRED]** 
 
-          The desired value for this key.
+          The value for this key.
 
           
 
@@ -8218,7 +8378,7 @@ Client
     :type RemoveTags: list
     :param RemoveTags: 
 
-      Tags to remove from the existing list of tags associated with the portfolio.
+      The tags to remove.
 
       
 
@@ -8261,14 +8421,14 @@ Client
 
         - **PortfolioDetail** *(dict) --* 
 
-          The resulting detailed portfolio information.
+          Information about the portfolio.
 
           
           
 
           - **Id** *(string) --* 
 
-            The identifier for the portfolio.
+            The portfolio identifier.
 
             
           
@@ -8289,7 +8449,7 @@ Client
 
           - **Description** *(string) --* 
 
-            The text description of the portfolio.
+            The description of the portfolio.
 
             
           
@@ -8311,28 +8471,28 @@ Client
 
         - **Tags** *(list) --* 
 
-          Tags associated with the portfolio.
+          Information about the tags associated with the portfolio.
 
           
           
 
           - *(dict) --* 
 
-            Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.
+            Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.
 
             
             
 
             - **Key** *(string) --* 
 
-              The ``ProvisioningArtifactParameter.TagKey`` parameter from  DescribeProvisioningParameters .
+              The tag key.
 
               
             
 
             - **Value** *(string) --* 
 
-              The desired value for this key.
+              The value for this key.
 
               
         
@@ -8343,7 +8503,7 @@ Client
 
     
 
-    Updates an existing product.
+    Updates the specified product.
 
     
 
@@ -8394,7 +8554,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The identifier of the product for the update request.
+      The product identifier.
 
       
 
@@ -8418,7 +8578,7 @@ Client
     :type Description: string
     :param Description: 
 
-      The updated text description of the product.
+      The updated description of the product.
 
       
 
@@ -8458,28 +8618,28 @@ Client
     :type AddTags: list
     :param AddTags: 
 
-      Tags to add to the existing list of tags associated with the product.
+      The tags to add to the product.
 
       
 
     
       - *(dict) --* 
 
-        Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.
+        Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.
 
         
 
       
         - **Key** *(string) --* **[REQUIRED]** 
 
-          The ``ProvisioningArtifactParameter.TagKey`` parameter from  DescribeProvisioningParameters .
+          The tag key.
 
           
 
         
         - **Value** *(string) --* **[REQUIRED]** 
 
-          The desired value for this key.
+          The value for this key.
 
           
 
@@ -8489,7 +8649,7 @@ Client
     :type RemoveTags: list
     :param RemoveTags: 
 
-      Tags to remove from the existing list of tags associated with the product.
+      The tags to remove from the product.
 
       
 
@@ -8542,14 +8702,14 @@ Client
 
         - **ProductViewDetail** *(dict) --* 
 
-          The resulting detailed product view information.
+          Information about the product view.
 
           
           
 
           - **ProductViewSummary** *(dict) --* 
 
-            The summary metadata about the specified product view.
+            Summary information about the product view.
 
             
             
@@ -8605,7 +8765,7 @@ Client
 
             - **HasDefaultPath** *(boolean) --* 
 
-              A value of ``false`` indicates that the product does not have a default path, while a value of ``true`` indicates that it does. If it's false, call  ListLaunchPaths to disambiguate between paths. If true,  ListLaunchPaths is not required, and the output of the  ProductViewSummary operation can be used directly with  DescribeProvisioningParameters .
+              Indicates whether the product has a default path. If the product does not have a default path, call  ListLaunchPaths to disambiguate between paths. Otherwise,  ListLaunchPaths is not required, and the output of  ProductViewSummary can be used directly with  DescribeProvisioningParameters .
 
               
             
@@ -8634,26 +8794,24 @@ Client
 
           - **Status** *(string) --* 
 
-            Current status of the product.
+            The status of the product.
 
              
 
-             ``AVAILABLE`` - Product is available for use.
-
              
-
-             ``CREATING`` - Creation of product started, not ready for use.
-
+            * ``AVAILABLE`` - The product is ready for use. 
              
-
-             ``FAILED`` - Action on product failed.
+            * ``CREATING`` - Product creation has started; the product is not ready for use. 
+             
+            * ``FAILED`` - An action failed. 
+             
 
             
           
 
           - **ProductARN** *(string) --* 
 
-            The ARN associated with the product.
+            The ARN of the product.
 
             
           
@@ -8668,28 +8826,28 @@ Client
 
         - **Tags** *(list) --* 
 
-          Tags associated with the product.
+          Information about the tags associated with the product.
 
           
           
 
           - *(dict) --* 
 
-            Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.
+            Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.
 
             
             
 
             - **Key** *(string) --* 
 
-              The ``ProvisioningArtifactParameter.TagKey`` parameter from  DescribeProvisioningParameters .
+              The tag key.
 
               
             
 
             - **Value** *(string) --* 
 
-              The desired value for this key.
+              The value for this key.
 
               
         
@@ -8700,11 +8858,15 @@ Client
 
     
 
-    Requests updates to the configuration of an existing ProvisionedProduct object. If there are tags associated with the object, they cannot be updated or added with this operation. Depending on the specific updates requested, this operation may update with no interruption, with some interruption, or replace the ProvisionedProduct object entirely. 
+    Requests updates to the configuration of the specified provisioned product.
 
      
 
-    You can check the status of this request using the  DescribeRecord operation.
+    If there are tags associated with the object, they cannot be updated or added. Depending on the specific updates requested, this operation can update with no interruption, with some interruption, or replace the provisioned product entirely.
+
+     
+
+    You can check the status of this request using  DescribeRecord .
 
     
 
@@ -8751,7 +8913,7 @@ Client
     :type ProvisionedProductName: string
     :param ProvisionedProductName: 
 
-      The updated name of the ProvisionedProduct object. Specify either ``ProvisionedProductName`` or ``ProvisionedProductId`` , but not both.
+      The updated name of the provisioned product. You cannot specify both ``ProvisionedProductName`` and ``ProvisionedProductId`` .
 
       
 
@@ -8759,7 +8921,7 @@ Client
     :type ProvisionedProductId: string
     :param ProvisionedProductId: 
 
-      The identifier of the ProvisionedProduct object to update. Specify either ``ProvisionedProductName`` or ``ProvisionedProductId`` , but not both.
+      The identifier of the provisioned product. You cannot specify both ``ProvisionedProductName`` and ``ProvisionedProductId`` .
 
       
 
@@ -8767,7 +8929,7 @@ Client
     :type ProductId: string
     :param ProductId: 
 
-      The identifier of the ProvisionedProduct object.
+      The identifier of the provisioned product.
 
       
 
@@ -8775,7 +8937,7 @@ Client
     :type ProvisioningArtifactId: string
     :param ProvisioningArtifactId: 
 
-      The provisioning artifact identifier for this product. This is sometimes referred to as the product version.
+      The identifier of the provisioning artifact.
 
       
 
@@ -8783,7 +8945,7 @@ Client
     :type PathId: string
     :param PathId: 
 
-      The identifier of the path to use in the updated ProvisionedProduct object. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.
+      The new path identifier. This value is optional if the product has a default path, and required if the product has more than one path.
 
       
 
@@ -8791,35 +8953,35 @@ Client
     :type ProvisioningParameters: list
     :param ProvisioningParameters: 
 
-      A list of ``ProvisioningParameter`` objects used to update the ProvisionedProduct object.
+      The new parameters.
 
       
 
     
       - *(dict) --* 
 
-        The parameter key-value pair used to update a ProvisionedProduct object. If ``UsePreviousValue`` is set to true, ``Value`` is ignored and the value for ``Key`` is kept as previously set (current value).
+        The parameter key-value pair used to update a provisioned product.
 
         
 
       
         - **Key** *(string) --* 
 
-          The ``ProvisioningArtifactParameter.ParameterKey`` parameter from  DescribeProvisioningParameters .
+          The parameter key.
 
           
 
         
         - **Value** *(string) --* 
 
-          The value to use for updating the product provisioning. Any constraints on this value can be found in the ``ProvisioningArtifactParameter`` parameter for ``Key`` .
+          The parameter value.
 
           
 
         
         - **UsePreviousValue** *(boolean) --* 
 
-          If true, uses the currently set value for ``Key`` , ignoring ``UpdateProvisioningParameter.Value`` .
+          If set to true, ``Value`` is ignored and the previous parameter value is kept.
 
           
 
@@ -8829,7 +8991,7 @@ Client
     :type UpdateToken: string
     :param UpdateToken: **[REQUIRED]** 
 
-      The idempotency token that uniquely identifies the provisioning update request.
+      The idempotency token that uniquely identifies the provisioning update rquest.
 
       This field is autopopulated if not provided.
 
@@ -8879,48 +9041,42 @@ Client
 
         - **RecordDetail** *(dict) --* 
 
-          The detailed result of the  UpdateProvisionedProduct request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object that the request is modifying, and a list of any errors that the request encountered.
+          Information about the result of the request.
 
           
           
 
           - **RecordId** *(string) --* 
 
-            The identifier of the ProvisionedProduct object record.
+            The identifier of the record.
 
             
           
 
           - **ProvisionedProductName** *(string) --* 
 
-            The user-friendly name of the ProvisionedProduct object.
+            The user-friendly name of the provisioned product.
 
             
           
 
           - **Status** *(string) --* 
 
-            The status of the ProvisionedProduct object.
+            The status of the provisioned product.
 
              
 
-             ``CREATED`` - Request created but the operation has not yet started.
-
              
-
-             ``IN_PROGRESS`` - The requested operation is in-progress.
-
+            * ``CREATED`` - The request was created but the operation has not started. 
              
-
-             ``IN_PROGRESS_IN_ERROR`` - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback.
-
+            * ``IN_PROGRESS`` - The requested operation is in progress. 
              
-
-             ``SUCCEEDED`` - The requested operation has successfully completed.
-
+            * ``IN_PROGRESS_IN_ERROR`` - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback. 
              
-
-             ``FAILED`` - The requested operation has completed but has failed. Investigate using the error messages returned.
+            * ``SUCCEEDED`` - The requested operation has successfully completed. 
+             
+            * ``FAILED`` - The requested operation has unsuccessfully completed. Investigate using the error messages returned. 
+             
 
             
           
@@ -8934,14 +9090,14 @@ Client
 
           - **UpdatedTime** *(datetime) --* 
 
-            The time when the record for the ProvisionedProduct object was last updated.
+            The time when the record was last updated.
 
             
           
 
           - **ProvisionedProductType** *(string) --* 
 
-            The type of the ProvisionedProduct object.
+            The type of provisioned product. The supported value is ``CFN_STACK`` .
 
             
           
@@ -8950,12 +9106,22 @@ Client
 
             The record type for this record.
 
+             
+
+             
+            * ``PROVISION_PRODUCT``   
+             
+            * ``UPDATE_PROVISIONED_PRODUCT``   
+             
+            * ``TERMINATE_PROVISIONED_PRODUCT``   
+             
+
             
           
 
           - **ProvisionedProductId** *(string) --* 
 
-            The identifier of the ProvisionedProduct object.
+            The identifier of the provisioned product.
 
             
           
@@ -8969,21 +9135,21 @@ Client
 
           - **ProvisioningArtifactId** *(string) --* 
 
-            The provisioning artifact identifier for this product. This is sometimes referred to as the product version.
+            The identifier of the provisioning artifact.
 
             
           
 
           - **PathId** *(string) --* 
 
-            The identifier of the path for this product's provisioning.
+            The path identifier.
 
             
           
 
           - **RecordErrors** *(list) --* 
 
-            A list of errors that occurred while processing the request.
+            The errors that occurred while processing the request.
 
             
             
@@ -9004,7 +9170,7 @@ Client
 
               - **Description** *(string) --* 
 
-                The text description of the error.
+                The description of the error.
 
                 
           
@@ -9013,7 +9179,7 @@ Client
 
           - **RecordTags** *(list) --* 
 
-            List of tags associated with this record.
+            The tags associated with this record.
 
             
             
@@ -9046,7 +9212,11 @@ Client
 
     
 
-    Updates an existing provisioning artifact's information. This operation does not work on a provisioning artifact associated with a product that has been shared with you.
+    Updates the specified provisioning artifact (also known as a version) for the specified product.
+
+     
+
+    You cannot update a provisioning artifact for a product that was shared with you.
 
     
 
@@ -9061,7 +9231,8 @@ Client
           ProductId='string',
           ProvisioningArtifactId='string',
           Name='string',
-          Description='string'
+          Description='string',
+          Active=True|False
       )
     :type AcceptLanguage: string
     :param AcceptLanguage: 
@@ -9092,7 +9263,7 @@ Client
     :type ProvisioningArtifactId: string
     :param ProvisioningArtifactId: **[REQUIRED]** 
 
-      The identifier of the provisioning artifact for the update request. This is sometimes referred to as the product version.
+      The identifier of the provisioning artifact.
 
       
 
@@ -9108,7 +9279,15 @@ Client
     :type Description: string
     :param Description: 
 
-      The updated text description of the provisioning artifact.
+      The updated description of the provisioning artifact.
+
+      
+
+    
+    :type Active: boolean
+    :param Active: 
+
+      Indicates whether the product version is active.
 
       
 
@@ -9128,7 +9307,8 @@ Client
                 'Name': 'string',
                 'Description': 'string',
                 'Type': 'CLOUD_FORMATION_TEMPLATE'|'MARKETPLACE_AMI'|'MARKETPLACE_CAR',
-                'CreatedTime': datetime(2015, 1, 1)
+                'CreatedTime': datetime(2015, 1, 1),
+                'Active': True|False
             },
             'Info': {
                 'string': 'string'
@@ -9144,43 +9324,45 @@ Client
 
         - **ProvisioningArtifactDetail** *(dict) --* 
 
-          The resulting detailed provisioning artifact information.
+          Information about the provisioning artifact.
 
           
           
 
           - **Id** *(string) --* 
 
-            The identifier of the provisioning artifact. This is sometimes referred to as the product version.
+            The identifier of the provisioning artifact.
 
             
           
 
           - **Name** *(string) --* 
 
-            The name assigned to the provisioning artifact.
+            The name of the provisioning artifact.
 
             
           
 
           - **Description** *(string) --* 
 
-            The text description of the provisioning artifact.
+            The description of the provisioning artifact.
 
             
           
 
           - **Type** *(string) --* 
 
-            The type of the provisioning artifact. The following provisioning artifact types are used by AWS Marketplace products:
+            The type of provisioning artifact.
 
              
 
-             ``MARKETPLACE_AMI`` - AMI products.
-
              
-
-             ``MARKETPLACE_CAR`` - CAR (Cluster and AWS Resources) products.
+            * ``CLOUD_FORMATION_TEMPLATE`` - AWS CloudFormation template 
+             
+            * ``MARKETPLACE_AMI`` - AWS Marketplace AMI 
+             
+            * ``MARKETPLACE_CAR`` - AWS Marketplace Clusters and AWS Resources 
+             
 
             
           
@@ -9190,12 +9372,19 @@ Client
             The UTC timestamp of the creation time.
 
             
+          
+
+          - **Active** *(boolean) --* 
+
+            Indicates whether the product version is active.
+
+            
       
         
 
         - **Info** *(dict) --* 
 
-          Additional information about the provisioning artifact update request.
+          The URL of the CloudFormation template in Amazon S3.
 
           
           
@@ -9219,7 +9408,7 @@ Client
 
     
 
-    Updates an existing TagOption.
+    Updates the specified TagOption.
 
     
 
@@ -9237,7 +9426,7 @@ Client
     :type Id: string
     :param Id: **[REQUIRED]** 
 
-      The identifier of the constraint to update.
+      The TagOption identifier.
 
       
 
@@ -9284,35 +9473,35 @@ Client
 
         - **TagOptionDetail** *(dict) --* 
 
-          The resulting detailed TagOption information.
+          Information about the TagOption.
 
           
           
 
           - **Key** *(string) --* 
 
-            The TagOptionDetail key.
+            The TagOption key.
 
             
           
 
           - **Value** *(string) --* 
 
-            The TagOptionDetail value.
+            The TagOption value.
 
             
           
 
           - **Active** *(boolean) --* 
 
-            The TagOptionDetail active state.
+            The TagOption active state.
 
             
           
 
           - **Id** *(string) --* 
 
-            The TagOptionDetail identifier.
+            The TagOption identifier.
 
             
       

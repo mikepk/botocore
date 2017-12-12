@@ -395,7 +395,7 @@ Client
     :type ImageName: string
     :param ImageName: **[REQUIRED]** 
 
-      The name of the image used by the fleet.
+      The name of the image used to create the fleet.
 
       
 
@@ -454,6 +454,18 @@ Client
     
     :type FleetType: string
     :param FleetType: 
+
+      The fleet type.
+
+        ALWAYS_ON  
+
+      Provides users with instant-on access to their apps. You are charged for all running instances in your fleet, even if no users are streaming apps.
+
+        ON_DEMAND  
+
+      Provide users with access to applications after they connect, which takes one to two minutes. You are charged for instance streaming when users are connected and a small hourly fee for instances that are not streaming apps.
+
+        
 
     
     :type ComputeCapacity: dict
@@ -522,7 +534,7 @@ Client
     :type Description: string
     :param Description: 
 
-      The description displayed to end users.
+      The description for display.
 
       
 
@@ -530,7 +542,7 @@ Client
     :type DisplayName: string
     :param DisplayName: 
 
-      The fleet name displayed to end users.
+      The fleet name for display.
 
       
 
@@ -546,7 +558,7 @@ Client
     :type DomainJoinInfo: dict
     :param DomainJoinInfo: 
 
-      The information needed for streaming instances to join a domain.
+      The information needed to join a Microsoft Active Directory domain.
 
       
 
@@ -645,21 +657,21 @@ Client
 
           - **DisplayName** *(string) --* 
 
-            The fleet name displayed to end users.
+            The fleet name for display.
 
             
           
 
           - **Description** *(string) --* 
 
-            The description displayed to end users.
+            The description for display.
 
             
           
 
           - **ImageName** *(string) --* 
 
-            The image used by the fleet.
+            The name of the image used to create the fleet.
 
             
           
@@ -672,6 +684,18 @@ Client
           
 
           - **FleetType** *(string) --* 
+
+            The fleet type.
+
+              ALWAYS_ON  
+
+            Provides users with instant-on access to their apps. You are charged for all running instances in your fleet, even if no users are streaming apps.
+
+              ON_DEMAND  
+
+            Provide users with access to applications after they connect, which takes one to two minutes. You are charged for instance streaming when users are connected and a small hourly fee for instances that are not streaming apps.
+
+              
           
 
           - **ComputeCapacityStatus** *(dict) --* 
@@ -807,7 +831,7 @@ Client
 
           - **DomainJoinInfo** *(dict) --* 
 
-            The information needed for streaming instances to join a domain.
+            The information needed to join a Microsoft Active Directory domain.
 
             
             
@@ -829,6 +853,14 @@ Client
     
 
   .. py:method:: create_image_builder(**kwargs)
+
+    
+
+    Creates an image builder.
+
+     
+
+    The initial state of the builder is ``PENDING`` . When it is ready, the state is ``RUNNING`` .
 
     
 
@@ -856,32 +888,53 @@ Client
           DomainJoinInfo={
               'DirectoryName': 'string',
               'OrganizationalUnitDistinguishedName': 'string'
-          }
+          },
+          AppstreamAgentVersion='string'
       )
     :type Name: string
     :param Name: **[REQUIRED]** 
+
+      A unique name for the image builder.
+
+      
 
     
     :type ImageName: string
     :param ImageName: **[REQUIRED]** 
 
+      The name of the image used to create the builder.
+
+      
+
     
     :type InstanceType: string
     :param InstanceType: **[REQUIRED]** 
+
+      The instance type to use when launching the image builder.
+
+      
 
     
     :type Description: string
     :param Description: 
 
+      The description for display.
+
+      
+
     
     :type DisplayName: string
     :param DisplayName: 
+
+      The image builder name for display.
+
+      
 
     
     :type VpcConfig: dict
     :param VpcConfig: 
 
-      Describes VPC configuration information.
+      The VPC configuration for the image builder. You can specify only one subnet.
 
       
 
@@ -912,11 +965,15 @@ Client
     :type EnableDefaultInternetAccess: boolean
     :param EnableDefaultInternetAccess: 
 
+      Enables or disables default internet access for the image builder.
+
+      
+
     
     :type DomainJoinInfo: dict
     :param DomainJoinInfo: 
 
-      Contains the information needed for streaming instances to join a domain.
+      The information needed to join a Microsoft Active Directory domain.
 
       
 
@@ -935,6 +992,14 @@ Client
         
 
       
+    
+    :type AppstreamAgentVersion: string
+    :param AppstreamAgentVersion: 
+
+      The version of the AppStream 2.0 agent to use for this image builder. To use the latest version of the AppStream 2.0 agent, specify [LATEST].
+
+      
+
     
     
     :rtype: dict
@@ -962,7 +1027,7 @@ Client
                 },
                 'InstanceType': 'string',
                 'Platform': 'WINDOWS',
-                'State': 'PENDING'|'RUNNING'|'STOPPING'|'STOPPED'|'REBOOTING'|'SNAPSHOTTING'|'DELETING'|'FAILED',
+                'State': 'PENDING'|'UPDATING_AGENT'|'RUNNING'|'STOPPING'|'STOPPED'|'REBOOTING'|'SNAPSHOTTING'|'DELETING'|'FAILED',
                 'StateChangeReason': {
                     'Code': 'INTERNAL_ERROR'|'IMAGE_UNAVAILABLE',
                     'Message': 'string'
@@ -979,7 +1044,8 @@ Client
                         'ErrorMessage': 'string',
                         'ErrorTimestamp': datetime(2015, 1, 1)
                     },
-                ]
+                ],
+                'AppstreamAgentVersion': 'string'
             }
         }
       **Response Structure** 
@@ -990,26 +1056,50 @@ Client
         
 
         - **ImageBuilder** *(dict) --* 
+
+          Information about the image builder.
+
+          
           
 
           - **Name** *(string) --* 
+
+            The name of the image builder.
+
+            
           
 
           - **Arn** *(string) --* 
+
+            The ARN for the image builder.
+
+            
           
 
           - **ImageArn** *(string) --* 
+
+            The ARN of the image from which this builder was created.
+
+            
           
 
           - **Description** *(string) --* 
+
+            The description for display.
+
+            
           
 
           - **DisplayName** *(string) --* 
+
+            The image builder name for display.
+
+            
           
 
           - **VpcConfig** *(dict) --* 
 
-            Describes VPC configuration information.
+            The VPC configuration of the image builder.
 
             
             
@@ -1038,33 +1128,65 @@ Client
           
 
           - **InstanceType** *(string) --* 
+
+            The instance type for the image builder.
+
+            
           
 
           - **Platform** *(string) --* 
+
+            The operating system platform of the image builder.
+
+            
           
 
           - **State** *(string) --* 
+
+            The state of the image builder.
+
+            
           
 
           - **StateChangeReason** *(dict) --* 
+
+            The reason why the last state change occurred.
+
+            
             
 
             - **Code** *(string) --* 
+
+              The state change reason code.
+
+              
             
 
             - **Message** *(string) --* 
+
+              The state change reason message.
+
+              
         
           
 
           - **CreatedTime** *(datetime) --* 
+
+            The time stamp when the image builder was created.
+
+            
           
 
           - **EnableDefaultInternetAccess** *(boolean) --* 
+
+            Enables or disables default internet access for the image builder.
+
+            
           
 
           - **DomainJoinInfo** *(dict) --* 
 
-            Contains the information needed for streaming instances to join a domain.
+            The information needed to join a Microsoft Active Directory domain.
 
             
             
@@ -1085,24 +1207,55 @@ Client
           
 
           - **ImageBuilderErrors** *(list) --* 
+
+            The image builder errors.
+
+            
             
 
             - *(dict) --* 
+
+              Describes a resource error.
+
+              
               
 
               - **ErrorCode** *(string) --* 
+
+                The error code.
+
+                
               
 
               - **ErrorMessage** *(string) --* 
+
+                The error message.
+
+                
               
 
               - **ErrorTimestamp** *(datetime) --* 
+
+                The time the error occurred.
+
+                
           
         
+          
+
+          - **AppstreamAgentVersion** *(string) --* 
+
+            The version of the AppStream 2.0 agent that is currently being used by this image builder.
+
+            
       
     
 
   .. py:method:: create_image_builder_streaming_url(**kwargs)
+
+    
+
+    Creates a URL to start an image builder streaming session.
 
     
 
@@ -1119,9 +1272,17 @@ Client
     :type Name: string
     :param Name: **[REQUIRED]** 
 
+      The name of the image builder.
+
+      
+
     
     :type Validity: integer
     :param Validity: 
+
+      The time that the streaming URL will be valid, in seconds. Specify a value between 1 and 604800 seconds. The default is 3600 seconds.
+
+      
 
     
     
@@ -1145,9 +1306,17 @@ Client
         
 
         - **StreamingURL** *(string) --* 
+
+          The URL to start the AppStream 2.0 streaming session.
+
+          
         
 
         - **Expires** *(datetime) --* 
+
+          The elapsed time, in seconds after the Unix epoch, when this URL expires.
+
+          
     
 
   .. py:method:: create_stack(**kwargs)
@@ -1186,7 +1355,7 @@ Client
     :type Description: string
     :param Description: 
 
-      The description displayed to end users.
+      The description for display.
 
       
 
@@ -1194,7 +1363,7 @@ Client
     :type DisplayName: string
     :param DisplayName: 
 
-      The stack name displayed to end users.
+      The stack name for display.
 
       
 
@@ -1290,14 +1459,14 @@ Client
 
           - **Description** *(string) --* 
 
-            The description displayed to end users.
+            The description for display.
 
             
           
 
           - **DisplayName** *(string) --* 
 
-            The stack name displayed to end users.
+            The stack name for display.
 
             
           
@@ -1376,10 +1545,6 @@ Client
 
     Creates a URL to start a streaming session for the specified user.
 
-     
-
-    By default, the URL is valid only for one minute from the time that it is generated.
-
     
 
     See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/CreateStreamingURL>`_    
@@ -1423,7 +1588,7 @@ Client
     :type ApplicationId: string
     :param ApplicationId: 
 
-      The ID of the application that must be launched after the session starts.
+      The name of the application to launch after the session starts. This is the name that you specified as **Name** in the Image Assistant.
 
       
 
@@ -1431,7 +1596,7 @@ Client
     :type Validity: integer
     :param Validity: 
 
-      The time that the streaming URL will be valid, in seconds. Specify a value between 1 and 604800 seconds.
+      The time that the streaming URL will be valid, in seconds. Specify a value between 1 and 604800 seconds. The default is 60 seconds.
 
       
 
@@ -1439,7 +1604,7 @@ Client
     :type SessionContext: string
     :param SessionContext: 
 
-      The session context of the streaming URL.
+      The session context. For more information, see `Session Context <http://docs.aws.amazon.com/appstream2/latest/developerguide/managing-stacks-fleets.html#managing-stacks-fleets-parameters>`__ in the *Amazon AppStream 2.0 Developer Guide* .
 
       
 
@@ -1568,6 +1733,10 @@ Client
 
     
 
+    Deletes the specified image. You cannot delete an image that is currently in use. After you delete an image, you cannot provision new capacity using the image.
+
+    
+
     See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DeleteImage>`_    
 
 
@@ -1579,6 +1748,10 @@ Client
       )
     :type Name: string
     :param Name: **[REQUIRED]** 
+
+      The name of the image.
+
+      
 
     
     
@@ -1619,7 +1792,8 @@ Client
                     },
                 ],
                 'CreatedTime': datetime(2015, 1, 1),
-                'PublicBaseImageReleasedDate': datetime(2015, 1, 1)
+                'PublicBaseImageReleasedDate': datetime(2015, 1, 1),
+                'AppstreamAgentVersion': 'string'
             }
         }
       **Response Structure** 
@@ -1631,7 +1805,7 @@ Client
 
         - **Image** *(dict) --* 
 
-          Describes an image.
+          Information about the image.
 
           
           
@@ -1659,7 +1833,7 @@ Client
 
           - **DisplayName** *(string) --* 
 
-            The image name displayed to end users.
+            The image name for display.
 
             
           
@@ -1694,7 +1868,7 @@ Client
 
           - **Description** *(string) --* 
 
-            The description displayed to end users.
+            The description for display.
 
             
           
@@ -1744,7 +1918,7 @@ Client
 
               - **DisplayName** *(string) --* 
 
-                The application name displayed to end users.
+                The application name for display.
 
                 
               
@@ -1806,10 +1980,21 @@ Client
             The release date of the public base image. For private images, this date is the release date of the base image from which the image was created.
 
             
+          
+
+          - **AppstreamAgentVersion** *(string) --* 
+
+            The version of the AppStream 2.0 agent to use for instances that are launched from this image.
+
+            
       
     
 
   .. py:method:: delete_image_builder(**kwargs)
+
+    
+
+    Deletes the specified image builder and releases the capacity.
 
     
 
@@ -1824,6 +2009,10 @@ Client
       )
     :type Name: string
     :param Name: **[REQUIRED]** 
+
+      The name of the image builder.
+
+      
 
     
     
@@ -1852,7 +2041,7 @@ Client
                 },
                 'InstanceType': 'string',
                 'Platform': 'WINDOWS',
-                'State': 'PENDING'|'RUNNING'|'STOPPING'|'STOPPED'|'REBOOTING'|'SNAPSHOTTING'|'DELETING'|'FAILED',
+                'State': 'PENDING'|'UPDATING_AGENT'|'RUNNING'|'STOPPING'|'STOPPED'|'REBOOTING'|'SNAPSHOTTING'|'DELETING'|'FAILED',
                 'StateChangeReason': {
                     'Code': 'INTERNAL_ERROR'|'IMAGE_UNAVAILABLE',
                     'Message': 'string'
@@ -1869,7 +2058,8 @@ Client
                         'ErrorMessage': 'string',
                         'ErrorTimestamp': datetime(2015, 1, 1)
                     },
-                ]
+                ],
+                'AppstreamAgentVersion': 'string'
             }
         }
       **Response Structure** 
@@ -1880,26 +2070,50 @@ Client
         
 
         - **ImageBuilder** *(dict) --* 
+
+          Information about the image builder.
+
+          
           
 
           - **Name** *(string) --* 
+
+            The name of the image builder.
+
+            
           
 
           - **Arn** *(string) --* 
+
+            The ARN for the image builder.
+
+            
           
 
           - **ImageArn** *(string) --* 
+
+            The ARN of the image from which this builder was created.
+
+            
           
 
           - **Description** *(string) --* 
+
+            The description for display.
+
+            
           
 
           - **DisplayName** *(string) --* 
+
+            The image builder name for display.
+
+            
           
 
           - **VpcConfig** *(dict) --* 
 
-            Describes VPC configuration information.
+            The VPC configuration of the image builder.
 
             
             
@@ -1928,33 +2142,65 @@ Client
           
 
           - **InstanceType** *(string) --* 
+
+            The instance type for the image builder.
+
+            
           
 
           - **Platform** *(string) --* 
+
+            The operating system platform of the image builder.
+
+            
           
 
           - **State** *(string) --* 
+
+            The state of the image builder.
+
+            
           
 
           - **StateChangeReason** *(dict) --* 
+
+            The reason why the last state change occurred.
+
+            
             
 
             - **Code** *(string) --* 
+
+              The state change reason code.
+
+              
             
 
             - **Message** *(string) --* 
+
+              The state change reason message.
+
+              
         
           
 
           - **CreatedTime** *(datetime) --* 
+
+            The time stamp when the image builder was created.
+
+            
           
 
           - **EnableDefaultInternetAccess** *(boolean) --* 
+
+            Enables or disables default internet access for the image builder.
+
+            
           
 
           - **DomainJoinInfo** *(dict) --* 
 
-            Contains the information needed for streaming instances to join a domain.
+            The information needed to join a Microsoft Active Directory domain.
 
             
             
@@ -1975,20 +2221,47 @@ Client
           
 
           - **ImageBuilderErrors** *(list) --* 
+
+            The image builder errors.
+
+            
             
 
             - *(dict) --* 
+
+              Describes a resource error.
+
+              
               
 
               - **ErrorCode** *(string) --* 
+
+                The error code.
+
+                
               
 
               - **ErrorMessage** *(string) --* 
+
+                The error message.
+
+                
               
 
               - **ErrorTimestamp** *(datetime) --* 
+
+                The time the error occurred.
+
+                
           
         
+          
+
+          - **AppstreamAgentVersion** *(string) --* 
+
+            The version of the AppStream 2.0 agent that is currently being used by this image builder.
+
+            
       
     
 
@@ -2315,21 +2588,21 @@ Client
 
             - **DisplayName** *(string) --* 
 
-              The fleet name displayed to end users.
+              The fleet name for display.
 
               
             
 
             - **Description** *(string) --* 
 
-              The description displayed to end users.
+              The description for display.
 
               
             
 
             - **ImageName** *(string) --* 
 
-              The image used by the fleet.
+              The name of the image used to create the fleet.
 
               
             
@@ -2342,6 +2615,18 @@ Client
             
 
             - **FleetType** *(string) --* 
+
+              The fleet type.
+
+                ALWAYS_ON  
+
+              Provides users with instant-on access to their apps. You are charged for all running instances in your fleet, even if no users are streaming apps.
+
+                ON_DEMAND  
+
+              Provide users with access to applications after they connect, which takes one to two minutes. You are charged for instance streaming when users are connected and a small hourly fee for instances that are not streaming apps.
+
+                
             
 
             - **ComputeCapacityStatus** *(dict) --* 
@@ -2477,7 +2762,7 @@ Client
 
             - **DomainJoinInfo** *(dict) --* 
 
-              The information needed for streaming instances to join a domain.
+              The information needed to join a Microsoft Active Directory domain.
 
               
               
@@ -2510,6 +2795,10 @@ Client
 
     
 
+    Describes the specified image builders or all image builders in the account.
+
+    
+
     See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DescribeImageBuilders>`_    
 
 
@@ -2526,6 +2815,10 @@ Client
     :type Names: list
     :param Names: 
 
+      The names of the image builders to describe.
+
+      
+
     
       - *(string) --* 
 
@@ -2534,9 +2827,17 @@ Client
     :type MaxResults: integer
     :param MaxResults: 
 
+      The maximum size of each page of results.
+
+      
+
     
     :type NextToken: string
     :param NextToken: 
+
+      The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.
+
+      
 
     
     
@@ -2566,7 +2867,7 @@ Client
                     },
                     'InstanceType': 'string',
                     'Platform': 'WINDOWS',
-                    'State': 'PENDING'|'RUNNING'|'STOPPING'|'STOPPED'|'REBOOTING'|'SNAPSHOTTING'|'DELETING'|'FAILED',
+                    'State': 'PENDING'|'UPDATING_AGENT'|'RUNNING'|'STOPPING'|'STOPPED'|'REBOOTING'|'SNAPSHOTTING'|'DELETING'|'FAILED',
                     'StateChangeReason': {
                         'Code': 'INTERNAL_ERROR'|'IMAGE_UNAVAILABLE',
                         'Message': 'string'
@@ -2583,7 +2884,8 @@ Client
                             'ErrorMessage': 'string',
                             'ErrorTimestamp': datetime(2015, 1, 1)
                         },
-                    ]
+                    ],
+                    'AppstreamAgentVersion': 'string'
                 },
             ],
             'NextToken': 'string'
@@ -2596,29 +2898,57 @@ Client
         
 
         - **ImageBuilders** *(list) --* 
+
+          Information about the image builders.
+
+          
           
 
           - *(dict) --* 
+
+            Describes a streaming instance used for editing an image. New images are created from a snapshot through an image builder.
+
+            
             
 
             - **Name** *(string) --* 
+
+              The name of the image builder.
+
+              
             
 
             - **Arn** *(string) --* 
+
+              The ARN for the image builder.
+
+              
             
 
             - **ImageArn** *(string) --* 
+
+              The ARN of the image from which this builder was created.
+
+              
             
 
             - **Description** *(string) --* 
+
+              The description for display.
+
+              
             
 
             - **DisplayName** *(string) --* 
+
+              The image builder name for display.
+
+              
             
 
             - **VpcConfig** *(dict) --* 
 
-              Describes VPC configuration information.
+              The VPC configuration of the image builder.
 
               
               
@@ -2647,33 +2977,65 @@ Client
             
 
             - **InstanceType** *(string) --* 
+
+              The instance type for the image builder.
+
+              
             
 
             - **Platform** *(string) --* 
+
+              The operating system platform of the image builder.
+
+              
             
 
             - **State** *(string) --* 
+
+              The state of the image builder.
+
+              
             
 
             - **StateChangeReason** *(dict) --* 
+
+              The reason why the last state change occurred.
+
+              
               
 
               - **Code** *(string) --* 
+
+                The state change reason code.
+
+                
               
 
               - **Message** *(string) --* 
+
+                The state change reason message.
+
+                
           
             
 
             - **CreatedTime** *(datetime) --* 
+
+              The time stamp when the image builder was created.
+
+              
             
 
             - **EnableDefaultInternetAccess** *(boolean) --* 
+
+              Enables or disables default internet access for the image builder.
+
+              
             
 
             - **DomainJoinInfo** *(dict) --* 
 
-              Contains the information needed for streaming instances to join a domain.
+              The information needed to join a Microsoft Active Directory domain.
 
               
               
@@ -2694,25 +3056,56 @@ Client
             
 
             - **ImageBuilderErrors** *(list) --* 
+
+              The image builder errors.
+
+              
               
 
               - *(dict) --* 
+
+                Describes a resource error.
+
+                
                 
 
                 - **ErrorCode** *(string) --* 
+
+                  The error code.
+
+                  
                 
 
                 - **ErrorMessage** *(string) --* 
+
+                  The error message.
+
+                  
                 
 
                 - **ErrorTimestamp** *(datetime) --* 
+
+                  The time the error occurred.
+
+                  
             
           
+            
+
+            - **AppstreamAgentVersion** *(string) --* 
+
+              The version of the AppStream 2.0 agent that is currently being used by this image builder.
+
+              
         
       
         
 
         - **NextToken** *(string) --* 
+
+          The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.
+
+          
     
 
   .. py:method:: describe_images(**kwargs)
@@ -2785,7 +3178,8 @@ Client
                         },
                     ],
                     'CreatedTime': datetime(2015, 1, 1),
-                    'PublicBaseImageReleasedDate': datetime(2015, 1, 1)
+                    'PublicBaseImageReleasedDate': datetime(2015, 1, 1),
+                    'AppstreamAgentVersion': 'string'
                 },
             ]
         }
@@ -2833,7 +3227,7 @@ Client
 
             - **DisplayName** *(string) --* 
 
-              The image name displayed to end users.
+              The image name for display.
 
               
             
@@ -2868,7 +3262,7 @@ Client
 
             - **Description** *(string) --* 
 
-              The description displayed to end users.
+              The description for display.
 
               
             
@@ -2918,7 +3312,7 @@ Client
 
                 - **DisplayName** *(string) --* 
 
-                  The application name displayed to end users.
+                  The application name for display.
 
                   
                 
@@ -2978,6 +3372,13 @@ Client
             - **PublicBaseImageReleasedDate** *(datetime) --* 
 
               The release date of the public base image. For private images, this date is the release date of the base image from which the image was created.
+
+              
+            
+
+            - **AppstreamAgentVersion** *(string) --* 
+
+              The version of the AppStream 2.0 agent to use for instances that are launched from this image.
 
               
         
@@ -3258,14 +3659,14 @@ Client
 
             - **Description** *(string) --* 
 
-              The description displayed to end users.
+              The description for display.
 
               
             
 
             - **DisplayName** *(string) --* 
 
-              The stack name displayed to end users.
+              The stack name for display.
 
               
             
@@ -3685,6 +4086,10 @@ Client
 
     
 
+    Starts the specified image builder.
+
+    
+
     See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StartImageBuilder>`_    
 
 
@@ -3692,10 +4097,23 @@ Client
     ::
 
       response = client.start_image_builder(
-          Name='string'
+          Name='string',
+          AppstreamAgentVersion='string'
       )
     :type Name: string
     :param Name: **[REQUIRED]** 
+
+      The name of the image builder.
+
+      
+
+    
+    :type AppstreamAgentVersion: string
+    :param AppstreamAgentVersion: 
+
+      The version of the AppStream 2.0 agent to use for this image builder. To use the latest version of the AppStream 2.0 agent, specify [LATEST].
+
+      
 
     
     
@@ -3724,7 +4142,7 @@ Client
                 },
                 'InstanceType': 'string',
                 'Platform': 'WINDOWS',
-                'State': 'PENDING'|'RUNNING'|'STOPPING'|'STOPPED'|'REBOOTING'|'SNAPSHOTTING'|'DELETING'|'FAILED',
+                'State': 'PENDING'|'UPDATING_AGENT'|'RUNNING'|'STOPPING'|'STOPPED'|'REBOOTING'|'SNAPSHOTTING'|'DELETING'|'FAILED',
                 'StateChangeReason': {
                     'Code': 'INTERNAL_ERROR'|'IMAGE_UNAVAILABLE',
                     'Message': 'string'
@@ -3741,7 +4159,8 @@ Client
                         'ErrorMessage': 'string',
                         'ErrorTimestamp': datetime(2015, 1, 1)
                     },
-                ]
+                ],
+                'AppstreamAgentVersion': 'string'
             }
         }
       **Response Structure** 
@@ -3752,26 +4171,50 @@ Client
         
 
         - **ImageBuilder** *(dict) --* 
+
+          Information about the image builder.
+
+          
           
 
           - **Name** *(string) --* 
+
+            The name of the image builder.
+
+            
           
 
           - **Arn** *(string) --* 
+
+            The ARN for the image builder.
+
+            
           
 
           - **ImageArn** *(string) --* 
+
+            The ARN of the image from which this builder was created.
+
+            
           
 
           - **Description** *(string) --* 
+
+            The description for display.
+
+            
           
 
           - **DisplayName** *(string) --* 
+
+            The image builder name for display.
+
+            
           
 
           - **VpcConfig** *(dict) --* 
 
-            Describes VPC configuration information.
+            The VPC configuration of the image builder.
 
             
             
@@ -3800,33 +4243,65 @@ Client
           
 
           - **InstanceType** *(string) --* 
+
+            The instance type for the image builder.
+
+            
           
 
           - **Platform** *(string) --* 
+
+            The operating system platform of the image builder.
+
+            
           
 
           - **State** *(string) --* 
+
+            The state of the image builder.
+
+            
           
 
           - **StateChangeReason** *(dict) --* 
+
+            The reason why the last state change occurred.
+
+            
             
 
             - **Code** *(string) --* 
+
+              The state change reason code.
+
+              
             
 
             - **Message** *(string) --* 
+
+              The state change reason message.
+
+              
         
           
 
           - **CreatedTime** *(datetime) --* 
+
+            The time stamp when the image builder was created.
+
+            
           
 
           - **EnableDefaultInternetAccess** *(boolean) --* 
+
+            Enables or disables default internet access for the image builder.
+
+            
           
 
           - **DomainJoinInfo** *(dict) --* 
 
-            Contains the information needed for streaming instances to join a domain.
+            The information needed to join a Microsoft Active Directory domain.
 
             
             
@@ -3847,20 +4322,47 @@ Client
           
 
           - **ImageBuilderErrors** *(list) --* 
+
+            The image builder errors.
+
+            
             
 
             - *(dict) --* 
+
+              Describes a resource error.
+
+              
               
 
               - **ErrorCode** *(string) --* 
+
+                The error code.
+
+                
               
 
               - **ErrorMessage** *(string) --* 
+
+                The error message.
+
+                
               
 
               - **ErrorTimestamp** *(datetime) --* 
+
+                The time the error occurred.
+
+                
           
         
+          
+
+          - **AppstreamAgentVersion** *(string) --* 
+
+            The version of the AppStream 2.0 agent that is currently being used by this image builder.
+
+            
       
     
 
@@ -3911,6 +4413,10 @@ Client
 
     
 
+    Stops the specified image builder.
+
+    
+
     See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StopImageBuilder>`_    
 
 
@@ -3922,6 +4428,10 @@ Client
       )
     :type Name: string
     :param Name: **[REQUIRED]** 
+
+      The name of the image builder.
+
+      
 
     
     
@@ -3950,7 +4460,7 @@ Client
                 },
                 'InstanceType': 'string',
                 'Platform': 'WINDOWS',
-                'State': 'PENDING'|'RUNNING'|'STOPPING'|'STOPPED'|'REBOOTING'|'SNAPSHOTTING'|'DELETING'|'FAILED',
+                'State': 'PENDING'|'UPDATING_AGENT'|'RUNNING'|'STOPPING'|'STOPPED'|'REBOOTING'|'SNAPSHOTTING'|'DELETING'|'FAILED',
                 'StateChangeReason': {
                     'Code': 'INTERNAL_ERROR'|'IMAGE_UNAVAILABLE',
                     'Message': 'string'
@@ -3967,7 +4477,8 @@ Client
                         'ErrorMessage': 'string',
                         'ErrorTimestamp': datetime(2015, 1, 1)
                     },
-                ]
+                ],
+                'AppstreamAgentVersion': 'string'
             }
         }
       **Response Structure** 
@@ -3978,26 +4489,50 @@ Client
         
 
         - **ImageBuilder** *(dict) --* 
+
+          Information about the image builder.
+
+          
           
 
           - **Name** *(string) --* 
+
+            The name of the image builder.
+
+            
           
 
           - **Arn** *(string) --* 
+
+            The ARN for the image builder.
+
+            
           
 
           - **ImageArn** *(string) --* 
+
+            The ARN of the image from which this builder was created.
+
+            
           
 
           - **Description** *(string) --* 
+
+            The description for display.
+
+            
           
 
           - **DisplayName** *(string) --* 
+
+            The image builder name for display.
+
+            
           
 
           - **VpcConfig** *(dict) --* 
 
-            Describes VPC configuration information.
+            The VPC configuration of the image builder.
 
             
             
@@ -4026,33 +4561,65 @@ Client
           
 
           - **InstanceType** *(string) --* 
+
+            The instance type for the image builder.
+
+            
           
 
           - **Platform** *(string) --* 
+
+            The operating system platform of the image builder.
+
+            
           
 
           - **State** *(string) --* 
+
+            The state of the image builder.
+
+            
           
 
           - **StateChangeReason** *(dict) --* 
+
+            The reason why the last state change occurred.
+
+            
             
 
             - **Code** *(string) --* 
+
+              The state change reason code.
+
+              
             
 
             - **Message** *(string) --* 
+
+              The state change reason message.
+
+              
         
           
 
           - **CreatedTime** *(datetime) --* 
+
+            The time stamp when the image builder was created.
+
+            
           
 
           - **EnableDefaultInternetAccess** *(boolean) --* 
+
+            Enables or disables default internet access for the image builder.
+
+            
           
 
           - **DomainJoinInfo** *(dict) --* 
 
-            Contains the information needed for streaming instances to join a domain.
+            The information needed to join a Microsoft Active Directory domain.
 
             
             
@@ -4073,20 +4640,47 @@ Client
           
 
           - **ImageBuilderErrors** *(list) --* 
+
+            The image builder errors.
+
+            
             
 
             - *(dict) --* 
+
+              Describes a resource error.
+
+              
               
 
               - **ErrorCode** *(string) --* 
+
+                The error code.
+
+                
               
 
               - **ErrorMessage** *(string) --* 
+
+                The error message.
+
+                
               
 
               - **ErrorTimestamp** *(datetime) --* 
+
+                The time the error occurred.
+
+                
           
         
+          
+
+          - **AppstreamAgentVersion** *(string) --* 
+
+            The version of the AppStream 2.0 agent that is currently being used by this image builder.
+
+            
       
     
 
@@ -4291,7 +4885,7 @@ Client
     :type ImageName: string
     :param ImageName: 
 
-      The name of the image used by the fleet.
+      The name of the image used to create the fleet.
 
       
 
@@ -4430,7 +5024,7 @@ Client
     :type Description: string
     :param Description: 
 
-      The description displayed to end users.
+      The description for display.
 
       
 
@@ -4438,7 +5032,7 @@ Client
     :type DisplayName: string
     :param DisplayName: 
 
-      The fleet name displayed to end users.
+      The fleet name for display.
 
       
 
@@ -4454,7 +5048,7 @@ Client
     :type DomainJoinInfo: dict
     :param DomainJoinInfo: 
 
-      The information needed for streaming instances to join a domain.
+      The information needed to join a Microsoft Active Directory domain.
 
       
 
@@ -4569,21 +5163,21 @@ Client
 
           - **DisplayName** *(string) --* 
 
-            The fleet name displayed to end users.
+            The fleet name for display.
 
             
           
 
           - **Description** *(string) --* 
 
-            The description displayed to end users.
+            The description for display.
 
             
           
 
           - **ImageName** *(string) --* 
 
-            The image used by the fleet.
+            The name of the image used to create the fleet.
 
             
           
@@ -4596,6 +5190,18 @@ Client
           
 
           - **FleetType** *(string) --* 
+
+            The fleet type.
+
+              ALWAYS_ON  
+
+            Provides users with instant-on access to their apps. You are charged for all running instances in your fleet, even if no users are streaming apps.
+
+              ON_DEMAND  
+
+            Provide users with access to applications after they connect, which takes one to two minutes. You are charged for instance streaming when users are connected and a small hourly fee for instances that are not streaming apps.
+
+              
           
 
           - **ComputeCapacityStatus** *(dict) --* 
@@ -4731,7 +5337,7 @@ Client
 
           - **DomainJoinInfo** *(dict) --* 
 
-            The information needed for streaming instances to join a domain.
+            The information needed to join a Microsoft Active Directory domain.
 
             
             
@@ -4781,7 +5387,7 @@ Client
     :type DisplayName: string
     :param DisplayName: 
 
-      The stack name displayed to end users.
+      The stack name for display.
 
       
 
@@ -4789,7 +5395,7 @@ Client
     :type Description: string
     :param Description: 
 
-      The description displayed to end users.
+      The description for display.
 
       
 
@@ -4901,14 +5507,14 @@ Client
 
           - **Description** *(string) --* 
 
-            The description displayed to end users.
+            The description for display.
 
             
           
 
           - **DisplayName** *(string) --* 
 
-            The stack name displayed to end users.
+            The stack name for display.
 
             
           

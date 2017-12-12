@@ -204,6 +204,10 @@ Client
                   'string',
               ]
           },
+          EncryptionAtRestOptions={
+              'Enabled': True|False,
+              'KmsKeyId': 'string'
+          },
           AdvancedOptions={
               'string': 'string'
           },
@@ -373,6 +377,29 @@ Client
         
     
     
+    :type EncryptionAtRestOptions: dict
+    :param EncryptionAtRestOptions: 
+
+      Specifies the Encryption At Rest Options.
+
+      
+
+    
+      - **Enabled** *(boolean) --* 
+
+        Specifies the option to enable Encryption At Rest.
+
+        
+
+      
+      - **KmsKeyId** *(string) --* 
+
+        Specifies the KMS Key ID for Encryption At Rest options.
+
+        
+
+      
+    
     :type AdvancedOptions: dict
     :param AdvancedOptions: 
 
@@ -495,6 +522,10 @@ Client
                     'SecurityGroupIds': [
                         'string',
                     ]
+                },
+                'EncryptionAtRestOptions': {
+                    'Enabled': True|False,
+                    'KmsKeyId': 'string'
                 },
                 'AdvancedOptions': {
                     'string': 'string'
@@ -752,6 +783,28 @@ Client
         
           
 
+          - **EncryptionAtRestOptions** *(dict) --* 
+
+            Specifies the status of the ``EncryptionAtRestOptions`` .
+
+            
+            
+
+            - **Enabled** *(boolean) --* 
+
+              Specifies the option to enable Encryption At Rest.
+
+              
+            
+
+            - **KmsKeyId** *(string) --* 
+
+              Specifies the KMS Key ID for Encryption At Rest options.
+
+              
+        
+          
+
           - **AdvancedOptions** *(dict) --* 
 
             Specifies the status of the ``AdvancedOptions`` 
@@ -898,6 +951,10 @@ Client
                     'SecurityGroupIds': [
                         'string',
                     ]
+                },
+                'EncryptionAtRestOptions': {
+                    'Enabled': True|False,
+                    'KmsKeyId': 'string'
                 },
                 'AdvancedOptions': {
                     'string': 'string'
@@ -1155,6 +1212,28 @@ Client
         
           
 
+          - **EncryptionAtRestOptions** *(dict) --* 
+
+            Specifies the status of the ``EncryptionAtRestOptions`` .
+
+            
+            
+
+            - **Enabled** *(boolean) --* 
+
+              Specifies the option to enable Encryption At Rest.
+
+              
+            
+
+            - **KmsKeyId** *(string) --* 
+
+              Specifies the KMS Key ID for Encryption At Rest options.
+
+              
+        
+          
+
           - **AdvancedOptions** *(dict) --* 
 
             Specifies the status of the ``AdvancedOptions`` 
@@ -1319,6 +1398,10 @@ Client
                     'SecurityGroupIds': [
                         'string',
                     ]
+                },
+                'EncryptionAtRestOptions': {
+                    'Enabled': True|False,
+                    'KmsKeyId': 'string'
                 },
                 'AdvancedOptions': {
                     'string': 'string'
@@ -1576,6 +1659,28 @@ Client
         
           
 
+          - **EncryptionAtRestOptions** *(dict) --* 
+
+            Specifies the status of the ``EncryptionAtRestOptions`` .
+
+            
+            
+
+            - **Enabled** *(boolean) --* 
+
+              Specifies the option to enable Encryption At Rest.
+
+              
+            
+
+            - **KmsKeyId** *(string) --* 
+
+              Specifies the KMS Key ID for Encryption At Rest options.
+
+              
+        
+          
+
           - **AdvancedOptions** *(dict) --* 
 
             Specifies the status of the ``AdvancedOptions`` 
@@ -1758,6 +1863,19 @@ Client
                         'SecurityGroupIds': [
                             'string',
                         ]
+                    },
+                    'Status': {
+                        'CreationDate': datetime(2015, 1, 1),
+                        'UpdateDate': datetime(2015, 1, 1),
+                        'UpdateVersion': 123,
+                        'State': 'RequiresIndexDocuments'|'Processing'|'Active',
+                        'PendingDeletion': True|False
+                    }
+                },
+                'EncryptionAtRestOptions': {
+                    'Options': {
+                        'Enabled': True|False,
+                        'KmsKeyId': 'string'
                     },
                     'Status': {
                         'CreationDate': datetime(2015, 1, 1),
@@ -2283,6 +2401,79 @@ Client
         
           
 
+          - **EncryptionAtRestOptions** *(dict) --* 
+
+            Specifies the ``EncryptionAtRestOptions`` for the Elasticsearch domain.
+
+            
+            
+
+            - **Options** *(dict) --* 
+
+              Specifies the Encryption At Rest options for the specified Elasticsearch domain.
+
+              
+              
+
+              - **Enabled** *(boolean) --* 
+
+                Specifies the option to enable Encryption At Rest.
+
+                
+              
+
+              - **KmsKeyId** *(string) --* 
+
+                Specifies the KMS Key ID for Encryption At Rest options.
+
+                
+          
+            
+
+            - **Status** *(dict) --* 
+
+              Specifies the status of the Encryption At Rest options for the specified Elasticsearch domain.
+
+              
+              
+
+              - **CreationDate** *(datetime) --* 
+
+                Timestamp which tells the creation date for the entity.
+
+                
+              
+
+              - **UpdateDate** *(datetime) --* 
+
+                Timestamp which tells the last updated time for the entity.
+
+                
+              
+
+              - **UpdateVersion** *(integer) --* 
+
+                Specifies the latest version for the entity.
+
+                
+              
+
+              - **State** *(string) --* 
+
+                Provides the ``OptionState`` for the Elasticsearch domain.
+
+                
+              
+
+              - **PendingDeletion** *(boolean) --* 
+
+                Indicates whether the Elasticsearch domain is being deleted.
+
+                
+          
+        
+          
+
           - **AdvancedOptions** *(dict) --* 
 
             Specifies the ``AdvancedOptions`` for the domain. See `Configuring Advanced Options <http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-advanced-options>`__ for more information.
@@ -2542,6 +2733,10 @@ Client
                         'SecurityGroupIds': [
                             'string',
                         ]
+                    },
+                    'EncryptionAtRestOptions': {
+                        'Enabled': True|False,
+                        'KmsKeyId': 'string'
                     },
                     'AdvancedOptions': {
                         'string': 'string'
@@ -2804,6 +2999,28 @@ Client
 
                 - *(string) --* 
             
+          
+            
+
+            - **EncryptionAtRestOptions** *(dict) --* 
+
+              Specifies the status of the ``EncryptionAtRestOptions`` .
+
+              
+              
+
+              - **Enabled** *(boolean) --* 
+
+                Specifies the option to enable Encryption At Rest.
+
+                
+              
+
+              - **KmsKeyId** *(string) --* 
+
+                Specifies the KMS Key ID for Encryption At Rest options.
+
+                
           
             
 
@@ -3949,6 +4166,19 @@ Client
                         'PendingDeletion': True|False
                     }
                 },
+                'EncryptionAtRestOptions': {
+                    'Options': {
+                        'Enabled': True|False,
+                        'KmsKeyId': 'string'
+                    },
+                    'Status': {
+                        'CreationDate': datetime(2015, 1, 1),
+                        'UpdateDate': datetime(2015, 1, 1),
+                        'UpdateVersion': 123,
+                        'State': 'RequiresIndexDocuments'|'Processing'|'Active',
+                        'PendingDeletion': True|False
+                    }
+                },
                 'AdvancedOptions': {
                     'Options': {
                         'string': 'string'
@@ -4424,6 +4654,79 @@ Client
             - **Status** *(dict) --* 
 
               Specifies the status of the VPC options for the specified Elasticsearch domain.
+
+              
+              
+
+              - **CreationDate** *(datetime) --* 
+
+                Timestamp which tells the creation date for the entity.
+
+                
+              
+
+              - **UpdateDate** *(datetime) --* 
+
+                Timestamp which tells the last updated time for the entity.
+
+                
+              
+
+              - **UpdateVersion** *(integer) --* 
+
+                Specifies the latest version for the entity.
+
+                
+              
+
+              - **State** *(string) --* 
+
+                Provides the ``OptionState`` for the Elasticsearch domain.
+
+                
+              
+
+              - **PendingDeletion** *(boolean) --* 
+
+                Indicates whether the Elasticsearch domain is being deleted.
+
+                
+          
+        
+          
+
+          - **EncryptionAtRestOptions** *(dict) --* 
+
+            Specifies the ``EncryptionAtRestOptions`` for the Elasticsearch domain.
+
+            
+            
+
+            - **Options** *(dict) --* 
+
+              Specifies the Encryption At Rest options for the specified Elasticsearch domain.
+
+              
+              
+
+              - **Enabled** *(boolean) --* 
+
+                Specifies the option to enable Encryption At Rest.
+
+                
+              
+
+              - **KmsKeyId** *(string) --* 
+
+                Specifies the KMS Key ID for Encryption At Rest options.
+
+                
+          
+            
+
+            - **Status** *(dict) --* 
+
+              Specifies the status of the Encryption At Rest options for the specified Elasticsearch domain.
 
               
               

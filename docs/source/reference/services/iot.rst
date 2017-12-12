@@ -2178,7 +2178,85 @@ Client
                   },
               ],
               'ruleDisabled': True|False,
-              'awsIotSqlVersion': 'string'
+              'awsIotSqlVersion': 'string',
+              'errorAction': {
+                  'dynamoDB': {
+                      'tableName': 'string',
+                      'roleArn': 'string',
+                      'operation': 'string',
+                      'hashKeyField': 'string',
+                      'hashKeyValue': 'string',
+                      'hashKeyType': 'STRING'|'NUMBER',
+                      'rangeKeyField': 'string',
+                      'rangeKeyValue': 'string',
+                      'rangeKeyType': 'STRING'|'NUMBER',
+                      'payloadField': 'string'
+                  },
+                  'dynamoDBv2': {
+                      'roleArn': 'string',
+                      'putItem': {
+                          'tableName': 'string'
+                      }
+                  },
+                  'lambda': {
+                      'functionArn': 'string'
+                  },
+                  'sns': {
+                      'targetArn': 'string',
+                      'roleArn': 'string',
+                      'messageFormat': 'RAW'|'JSON'
+                  },
+                  'sqs': {
+                      'roleArn': 'string',
+                      'queueUrl': 'string',
+                      'useBase64': True|False
+                  },
+                  'kinesis': {
+                      'roleArn': 'string',
+                      'streamName': 'string',
+                      'partitionKey': 'string'
+                  },
+                  'republish': {
+                      'roleArn': 'string',
+                      'topic': 'string'
+                  },
+                  's3': {
+                      'roleArn': 'string',
+                      'bucketName': 'string',
+                      'key': 'string',
+                      'cannedAcl': 'private'|'public-read'|'public-read-write'|'aws-exec-read'|'authenticated-read'|'bucket-owner-read'|'bucket-owner-full-control'|'log-delivery-write'
+                  },
+                  'firehose': {
+                      'roleArn': 'string',
+                      'deliveryStreamName': 'string',
+                      'separator': 'string'
+                  },
+                  'cloudwatchMetric': {
+                      'roleArn': 'string',
+                      'metricNamespace': 'string',
+                      'metricName': 'string',
+                      'metricValue': 'string',
+                      'metricUnit': 'string',
+                      'metricTimestamp': 'string'
+                  },
+                  'cloudwatchAlarm': {
+                      'roleArn': 'string',
+                      'alarmName': 'string',
+                      'stateReason': 'string',
+                      'stateValue': 'string'
+                  },
+                  'elasticsearch': {
+                      'roleArn': 'string',
+                      'endpoint': 'string',
+                      'index': 'string',
+                      'type': 'string',
+                      'id': 'string'
+                  },
+                  'salesforce': {
+                      'token': 'string',
+                      'url': 'string'
+                  }
+              }
           }
       )
     :type ruleName: string
@@ -2696,6 +2774,470 @@ Client
 
         
 
+      
+      - **errorAction** *(dict) --* 
+
+        The action to take when an error occurs.
+
+        
+
+      
+        - **dynamoDB** *(dict) --* 
+
+          Write to a DynamoDB table.
+
+          
+
+        
+          - **tableName** *(string) --* **[REQUIRED]** 
+
+            The name of the DynamoDB table.
+
+            
+
+          
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the IAM role that grants access to the DynamoDB table.
+
+            
+
+          
+          - **operation** *(string) --* 
+
+            The type of operation to be performed. This follows the substitution template, so it can be ``${operation}`` , but the substitution must result in one of the following: ``INSERT`` , ``UPDATE`` , or ``DELETE`` .
+
+            
+
+          
+          - **hashKeyField** *(string) --* **[REQUIRED]** 
+
+            The hash key name.
+
+            
+
+          
+          - **hashKeyValue** *(string) --* **[REQUIRED]** 
+
+            The hash key value.
+
+            
+
+          
+          - **hashKeyType** *(string) --* 
+
+            The hash key type. Valid values are "STRING" or "NUMBER"
+
+            
+
+          
+          - **rangeKeyField** *(string) --* 
+
+            The range key name.
+
+            
+
+          
+          - **rangeKeyValue** *(string) --* 
+
+            The range key value.
+
+            
+
+          
+          - **rangeKeyType** *(string) --* 
+
+            The range key type. Valid values are "STRING" or "NUMBER"
+
+            
+
+          
+          - **payloadField** *(string) --* 
+
+            The action payload. This name can be customized.
+
+            
+
+          
+        
+        - **dynamoDBv2** *(dict) --* 
+
+          Write to a DynamoDB table. This is a new version of the DynamoDB action. It allows you to write each attribute in an MQTT message payload into a separate DynamoDB column.
+
+          
+
+        
+          - **roleArn** *(string) --* 
+
+            The ARN of the IAM role that grants access to the DynamoDB table.
+
+            
+
+          
+          - **putItem** *(dict) --* 
+
+            Specifies the DynamoDB table to which the message data will be written. For example:
+
+             
+
+             ``{ "dynamoDBv2": { "roleArn": "aws:iam:12341251:my-role" "putItem": { "tableName": "my-table" } } }``  
+
+             
+
+            Each attribute in the message payload will be written to a separate column in the DynamoDB database.
+
+            
+
+          
+            - **tableName** *(string) --* **[REQUIRED]** 
+
+              The table where the message data will be written
+
+              
+
+            
+          
+        
+        - **lambda** *(dict) --* 
+
+          Invoke a Lambda function.
+
+          
+
+        
+          - **functionArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the Lambda function.
+
+            
+
+          
+        
+        - **sns** *(dict) --* 
+
+          Publish to an Amazon SNS topic.
+
+          
+
+        
+          - **targetArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the SNS topic.
+
+            
+
+          
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the IAM role that grants access.
+
+            
+
+          
+          - **messageFormat** *(string) --* 
+
+            The message format of the message to publish. Optional. Accepted values are "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see `http\://docs.aws.amazon.com/sns/latest/dg/json-formats.html <http://docs.aws.amazon.com/sns/latest/dg/json-formats.html>`__ refer to their official documentation.
+
+            
+
+          
+        
+        - **sqs** *(dict) --* 
+
+          Publish to an Amazon SQS queue.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the IAM role that grants access.
+
+            
+
+          
+          - **queueUrl** *(string) --* **[REQUIRED]** 
+
+            The URL of the Amazon SQS queue.
+
+            
+
+          
+          - **useBase64** *(boolean) --* 
+
+            Specifies whether to use Base64 encoding.
+
+            
+
+          
+        
+        - **kinesis** *(dict) --* 
+
+          Write data to an Amazon Kinesis stream.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the IAM role that grants access to the Amazon Kinesis stream.
+
+            
+
+          
+          - **streamName** *(string) --* **[REQUIRED]** 
+
+            The name of the Amazon Kinesis stream.
+
+            
+
+          
+          - **partitionKey** *(string) --* 
+
+            The partition key.
+
+            
+
+          
+        
+        - **republish** *(dict) --* 
+
+          Publish to another MQTT topic.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the IAM role that grants access.
+
+            
+
+          
+          - **topic** *(string) --* **[REQUIRED]** 
+
+            The name of the MQTT topic.
+
+            
+
+          
+        
+        - **s3** *(dict) --* 
+
+          Write to an Amazon S3 bucket.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the IAM role that grants access.
+
+            
+
+          
+          - **bucketName** *(string) --* **[REQUIRED]** 
+
+            The Amazon S3 bucket.
+
+            
+
+          
+          - **key** *(string) --* **[REQUIRED]** 
+
+            The object key.
+
+            
+
+          
+          - **cannedAcl** *(string) --* 
+
+            The Amazon S3 canned ACL that controls access to the object identified by the object key. For more information, see `S3 canned ACLs <http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl>`__ .
+
+            
+
+          
+        
+        - **firehose** *(dict) --* 
+
+          Write to an Amazon Kinesis Firehose stream.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The IAM role that grants access to the Amazon Kinesis Firehose stream.
+
+            
+
+          
+          - **deliveryStreamName** *(string) --* **[REQUIRED]** 
+
+            The delivery stream name.
+
+            
+
+          
+          - **separator** *(string) --* 
+
+            A character separator that will be used to separate records written to the Firehose stream. Valid values are: '\n' (newline), '\t' (tab), '\r\n' (Windows newline), ',' (comma).
+
+            
+
+          
+        
+        - **cloudwatchMetric** *(dict) --* 
+
+          Capture a CloudWatch metric.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The IAM role that allows access to the CloudWatch metric.
+
+            
+
+          
+          - **metricNamespace** *(string) --* **[REQUIRED]** 
+
+            The CloudWatch metric namespace name.
+
+            
+
+          
+          - **metricName** *(string) --* **[REQUIRED]** 
+
+            The CloudWatch metric name.
+
+            
+
+          
+          - **metricValue** *(string) --* **[REQUIRED]** 
+
+            The CloudWatch metric value.
+
+            
+
+          
+          - **metricUnit** *(string) --* **[REQUIRED]** 
+
+            The `metric unit <http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#Unit>`__ supported by CloudWatch.
+
+            
+
+          
+          - **metricTimestamp** *(string) --* 
+
+            An optional `Unix timestamp <http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#about_timestamp>`__ .
+
+            
+
+          
+        
+        - **cloudwatchAlarm** *(dict) --* 
+
+          Change the state of a CloudWatch alarm.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The IAM role that allows access to the CloudWatch alarm.
+
+            
+
+          
+          - **alarmName** *(string) --* **[REQUIRED]** 
+
+            The CloudWatch alarm name.
+
+            
+
+          
+          - **stateReason** *(string) --* **[REQUIRED]** 
+
+            The reason for the alarm change.
+
+            
+
+          
+          - **stateValue** *(string) --* **[REQUIRED]** 
+
+            The value of the alarm state. Acceptable values are: OK, ALARM, INSUFFICIENT_DATA.
+
+            
+
+          
+        
+        - **elasticsearch** *(dict) --* 
+
+          Write data to an Amazon Elasticsearch Service domain.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The IAM role ARN that has access to Elasticsearch.
+
+            
+
+          
+          - **endpoint** *(string) --* **[REQUIRED]** 
+
+            The endpoint of your Elasticsearch domain.
+
+            
+
+          
+          - **index** *(string) --* **[REQUIRED]** 
+
+            The Elasticsearch index where you want to store your data.
+
+            
+
+          
+          - **type** *(string) --* **[REQUIRED]** 
+
+            The type of document you are storing.
+
+            
+
+          
+          - **id** *(string) --* **[REQUIRED]** 
+
+            The unique identifier for the document you are storing.
+
+            
+
+          
+        
+        - **salesforce** *(dict) --* 
+
+          Send a message to a Salesforce IoT Cloud Input Stream.
+
+          
+
+        
+          - **token** *(string) --* **[REQUIRED]** 
+
+            The token used to authenticate access to the Salesforce IoT Cloud Input Stream. The token is available from the Salesforce IoT Cloud platform after creation of the Input Stream.
+
+            
+
+          
+          - **url** *(string) --* **[REQUIRED]** 
+
+            The URL exposed by the Salesforce IoT Cloud Input Stream. The URL is available from the Salesforce IoT Cloud platform after creation of the Input Stream.
+
+            
+
+          
+        
       
     
     
@@ -3536,7 +4078,7 @@ Client
 
     
 
-    Gets information about the specified certificate. You may specify the certificate using either its ID or PEM.
+    Gets information about the specified certificate.
 
     
 
@@ -6054,7 +6596,85 @@ Client
                     },
                 ],
                 'ruleDisabled': True|False,
-                'awsIotSqlVersion': 'string'
+                'awsIotSqlVersion': 'string',
+                'errorAction': {
+                    'dynamoDB': {
+                        'tableName': 'string',
+                        'roleArn': 'string',
+                        'operation': 'string',
+                        'hashKeyField': 'string',
+                        'hashKeyValue': 'string',
+                        'hashKeyType': 'STRING'|'NUMBER',
+                        'rangeKeyField': 'string',
+                        'rangeKeyValue': 'string',
+                        'rangeKeyType': 'STRING'|'NUMBER',
+                        'payloadField': 'string'
+                    },
+                    'dynamoDBv2': {
+                        'roleArn': 'string',
+                        'putItem': {
+                            'tableName': 'string'
+                        }
+                    },
+                    'lambda': {
+                        'functionArn': 'string'
+                    },
+                    'sns': {
+                        'targetArn': 'string',
+                        'roleArn': 'string',
+                        'messageFormat': 'RAW'|'JSON'
+                    },
+                    'sqs': {
+                        'roleArn': 'string',
+                        'queueUrl': 'string',
+                        'useBase64': True|False
+                    },
+                    'kinesis': {
+                        'roleArn': 'string',
+                        'streamName': 'string',
+                        'partitionKey': 'string'
+                    },
+                    'republish': {
+                        'roleArn': 'string',
+                        'topic': 'string'
+                    },
+                    's3': {
+                        'roleArn': 'string',
+                        'bucketName': 'string',
+                        'key': 'string',
+                        'cannedAcl': 'private'|'public-read'|'public-read-write'|'aws-exec-read'|'authenticated-read'|'bucket-owner-read'|'bucket-owner-full-control'|'log-delivery-write'
+                    },
+                    'firehose': {
+                        'roleArn': 'string',
+                        'deliveryStreamName': 'string',
+                        'separator': 'string'
+                    },
+                    'cloudwatchMetric': {
+                        'roleArn': 'string',
+                        'metricNamespace': 'string',
+                        'metricName': 'string',
+                        'metricValue': 'string',
+                        'metricUnit': 'string',
+                        'metricTimestamp': 'string'
+                    },
+                    'cloudwatchAlarm': {
+                        'roleArn': 'string',
+                        'alarmName': 'string',
+                        'stateReason': 'string',
+                        'stateValue': 'string'
+                    },
+                    'elasticsearch': {
+                        'roleArn': 'string',
+                        'endpoint': 'string',
+                        'index': 'string',
+                        'type': 'string',
+                        'id': 'string'
+                    },
+                    'salesforce': {
+                        'token': 'string',
+                        'url': 'string'
+                    }
+                }
             }
         }
       **Response Structure** 
@@ -6594,6 +7214,470 @@ Client
             The version of the SQL rules engine to use when evaluating the rule.
 
             
+          
+
+          - **errorAction** *(dict) --* 
+
+            The action to perform when an error occurs.
+
+            
+            
+
+            - **dynamoDB** *(dict) --* 
+
+              Write to a DynamoDB table.
+
+              
+              
+
+              - **tableName** *(string) --* 
+
+                The name of the DynamoDB table.
+
+                
+              
+
+              - **roleArn** *(string) --* 
+
+                The ARN of the IAM role that grants access to the DynamoDB table.
+
+                
+              
+
+              - **operation** *(string) --* 
+
+                The type of operation to be performed. This follows the substitution template, so it can be ``${operation}`` , but the substitution must result in one of the following: ``INSERT`` , ``UPDATE`` , or ``DELETE`` .
+
+                
+              
+
+              - **hashKeyField** *(string) --* 
+
+                The hash key name.
+
+                
+              
+
+              - **hashKeyValue** *(string) --* 
+
+                The hash key value.
+
+                
+              
+
+              - **hashKeyType** *(string) --* 
+
+                The hash key type. Valid values are "STRING" or "NUMBER"
+
+                
+              
+
+              - **rangeKeyField** *(string) --* 
+
+                The range key name.
+
+                
+              
+
+              - **rangeKeyValue** *(string) --* 
+
+                The range key value.
+
+                
+              
+
+              - **rangeKeyType** *(string) --* 
+
+                The range key type. Valid values are "STRING" or "NUMBER"
+
+                
+              
+
+              - **payloadField** *(string) --* 
+
+                The action payload. This name can be customized.
+
+                
+          
+            
+
+            - **dynamoDBv2** *(dict) --* 
+
+              Write to a DynamoDB table. This is a new version of the DynamoDB action. It allows you to write each attribute in an MQTT message payload into a separate DynamoDB column.
+
+              
+              
+
+              - **roleArn** *(string) --* 
+
+                The ARN of the IAM role that grants access to the DynamoDB table.
+
+                
+              
+
+              - **putItem** *(dict) --* 
+
+                Specifies the DynamoDB table to which the message data will be written. For example:
+
+                 
+
+                 ``{ "dynamoDBv2": { "roleArn": "aws:iam:12341251:my-role" "putItem": { "tableName": "my-table" } } }``  
+
+                 
+
+                Each attribute in the message payload will be written to a separate column in the DynamoDB database.
+
+                
+                
+
+                - **tableName** *(string) --* 
+
+                  The table where the message data will be written
+
+                  
+            
+          
+            
+
+            - **lambda** *(dict) --* 
+
+              Invoke a Lambda function.
+
+              
+              
+
+              - **functionArn** *(string) --* 
+
+                The ARN of the Lambda function.
+
+                
+          
+            
+
+            - **sns** *(dict) --* 
+
+              Publish to an Amazon SNS topic.
+
+              
+              
+
+              - **targetArn** *(string) --* 
+
+                The ARN of the SNS topic.
+
+                
+              
+
+              - **roleArn** *(string) --* 
+
+                The ARN of the IAM role that grants access.
+
+                
+              
+
+              - **messageFormat** *(string) --* 
+
+                The message format of the message to publish. Optional. Accepted values are "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see `http\://docs.aws.amazon.com/sns/latest/dg/json-formats.html <http://docs.aws.amazon.com/sns/latest/dg/json-formats.html>`__ refer to their official documentation.
+
+                
+          
+            
+
+            - **sqs** *(dict) --* 
+
+              Publish to an Amazon SQS queue.
+
+              
+              
+
+              - **roleArn** *(string) --* 
+
+                The ARN of the IAM role that grants access.
+
+                
+              
+
+              - **queueUrl** *(string) --* 
+
+                The URL of the Amazon SQS queue.
+
+                
+              
+
+              - **useBase64** *(boolean) --* 
+
+                Specifies whether to use Base64 encoding.
+
+                
+          
+            
+
+            - **kinesis** *(dict) --* 
+
+              Write data to an Amazon Kinesis stream.
+
+              
+              
+
+              - **roleArn** *(string) --* 
+
+                The ARN of the IAM role that grants access to the Amazon Kinesis stream.
+
+                
+              
+
+              - **streamName** *(string) --* 
+
+                The name of the Amazon Kinesis stream.
+
+                
+              
+
+              - **partitionKey** *(string) --* 
+
+                The partition key.
+
+                
+          
+            
+
+            - **republish** *(dict) --* 
+
+              Publish to another MQTT topic.
+
+              
+              
+
+              - **roleArn** *(string) --* 
+
+                The ARN of the IAM role that grants access.
+
+                
+              
+
+              - **topic** *(string) --* 
+
+                The name of the MQTT topic.
+
+                
+          
+            
+
+            - **s3** *(dict) --* 
+
+              Write to an Amazon S3 bucket.
+
+              
+              
+
+              - **roleArn** *(string) --* 
+
+                The ARN of the IAM role that grants access.
+
+                
+              
+
+              - **bucketName** *(string) --* 
+
+                The Amazon S3 bucket.
+
+                
+              
+
+              - **key** *(string) --* 
+
+                The object key.
+
+                
+              
+
+              - **cannedAcl** *(string) --* 
+
+                The Amazon S3 canned ACL that controls access to the object identified by the object key. For more information, see `S3 canned ACLs <http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl>`__ .
+
+                
+          
+            
+
+            - **firehose** *(dict) --* 
+
+              Write to an Amazon Kinesis Firehose stream.
+
+              
+              
+
+              - **roleArn** *(string) --* 
+
+                The IAM role that grants access to the Amazon Kinesis Firehose stream.
+
+                
+              
+
+              - **deliveryStreamName** *(string) --* 
+
+                The delivery stream name.
+
+                
+              
+
+              - **separator** *(string) --* 
+
+                A character separator that will be used to separate records written to the Firehose stream. Valid values are: '\n' (newline), '\t' (tab), '\r\n' (Windows newline), ',' (comma).
+
+                
+          
+            
+
+            - **cloudwatchMetric** *(dict) --* 
+
+              Capture a CloudWatch metric.
+
+              
+              
+
+              - **roleArn** *(string) --* 
+
+                The IAM role that allows access to the CloudWatch metric.
+
+                
+              
+
+              - **metricNamespace** *(string) --* 
+
+                The CloudWatch metric namespace name.
+
+                
+              
+
+              - **metricName** *(string) --* 
+
+                The CloudWatch metric name.
+
+                
+              
+
+              - **metricValue** *(string) --* 
+
+                The CloudWatch metric value.
+
+                
+              
+
+              - **metricUnit** *(string) --* 
+
+                The `metric unit <http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#Unit>`__ supported by CloudWatch.
+
+                
+              
+
+              - **metricTimestamp** *(string) --* 
+
+                An optional `Unix timestamp <http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#about_timestamp>`__ .
+
+                
+          
+            
+
+            - **cloudwatchAlarm** *(dict) --* 
+
+              Change the state of a CloudWatch alarm.
+
+              
+              
+
+              - **roleArn** *(string) --* 
+
+                The IAM role that allows access to the CloudWatch alarm.
+
+                
+              
+
+              - **alarmName** *(string) --* 
+
+                The CloudWatch alarm name.
+
+                
+              
+
+              - **stateReason** *(string) --* 
+
+                The reason for the alarm change.
+
+                
+              
+
+              - **stateValue** *(string) --* 
+
+                The value of the alarm state. Acceptable values are: OK, ALARM, INSUFFICIENT_DATA.
+
+                
+          
+            
+
+            - **elasticsearch** *(dict) --* 
+
+              Write data to an Amazon Elasticsearch Service domain.
+
+              
+              
+
+              - **roleArn** *(string) --* 
+
+                The IAM role ARN that has access to Elasticsearch.
+
+                
+              
+
+              - **endpoint** *(string) --* 
+
+                The endpoint of your Elasticsearch domain.
+
+                
+              
+
+              - **index** *(string) --* 
+
+                The Elasticsearch index where you want to store your data.
+
+                
+              
+
+              - **type** *(string) --* 
+
+                The type of document you are storing.
+
+                
+              
+
+              - **id** *(string) --* 
+
+                The unique identifier for the document you are storing.
+
+                
+          
+            
+
+            - **salesforce** *(dict) --* 
+
+              Send a message to a Salesforce IoT Cloud Input Stream.
+
+              
+              
+
+              - **token** *(string) --* 
+
+                The token used to authenticate access to the Salesforce IoT Cloud Input Stream. The token is available from the Salesforce IoT Cloud platform after creation of the Input Stream.
+
+                
+              
+
+              - **url** *(string) --* 
+
+                The URL exposed by the Salesforce IoT Cloud Input Stream. The URL is available from the Salesforce IoT Cloud platform after creation of the Input Stream.
+
+                
+          
+        
       
     
 
@@ -10363,7 +11447,85 @@ Client
                   },
               ],
               'ruleDisabled': True|False,
-              'awsIotSqlVersion': 'string'
+              'awsIotSqlVersion': 'string',
+              'errorAction': {
+                  'dynamoDB': {
+                      'tableName': 'string',
+                      'roleArn': 'string',
+                      'operation': 'string',
+                      'hashKeyField': 'string',
+                      'hashKeyValue': 'string',
+                      'hashKeyType': 'STRING'|'NUMBER',
+                      'rangeKeyField': 'string',
+                      'rangeKeyValue': 'string',
+                      'rangeKeyType': 'STRING'|'NUMBER',
+                      'payloadField': 'string'
+                  },
+                  'dynamoDBv2': {
+                      'roleArn': 'string',
+                      'putItem': {
+                          'tableName': 'string'
+                      }
+                  },
+                  'lambda': {
+                      'functionArn': 'string'
+                  },
+                  'sns': {
+                      'targetArn': 'string',
+                      'roleArn': 'string',
+                      'messageFormat': 'RAW'|'JSON'
+                  },
+                  'sqs': {
+                      'roleArn': 'string',
+                      'queueUrl': 'string',
+                      'useBase64': True|False
+                  },
+                  'kinesis': {
+                      'roleArn': 'string',
+                      'streamName': 'string',
+                      'partitionKey': 'string'
+                  },
+                  'republish': {
+                      'roleArn': 'string',
+                      'topic': 'string'
+                  },
+                  's3': {
+                      'roleArn': 'string',
+                      'bucketName': 'string',
+                      'key': 'string',
+                      'cannedAcl': 'private'|'public-read'|'public-read-write'|'aws-exec-read'|'authenticated-read'|'bucket-owner-read'|'bucket-owner-full-control'|'log-delivery-write'
+                  },
+                  'firehose': {
+                      'roleArn': 'string',
+                      'deliveryStreamName': 'string',
+                      'separator': 'string'
+                  },
+                  'cloudwatchMetric': {
+                      'roleArn': 'string',
+                      'metricNamespace': 'string',
+                      'metricName': 'string',
+                      'metricValue': 'string',
+                      'metricUnit': 'string',
+                      'metricTimestamp': 'string'
+                  },
+                  'cloudwatchAlarm': {
+                      'roleArn': 'string',
+                      'alarmName': 'string',
+                      'stateReason': 'string',
+                      'stateValue': 'string'
+                  },
+                  'elasticsearch': {
+                      'roleArn': 'string',
+                      'endpoint': 'string',
+                      'index': 'string',
+                      'type': 'string',
+                      'id': 'string'
+                  },
+                  'salesforce': {
+                      'token': 'string',
+                      'url': 'string'
+                  }
+              }
           }
       )
     :type ruleName: string
@@ -10881,6 +12043,470 @@ Client
 
         
 
+      
+      - **errorAction** *(dict) --* 
+
+        The action to take when an error occurs.
+
+        
+
+      
+        - **dynamoDB** *(dict) --* 
+
+          Write to a DynamoDB table.
+
+          
+
+        
+          - **tableName** *(string) --* **[REQUIRED]** 
+
+            The name of the DynamoDB table.
+
+            
+
+          
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the IAM role that grants access to the DynamoDB table.
+
+            
+
+          
+          - **operation** *(string) --* 
+
+            The type of operation to be performed. This follows the substitution template, so it can be ``${operation}`` , but the substitution must result in one of the following: ``INSERT`` , ``UPDATE`` , or ``DELETE`` .
+
+            
+
+          
+          - **hashKeyField** *(string) --* **[REQUIRED]** 
+
+            The hash key name.
+
+            
+
+          
+          - **hashKeyValue** *(string) --* **[REQUIRED]** 
+
+            The hash key value.
+
+            
+
+          
+          - **hashKeyType** *(string) --* 
+
+            The hash key type. Valid values are "STRING" or "NUMBER"
+
+            
+
+          
+          - **rangeKeyField** *(string) --* 
+
+            The range key name.
+
+            
+
+          
+          - **rangeKeyValue** *(string) --* 
+
+            The range key value.
+
+            
+
+          
+          - **rangeKeyType** *(string) --* 
+
+            The range key type. Valid values are "STRING" or "NUMBER"
+
+            
+
+          
+          - **payloadField** *(string) --* 
+
+            The action payload. This name can be customized.
+
+            
+
+          
+        
+        - **dynamoDBv2** *(dict) --* 
+
+          Write to a DynamoDB table. This is a new version of the DynamoDB action. It allows you to write each attribute in an MQTT message payload into a separate DynamoDB column.
+
+          
+
+        
+          - **roleArn** *(string) --* 
+
+            The ARN of the IAM role that grants access to the DynamoDB table.
+
+            
+
+          
+          - **putItem** *(dict) --* 
+
+            Specifies the DynamoDB table to which the message data will be written. For example:
+
+             
+
+             ``{ "dynamoDBv2": { "roleArn": "aws:iam:12341251:my-role" "putItem": { "tableName": "my-table" } } }``  
+
+             
+
+            Each attribute in the message payload will be written to a separate column in the DynamoDB database.
+
+            
+
+          
+            - **tableName** *(string) --* **[REQUIRED]** 
+
+              The table where the message data will be written
+
+              
+
+            
+          
+        
+        - **lambda** *(dict) --* 
+
+          Invoke a Lambda function.
+
+          
+
+        
+          - **functionArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the Lambda function.
+
+            
+
+          
+        
+        - **sns** *(dict) --* 
+
+          Publish to an Amazon SNS topic.
+
+          
+
+        
+          - **targetArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the SNS topic.
+
+            
+
+          
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the IAM role that grants access.
+
+            
+
+          
+          - **messageFormat** *(string) --* 
+
+            The message format of the message to publish. Optional. Accepted values are "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see `http\://docs.aws.amazon.com/sns/latest/dg/json-formats.html <http://docs.aws.amazon.com/sns/latest/dg/json-formats.html>`__ refer to their official documentation.
+
+            
+
+          
+        
+        - **sqs** *(dict) --* 
+
+          Publish to an Amazon SQS queue.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the IAM role that grants access.
+
+            
+
+          
+          - **queueUrl** *(string) --* **[REQUIRED]** 
+
+            The URL of the Amazon SQS queue.
+
+            
+
+          
+          - **useBase64** *(boolean) --* 
+
+            Specifies whether to use Base64 encoding.
+
+            
+
+          
+        
+        - **kinesis** *(dict) --* 
+
+          Write data to an Amazon Kinesis stream.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the IAM role that grants access to the Amazon Kinesis stream.
+
+            
+
+          
+          - **streamName** *(string) --* **[REQUIRED]** 
+
+            The name of the Amazon Kinesis stream.
+
+            
+
+          
+          - **partitionKey** *(string) --* 
+
+            The partition key.
+
+            
+
+          
+        
+        - **republish** *(dict) --* 
+
+          Publish to another MQTT topic.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the IAM role that grants access.
+
+            
+
+          
+          - **topic** *(string) --* **[REQUIRED]** 
+
+            The name of the MQTT topic.
+
+            
+
+          
+        
+        - **s3** *(dict) --* 
+
+          Write to an Amazon S3 bucket.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The ARN of the IAM role that grants access.
+
+            
+
+          
+          - **bucketName** *(string) --* **[REQUIRED]** 
+
+            The Amazon S3 bucket.
+
+            
+
+          
+          - **key** *(string) --* **[REQUIRED]** 
+
+            The object key.
+
+            
+
+          
+          - **cannedAcl** *(string) --* 
+
+            The Amazon S3 canned ACL that controls access to the object identified by the object key. For more information, see `S3 canned ACLs <http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl>`__ .
+
+            
+
+          
+        
+        - **firehose** *(dict) --* 
+
+          Write to an Amazon Kinesis Firehose stream.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The IAM role that grants access to the Amazon Kinesis Firehose stream.
+
+            
+
+          
+          - **deliveryStreamName** *(string) --* **[REQUIRED]** 
+
+            The delivery stream name.
+
+            
+
+          
+          - **separator** *(string) --* 
+
+            A character separator that will be used to separate records written to the Firehose stream. Valid values are: '\n' (newline), '\t' (tab), '\r\n' (Windows newline), ',' (comma).
+
+            
+
+          
+        
+        - **cloudwatchMetric** *(dict) --* 
+
+          Capture a CloudWatch metric.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The IAM role that allows access to the CloudWatch metric.
+
+            
+
+          
+          - **metricNamespace** *(string) --* **[REQUIRED]** 
+
+            The CloudWatch metric namespace name.
+
+            
+
+          
+          - **metricName** *(string) --* **[REQUIRED]** 
+
+            The CloudWatch metric name.
+
+            
+
+          
+          - **metricValue** *(string) --* **[REQUIRED]** 
+
+            The CloudWatch metric value.
+
+            
+
+          
+          - **metricUnit** *(string) --* **[REQUIRED]** 
+
+            The `metric unit <http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#Unit>`__ supported by CloudWatch.
+
+            
+
+          
+          - **metricTimestamp** *(string) --* 
+
+            An optional `Unix timestamp <http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#about_timestamp>`__ .
+
+            
+
+          
+        
+        - **cloudwatchAlarm** *(dict) --* 
+
+          Change the state of a CloudWatch alarm.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The IAM role that allows access to the CloudWatch alarm.
+
+            
+
+          
+          - **alarmName** *(string) --* **[REQUIRED]** 
+
+            The CloudWatch alarm name.
+
+            
+
+          
+          - **stateReason** *(string) --* **[REQUIRED]** 
+
+            The reason for the alarm change.
+
+            
+
+          
+          - **stateValue** *(string) --* **[REQUIRED]** 
+
+            The value of the alarm state. Acceptable values are: OK, ALARM, INSUFFICIENT_DATA.
+
+            
+
+          
+        
+        - **elasticsearch** *(dict) --* 
+
+          Write data to an Amazon Elasticsearch Service domain.
+
+          
+
+        
+          - **roleArn** *(string) --* **[REQUIRED]** 
+
+            The IAM role ARN that has access to Elasticsearch.
+
+            
+
+          
+          - **endpoint** *(string) --* **[REQUIRED]** 
+
+            The endpoint of your Elasticsearch domain.
+
+            
+
+          
+          - **index** *(string) --* **[REQUIRED]** 
+
+            The Elasticsearch index where you want to store your data.
+
+            
+
+          
+          - **type** *(string) --* **[REQUIRED]** 
+
+            The type of document you are storing.
+
+            
+
+          
+          - **id** *(string) --* **[REQUIRED]** 
+
+            The unique identifier for the document you are storing.
+
+            
+
+          
+        
+        - **salesforce** *(dict) --* 
+
+          Send a message to a Salesforce IoT Cloud Input Stream.
+
+          
+
+        
+          - **token** *(string) --* **[REQUIRED]** 
+
+            The token used to authenticate access to the Salesforce IoT Cloud Input Stream. The token is available from the Salesforce IoT Cloud platform after creation of the Input Stream.
+
+            
+
+          
+          - **url** *(string) --* **[REQUIRED]** 
+
+            The URL exposed by the Salesforce IoT Cloud Input Stream. The URL is available from the Salesforce IoT Cloud platform after creation of the Input Stream.
+
+            
+
+          
+        
       
     
     

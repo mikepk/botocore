@@ -153,9 +153,9 @@ Client
           ]
       )
     :type DashboardNames: list
-    :param DashboardNames: 
+    :param DashboardNames: **[REQUIRED]** 
 
-      The dashboards to be deleted.
+      The dashboards to be deleted. This parameter is required.
 
       
 
@@ -461,6 +461,7 @@ Client
                     'Period': 123,
                     'Unit': 'Seconds'|'Microseconds'|'Milliseconds'|'Bytes'|'Kilobytes'|'Megabytes'|'Gigabytes'|'Terabytes'|'Bits'|'Kilobits'|'Megabits'|'Gigabits'|'Terabits'|'Percent'|'Count'|'Bytes/Second'|'Kilobytes/Second'|'Megabytes/Second'|'Gigabytes/Second'|'Terabytes/Second'|'Bits/Second'|'Kilobits/Second'|'Megabits/Second'|'Gigabits/Second'|'Terabits/Second'|'Count/Second'|'None',
                     'EvaluationPeriods': 123,
+                    'DatapointsToAlarm': 123,
                     'Threshold': 123.0,
                     'ComparisonOperator': 'GreaterThanOrEqualToThreshold'|'GreaterThanThreshold'|'LessThanThreshold'|'LessThanOrEqualToThreshold',
                     'TreatMissingData': 'string',
@@ -665,6 +666,13 @@ Client
               
             
 
+            - **DatapointsToAlarm** *(integer) --* 
+
+              The number of datapoints that must be breaching to trigger the alarm.
+
+              
+            
+
             - **Threshold** *(float) --* 
 
               The value to compare with the specified statistic.
@@ -852,6 +860,7 @@ Client
                     'Period': 123,
                     'Unit': 'Seconds'|'Microseconds'|'Milliseconds'|'Bytes'|'Kilobytes'|'Megabytes'|'Gigabytes'|'Terabytes'|'Bits'|'Kilobits'|'Megabits'|'Gigabits'|'Terabits'|'Percent'|'Count'|'Bytes/Second'|'Kilobytes/Second'|'Megabytes/Second'|'Gigabytes/Second'|'Terabytes/Second'|'Bits/Second'|'Kilobits/Second'|'Megabits/Second'|'Gigabits/Second'|'Terabits/Second'|'Count/Second'|'None',
                     'EvaluationPeriods': 123,
+                    'DatapointsToAlarm': 123,
                     'Threshold': 123.0,
                     'ComparisonOperator': 'GreaterThanOrEqualToThreshold'|'GreaterThanThreshold'|'LessThanThreshold'|'LessThanOrEqualToThreshold',
                     'TreatMissingData': 'string',
@@ -1055,6 +1064,13 @@ Client
               
             
 
+            - **DatapointsToAlarm** *(integer) --* 
+
+              The number of datapoints that must be breaching to trigger the alarm.
+
+              
+            
+
             - **Threshold** *(float) --* 
 
               The value to compare with the specified statistic.
@@ -1198,7 +1214,7 @@ Client
           DashboardName='string'
       )
     :type DashboardName: string
-    :param DashboardName: 
+    :param DashboardName: **[REQUIRED]** 
 
       The name of the dashboard to be described.
 
@@ -1947,17 +1963,17 @@ Client
           DashboardBody='string'
       )
     :type DashboardName: string
-    :param DashboardName: 
+    :param DashboardName: **[REQUIRED]** 
 
-      The name of the dashboard. If a dashboard with this name already exists, this call modifies that dashboard, replacing its current contents. Otherwise, a new dashboard is created. The maximum length is 255, and valid characters are A-Z, a-z, 0-9, "-", and "_".
+      The name of the dashboard. If a dashboard with this name already exists, this call modifies that dashboard, replacing its current contents. Otherwise, a new dashboard is created. The maximum length is 255, and valid characters are A-Z, a-z, 0-9, "-", and "_". This parameter is required.
 
       
 
     
     :type DashboardBody: string
-    :param DashboardBody: 
+    :param DashboardBody: **[REQUIRED]** 
 
-      The detailed information about the dashboard in JSON format, including the widgets to include and their location on the dashboard.
+      The detailed information about the dashboard in JSON format, including the widgets to include and their location on the dashboard. This parameter is required.
 
        
 
@@ -2108,6 +2124,7 @@ Client
           Period=123,
           Unit='Seconds'|'Microseconds'|'Milliseconds'|'Bytes'|'Kilobytes'|'Megabytes'|'Gigabytes'|'Terabytes'|'Bits'|'Kilobits'|'Megabits'|'Gigabits'|'Terabits'|'Percent'|'Count'|'Bytes/Second'|'Kilobytes/Second'|'Megabytes/Second'|'Gigabytes/Second'|'Terabytes/Second'|'Bits/Second'|'Kilobits/Second'|'Megabits/Second'|'Gigabits/Second'|'Terabits/Second'|'Count/Second'|'None',
           EvaluationPeriods=123,
+          DatapointsToAlarm=123,
           Threshold=123.0,
           ComparisonOperator='GreaterThanOrEqualToThreshold'|'GreaterThanThreshold'|'LessThanThreshold'|'LessThanOrEqualToThreshold',
           TreatMissingData='string',
@@ -2144,11 +2161,11 @@ Client
 
        
 
-      Valid Values: arn:aws:automate:*region* :ec2:stop | arn:aws:automate:*region* :ec2:terminate | arn:aws:automate:*region* :ec2:recover
+      Valid Values: arn:aws:automate:*region* :ec2:stop | arn:aws:automate:*region* :ec2:terminate | arn:aws:automate:*region* :ec2:recover | arn:aws:sns:*region* :*account-id* :*sns-topic-name* | arn:aws:autoscaling:*region* :*account-id* :scalingPolicy:*policy-id* autoScalingGroupName/*group-friendly-name* :policyName/*policy-friendly-name*  
 
        
 
-      Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{*customer-account* }:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{*customer-account* }:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{*customer-account* }:action/actions/AWS_EC2.InstanceId.Reboot/1.0
+      Valid Values (for use with IAM roles): arn:aws:swf:*region* :{*account-id* }:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:*region* :{*account-id* }:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:*region* :{*account-id* }:action/actions/AWS_EC2.InstanceId.Reboot/1.0
 
       
 
@@ -2164,11 +2181,11 @@ Client
 
        
 
-      Valid Values: arn:aws:automate:*region* :ec2:stop | arn:aws:automate:*region* :ec2:terminate | arn:aws:automate:*region* :ec2:recover
+      Valid Values: arn:aws:automate:*region* :ec2:stop | arn:aws:automate:*region* :ec2:terminate | arn:aws:automate:*region* :ec2:recover | arn:aws:sns:*region* :*account-id* :*sns-topic-name* | arn:aws:autoscaling:*region* :*account-id* :scalingPolicy:*policy-id* autoScalingGroupName/*group-friendly-name* :policyName/*policy-friendly-name*  
 
        
 
-      Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{*customer-account* }:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{*customer-account* }:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{*customer-account* }:action/actions/AWS_EC2.InstanceId.Reboot/1.0
+      Valid Values (for use with IAM roles): arn:aws:swf:*region* :{*account-id* }:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:*region* :{*account-id* }:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:*region* :{*account-id* }:action/actions/AWS_EC2.InstanceId.Reboot/1.0
 
       
 
@@ -2184,11 +2201,11 @@ Client
 
        
 
-      Valid Values: arn:aws:automate:*region* :ec2:stop | arn:aws:automate:*region* :ec2:terminate | arn:aws:automate:*region* :ec2:recover
+      Valid Values: arn:aws:automate:*region* :ec2:stop | arn:aws:automate:*region* :ec2:terminate | arn:aws:automate:*region* :ec2:recover | arn:aws:sns:*region* :*account-id* :*sns-topic-name* | arn:aws:autoscaling:*region* :*account-id* :scalingPolicy:*policy-id* autoScalingGroupName/*group-friendly-name* :policyName/*policy-friendly-name*  
 
        
 
-      Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{*customer-account* }:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{*customer-account* }:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{*customer-account* }:action/actions/AWS_EC2.InstanceId.Reboot/1.0
+      Valid Values (for use with IAM roles): arn:aws:swf:*region* :{*account-id* }:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:*region* :{*account-id* }:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:*region* :{*account-id* }:action/actions/AWS_EC2.InstanceId.Reboot/1.0
 
       
 
@@ -2216,7 +2233,7 @@ Client
     :type Statistic: string
     :param Statistic: 
 
-      The statistic for the metric associated with the alarm, other than percentile. For percentile statistics, use ``ExtendedStatistic`` .
+      The statistic for the metric associated with the alarm, other than percentile. For percentile statistics, use ``ExtendedStatistic`` . When you call ``PutMetricAlarm`` , you must specify either ``Statistic`` or ``ExtendedStatistic,`` but not both.
 
       
 
@@ -2224,7 +2241,7 @@ Client
     :type ExtendedStatistic: string
     :param ExtendedStatistic: 
 
-      The percentile statistic for the metric associated with the alarm. Specify a value between p0.0 and p100.
+      The percentile statistic for the metric associated with the alarm. Specify a value between p0.0 and p100. When you call ``PutMetricAlarm`` , you must specify either ``Statistic`` or ``ExtendedStatistic,`` but not both.
 
       
 
@@ -2292,6 +2309,14 @@ Client
     :param EvaluationPeriods: **[REQUIRED]** 
 
       The number of periods over which data is compared to the specified threshold. An alarm's total current evaluation period can be no longer than one day, so this number multiplied by ``Period`` cannot be more than 86,400 seconds.
+
+      
+
+    
+    :type DatapointsToAlarm: integer
+    :param DatapointsToAlarm: 
+
+      The number of datapoints that must be breaching to trigger the alarm.
 
       
 
@@ -2940,6 +2965,7 @@ The available paginators are:
                     'Period': 123,
                     'Unit': 'Seconds'|'Microseconds'|'Milliseconds'|'Bytes'|'Kilobytes'|'Megabytes'|'Gigabytes'|'Terabytes'|'Bits'|'Kilobits'|'Megabits'|'Gigabits'|'Terabits'|'Percent'|'Count'|'Bytes/Second'|'Kilobytes/Second'|'Megabytes/Second'|'Gigabytes/Second'|'Terabytes/Second'|'Bits/Second'|'Kilobits/Second'|'Megabits/Second'|'Gigabits/Second'|'Terabits/Second'|'Count/Second'|'None',
                     'EvaluationPeriods': 123,
+                    'DatapointsToAlarm': 123,
                     'Threshold': 123.0,
                     'ComparisonOperator': 'GreaterThanOrEqualToThreshold'|'GreaterThanThreshold'|'LessThanThreshold'|'LessThanOrEqualToThreshold',
                     'TreatMissingData': 'string',
@@ -3140,6 +3166,13 @@ The available paginators are:
             - **EvaluationPeriods** *(integer) --* 
 
               The number of periods over which data is compared to the specified threshold.
+
+              
+            
+
+            - **DatapointsToAlarm** *(integer) --* 
+
+              The number of datapoints that must be breaching to trigger the alarm.
 
               
             

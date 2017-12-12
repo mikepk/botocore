@@ -1697,9 +1697,17 @@ Client
         
 
         - **PreferredMfaSetting** *(string) --* 
+
+          The user's preferred MFA setting.
+
+          
         
 
         - **UserMFASettingList** *(list) --* 
+
+          The list of the user's MFA settings.
+
+          
           
 
           - *(string) --* 
@@ -5759,6 +5767,7 @@ Client
                 },
                 'SmsConfigurationFailure': 'string',
                 'EmailConfigurationFailure': 'string',
+                'Domain': 'string',
                 'AdminCreateUserConfig': {
                     'AllowAdminCreateUserOnly': True|False,
                     'UnusedAccountValidityDays': 123,
@@ -6269,6 +6278,13 @@ Client
           - **EmailConfigurationFailure** *(string) --* 
 
             The reason why the email configuration cannot send the messages to your users.
+
+            
+          
+
+          - **Domain** *(string) --* 
+
+            Holds the domain prefix if the user pool has a domain associated with it.
 
             
           
@@ -8239,6 +8255,7 @@ Client
                 },
                 'SmsConfigurationFailure': 'string',
                 'EmailConfigurationFailure': 'string',
+                'Domain': 'string',
                 'AdminCreateUserConfig': {
                     'AllowAdminCreateUserOnly': True|False,
                     'UnusedAccountValidityDays': 123,
@@ -8749,6 +8766,13 @@ Client
           - **EmailConfigurationFailure** *(string) --* 
 
             The reason why the email configuration cannot send the messages to your users.
+
+            
+          
+
+          - **Domain** *(string) --* 
+
+            Holds the domain prefix if the user pool has a domain associated with it.
 
             
           
@@ -10186,9 +10210,17 @@ Client
         
 
         - **PreferredMfaSetting** *(string) --* 
+
+          The user's preferred MFA setting.
+
+          
         
 
         - **UserMFASettingList** *(list) --* 
+
+          The list of the user's MFA settings.
+
+          
           
 
           - *(string) --* 

@@ -983,3 +983,156 @@ Paginators
 
 
 The available paginators are:
+
+* :py:class:`Polly.Paginator.DescribeVoices`
+
+
+
+.. py:class:: Polly.Paginator.DescribeVoices
+
+  ::
+
+    
+    paginator = client.get_paginator('describe_voices')
+
+  
+  
+
+  .. py:method:: paginate(**kwargs)
+
+    Creates an iterator that will paginate through responses from :py:meth:`Polly.Client.describe_voices`.
+
+    See also: `AWS API Documentation <https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DescribeVoices>`_    
+
+
+    **Request Syntax** 
+    ::
+
+      response_iterator = paginator.paginate(
+          LanguageCode='cy-GB'|'da-DK'|'de-DE'|'en-AU'|'en-GB'|'en-GB-WLS'|'en-IN'|'en-US'|'es-ES'|'es-US'|'fr-CA'|'fr-FR'|'is-IS'|'it-IT'|'ko-KR'|'ja-JP'|'nb-NO'|'nl-NL'|'pl-PL'|'pt-BR'|'pt-PT'|'ro-RO'|'ru-RU'|'sv-SE'|'tr-TR',
+          PaginationConfig={
+              'MaxItems': 123,
+              'PageSize': 123,
+              'StartingToken': 'string'
+          }
+      )
+    :type LanguageCode: string
+    :param LanguageCode: 
+
+      The language identification tag (ISO 639 code for the language name-ISO 3166 country code) for filtering the list of voices returned. If you don't specify this optional parameter, all available voices are returned. 
+
+      
+
+    
+    :type PaginationConfig: dict
+    :param PaginationConfig: 
+
+      A dictionary that provides parameters to control pagination.
+
+      
+
+    
+      - **MaxItems** *(integer) --* 
+
+        The total number of items to return. If the total number of items available is more than the value specified in max-items then a ``NextToken`` will be provided in the output that you can use to resume pagination.
+
+        
+
+      
+      - **PageSize** *(integer) --* 
+
+        The size of each page.
+
+        
+
+        
+
+        
+
+      
+      - **StartingToken** *(string) --* 
+
+        A token to specify where to start paginating. This is the ``NextToken`` from a previous response.
+
+        
+
+      
+    
+    
+    :rtype: dict
+    :returns: 
+      
+      **Response Syntax** 
+
+      
+      ::
+
+        {
+            'Voices': [
+                {
+                    'Gender': 'Female'|'Male',
+                    'Id': 'Geraint'|'Gwyneth'|'Mads'|'Naja'|'Hans'|'Marlene'|'Nicole'|'Russell'|'Amy'|'Brian'|'Emma'|'Raveena'|'Ivy'|'Joanna'|'Joey'|'Justin'|'Kendra'|'Kimberly'|'Matthew'|'Salli'|'Conchita'|'Enrique'|'Miguel'|'Penelope'|'Chantal'|'Celine'|'Mathieu'|'Dora'|'Karl'|'Carla'|'Giorgio'|'Mizuki'|'Liv'|'Lotte'|'Ruben'|'Ewa'|'Jacek'|'Jan'|'Maja'|'Ricardo'|'Vitoria'|'Cristiano'|'Ines'|'Carmen'|'Maxim'|'Tatyana'|'Astrid'|'Filiz'|'Vicki'|'Takumi'|'Seoyeon'|'Aditi',
+                    'LanguageCode': 'cy-GB'|'da-DK'|'de-DE'|'en-AU'|'en-GB'|'en-GB-WLS'|'en-IN'|'en-US'|'es-ES'|'es-US'|'fr-CA'|'fr-FR'|'is-IS'|'it-IT'|'ko-KR'|'ja-JP'|'nb-NO'|'nl-NL'|'pl-PL'|'pt-BR'|'pt-PT'|'ro-RO'|'ru-RU'|'sv-SE'|'tr-TR',
+                    'LanguageName': 'string',
+                    'Name': 'string'
+                },
+            ],
+            
+        }
+      **Response Structure** 
+
+      
+
+      - *(dict) --* 
+        
+
+        - **Voices** *(list) --* 
+
+          A list of voices with their properties.
+
+          
+          
+
+          - *(dict) --* 
+
+            Description of the voice.
+
+            
+            
+
+            - **Gender** *(string) --* 
+
+              Gender of the voice.
+
+              
+            
+
+            - **Id** *(string) --* 
+
+              Amazon Polly assigned voice ID. This is the ID that you specify when calling the ``SynthesizeSpeech`` operation.
+
+              
+            
+
+            - **LanguageCode** *(string) --* 
+
+              Language code of the voice.
+
+              
+            
+
+            - **LanguageName** *(string) --* 
+
+              Human readable name of the language in English.
+
+              
+            
+
+            - **Name** *(string) --* 
+
+              Name of the voice (for example, Salli, Kendra, etc.). This provides a human readable voice name that you might display in your application.
+
+              
+        
+      
+    

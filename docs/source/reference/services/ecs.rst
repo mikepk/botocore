@@ -1,5 +1,8 @@
 
 
+.. _https://docs.docker.com/engine/reference/commandline/run/: https://docs.docker.com/engine/reference/commandline/run/
+
+
 ***
 ECS
 ***
@@ -3075,11 +3078,11 @@ Client
 
               - **cpu** *(integer) --* 
 
-                The number of ``cpu`` units reserved for the container. If your containers will be part of a task using the Fargate launch type, this field is optional and the only requirement is that the total amount of CPU reserved for all containers within a task be lower than the task ``cpu`` value.
+                The number of ``cpu`` units reserved for the container. This parameter maps to ``CpuShares`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--cpu-shares`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
                  
 
-                For containers that will be part of a task using the EC2 launch type, a container instance has 1,024 ``cpu`` units for every CPU core. This parameter specifies the minimum amount of CPU to reserve for a container, and containers share unallocated CPU units with other containers on the instance with the same ratio as their allocated amount. This parameter maps to ``CpuShares`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--cpu-shares`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+                This field is optional for tasks using the Fargate launch type, and the only requirement is that the total amount of CPU reserved for all containers within a task be lower than the task-level ``cpu`` value.
 
                  
 
@@ -3097,7 +3100,11 @@ Client
 
                  
 
-                The Docker daemon on the container instance uses the CPU value to calculate the relative CPU share ratios for running containers. For more information, see `CPU share constraint <https://docs.docker.com/engine/reference/run/#cpu-share-constraint>`__ in the Docker documentation. The minimum valid CPU share value that the Linux kernel allows is 2; however, the CPU parameter is not required, and you can use CPU values below 2 in your container definitions. For CPU values below 2 (including null), the behavior varies based on your Amazon ECS container agent version:
+                Linux containers share unallocated CPU units with other containers on the container instance with the same ratio as their allocated amount. For example, if you run a single-container task on a single-core instance type with 512 CPU units specified for that container, and that is the only task running on the container instance, that container could use the full 1,024 CPU unit share at any given time. However, if you launched another copy of the same task on that container instance, each task would be guaranteed a minimum of 512 CPU units when needed, and each container could float to higher CPU usage if the other container was not using it, but if both tasks were 100% active all of the time, they would be limited to 512 CPU units.
+
+                 
+
+                On Linux container instances, the Docker daemon on the container instance uses the CPU value to calculate the relative CPU share ratios for running containers. For more information, see `CPU share constraint <https://docs.docker.com/engine/reference/run/#cpu-share-constraint>`__ in the Docker documentation. The minimum valid CPU share value that the Linux kernel will allow is 2; however, the CPU parameter is not required, and you can use CPU values below 2 in your container definitions. For CPU values below 2 (including null), the behavior varies based on your Amazon ECS container agent version:
 
                  
 
@@ -3106,6 +3113,10 @@ Client
                  
                 * **Agent versions greater than or equal to 1.2.0:** Null, zero, and CPU values of 1 are passed to Docker as 2. 
                  
+
+                 
+
+                On Windows container instances, the CPU limit is enforced as an absolute limit, or a quota. Windows containers only have access to the specified amount of CPU that is described in the task definition.
 
                 
               
@@ -3146,7 +3157,17 @@ Client
 
               - **links** *(list) --* 
 
-                The ``link`` parameter allows containers to communicate with each other without the need for port mappings, using the ``name`` parameter and optionally, an ``alias`` for the link. This construct is analogous to ``name:alias`` in Docker links. This field is not valid for containers in tasks using the Fargate launch type. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed for each ``name`` and ``alias`` . For more information on linking Docker containers, see `https\://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/ <https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/>`__ . This parameter maps to ``Links`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--link`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+                The ``link`` parameter allows containers to communicate with each other without the need for port mappings. Only supported if the network mode of a task definition is set to ``bridge`` . The ``name:internalName`` construct is analogous to ``name:alias`` in Docker links. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed. For more information about linking Docker containers, go to `https\://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/ <https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/>`__ . This parameter maps to ``Links`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--link`` option to ` ``docker run`` https://docs.docker.com/engine/reference/commandline/run/`__ .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
 
                  
 
@@ -3171,7 +3192,11 @@ Client
 
                  
 
-                If using containers in a task with the Fargate, exposed ports should be specified using ``containerPort`` . The ``hostPort`` can be left blank or it must be the same value as the ``containerPort`` .
+                For task definitions that use the ``awsvpc`` network mode, you should only specify the ``containerPort`` . The ``hostPort`` can be left blank or it must be the same value as the ``containerPort`` .
+
+                 
+
+                Port mappings on Windows use the ``NetNAT`` gateway address rather than ``localhost`` . There is no loopback for port mappings on Windows, so you cannot access a container's mapped port from the host itself. 
 
                  
 
@@ -3351,11 +3376,11 @@ Client
 
                  
 
-                If using the Fargate launch type, the ``sourceVolume`` parameter is not supported.
+                This parameter maps to ``Volumes`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--volume`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
                  
 
-                This parameter maps to ``Volumes`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--volume`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+                Windows containers can mount whole directories on the same drive as ``$env:ProgramData`` . Windows containers cannot mount directories on a different drive, and mount point cannot be across drives.
 
                 
                 
@@ -3369,7 +3394,7 @@ Client
 
                   - **sourceVolume** *(string) --* 
 
-                    The name of the volume to mount. If using the Fargate launch type, the ``sourceVolume`` parameter is not supported.
+                    The name of the volume to mount.
 
                     
                   
@@ -3422,7 +3447,17 @@ Client
 
               - **linuxParameters** *(dict) --* 
 
-                Linux-specific modifications that are applied to the container, such as Linux  KernelCapabilities . This field is not valid for containers in tasks using the Fargate launch type.
+                Linux-specific modifications that are applied to the container, such as Linux  KernelCapabilities .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers or tasks using the Fargate launch type.
+
+                   
 
                 
                 
@@ -3525,6 +3560,16 @@ Client
 
                 The user name to use inside the container. This parameter maps to ``User`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--user`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
               
 
@@ -3539,12 +3584,32 @@ Client
 
                 When this parameter is true, networking is disabled within the container. This parameter maps to ``NetworkDisabled`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ .
 
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
               
 
               - **privileged** *(boolean) --* 
 
                 When this parameter is true, the container is given elevated privileges on the host container instance (similar to the ``root`` user). This parameter maps to ``Privileged`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--privileged`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers or tasks using the Fargate launch type.
+
+                   
 
                 
               
@@ -3553,12 +3618,32 @@ Client
 
                 When this parameter is true, the container is given read-only access to its root file system. This parameter maps to ``ReadonlyRootfs`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--read-only`` option to ``docker run`` .
 
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
               
 
               - **dnsServers** *(list) --* 
 
                 A list of DNS servers that are presented to the container. This parameter maps to ``Dns`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--dns`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
 
                 
                 
@@ -3571,6 +3656,16 @@ Client
 
                 A list of DNS search domains that are presented to the container. This parameter maps to ``DnsSearch`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--dns-search`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
                 
 
@@ -3581,6 +3676,16 @@ Client
               - **extraHosts** *(list) --* 
 
                 A list of hostnames and IP address mappings to append to the ``/etc/hosts`` file on the container. If using the Fargate launch type, this may be used to list non-Fargate hosts you want the container to talk to. This parameter maps to ``ExtraHosts`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--add-host`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
 
                 
                 
@@ -3626,6 +3731,10 @@ Client
 
                    
 
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
                 
 
@@ -3651,6 +3760,16 @@ Client
               - **ulimits** *(list) --* 
 
                 A list of ``ulimits`` to set in the container. This parameter maps to ``Ulimits`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--ulimit`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ . Valid naming values are displayed in the  Ulimit data type. This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: ``sudo docker version | grep "Server API version"``  
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
 
                 
                 
@@ -3774,6 +3893,10 @@ Client
 
             The ARN of the IAM role that containers in this task can assume. All containers in this task are granted the permissions that are specified in this role.
 
+             
+
+            IAM roles for tasks on Windows require that the ``-EnableTaskIAMRole`` option is set when you launch the Amazon ECS-optimized Windows AMI. Your containers must also run some configuration code in order to take advantage of the feature. For more information, see `Windows IAM Roles for Tasks <http://docs.aws.amazon.com/AmazonECS/latest/developerguide/windows_task_IAM_roles.html>`__ in the *Amazon Elastic Container Service Developer Guide* .
+
             
           
 
@@ -3798,7 +3921,21 @@ Client
 
              
 
+            .. note::
+
+               
+
+              Currently, only the Amazon ECS-optimized AMI, other Amazon Linux variants with the ``ecs-init`` package, or AWS Fargate infrastructure support the ``awsvpc`` network mode. 
+
+               
+
+             
+
             If the network mode is ``host`` , you can't run multiple instantiations of the same task on a single container instance when port mappings are used.
+
+             
+
+            Docker for Windows uses different network modes than Docker for Linux. When you register a task definition with Windows containers, you must not specify a network mode. If you use the console to register a task definition with Windows containers, you must choose the ``<default>`` network mode object. 
 
              
 
@@ -3849,7 +3986,7 @@ Client
 
                  
 
-                If you are using the Fargate launch type, the ``host`` parameter is not supported.
+                Windows containers can mount whole directories on the same drive as ``$env:ProgramData`` . Windows containers cannot mount directories on a different drive, and mount point cannot be across drives. For example, you can mount ``C:\my\path:C:\my\path`` and ``D:\:D:\`` , but not ``D:\my\path:C:\my\path`` or ``D:\:C:\my\path`` .
 
                 
                 
@@ -3860,7 +3997,7 @@ Client
 
                    
 
-                  If you are using the Fargate launch type, the ``host`` parameter is not supported.
+                  If you are using the Fargate launch type, the ``sourcePath`` parameter is not supported.
 
                   
             
@@ -5837,11 +5974,11 @@ Client
 
               - **cpu** *(integer) --* 
 
-                The number of ``cpu`` units reserved for the container. If your containers will be part of a task using the Fargate launch type, this field is optional and the only requirement is that the total amount of CPU reserved for all containers within a task be lower than the task ``cpu`` value.
+                The number of ``cpu`` units reserved for the container. This parameter maps to ``CpuShares`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--cpu-shares`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
                  
 
-                For containers that will be part of a task using the EC2 launch type, a container instance has 1,024 ``cpu`` units for every CPU core. This parameter specifies the minimum amount of CPU to reserve for a container, and containers share unallocated CPU units with other containers on the instance with the same ratio as their allocated amount. This parameter maps to ``CpuShares`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--cpu-shares`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+                This field is optional for tasks using the Fargate launch type, and the only requirement is that the total amount of CPU reserved for all containers within a task be lower than the task-level ``cpu`` value.
 
                  
 
@@ -5859,7 +5996,11 @@ Client
 
                  
 
-                The Docker daemon on the container instance uses the CPU value to calculate the relative CPU share ratios for running containers. For more information, see `CPU share constraint <https://docs.docker.com/engine/reference/run/#cpu-share-constraint>`__ in the Docker documentation. The minimum valid CPU share value that the Linux kernel allows is 2; however, the CPU parameter is not required, and you can use CPU values below 2 in your container definitions. For CPU values below 2 (including null), the behavior varies based on your Amazon ECS container agent version:
+                Linux containers share unallocated CPU units with other containers on the container instance with the same ratio as their allocated amount. For example, if you run a single-container task on a single-core instance type with 512 CPU units specified for that container, and that is the only task running on the container instance, that container could use the full 1,024 CPU unit share at any given time. However, if you launched another copy of the same task on that container instance, each task would be guaranteed a minimum of 512 CPU units when needed, and each container could float to higher CPU usage if the other container was not using it, but if both tasks were 100% active all of the time, they would be limited to 512 CPU units.
+
+                 
+
+                On Linux container instances, the Docker daemon on the container instance uses the CPU value to calculate the relative CPU share ratios for running containers. For more information, see `CPU share constraint <https://docs.docker.com/engine/reference/run/#cpu-share-constraint>`__ in the Docker documentation. The minimum valid CPU share value that the Linux kernel will allow is 2; however, the CPU parameter is not required, and you can use CPU values below 2 in your container definitions. For CPU values below 2 (including null), the behavior varies based on your Amazon ECS container agent version:
 
                  
 
@@ -5868,6 +6009,10 @@ Client
                  
                 * **Agent versions greater than or equal to 1.2.0:** Null, zero, and CPU values of 1 are passed to Docker as 2. 
                  
+
+                 
+
+                On Windows container instances, the CPU limit is enforced as an absolute limit, or a quota. Windows containers only have access to the specified amount of CPU that is described in the task definition.
 
                 
               
@@ -5908,7 +6053,17 @@ Client
 
               - **links** *(list) --* 
 
-                The ``link`` parameter allows containers to communicate with each other without the need for port mappings, using the ``name`` parameter and optionally, an ``alias`` for the link. This construct is analogous to ``name:alias`` in Docker links. This field is not valid for containers in tasks using the Fargate launch type. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed for each ``name`` and ``alias`` . For more information on linking Docker containers, see `https\://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/ <https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/>`__ . This parameter maps to ``Links`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--link`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+                The ``link`` parameter allows containers to communicate with each other without the need for port mappings. Only supported if the network mode of a task definition is set to ``bridge`` . The ``name:internalName`` construct is analogous to ``name:alias`` in Docker links. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed. For more information about linking Docker containers, go to `https\://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/ <https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/>`__ . This parameter maps to ``Links`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--link`` option to ` ``docker run`` https://docs.docker.com/engine/reference/commandline/run/`__ .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
 
                  
 
@@ -5933,7 +6088,11 @@ Client
 
                  
 
-                If using containers in a task with the Fargate, exposed ports should be specified using ``containerPort`` . The ``hostPort`` can be left blank or it must be the same value as the ``containerPort`` .
+                For task definitions that use the ``awsvpc`` network mode, you should only specify the ``containerPort`` . The ``hostPort`` can be left blank or it must be the same value as the ``containerPort`` .
+
+                 
+
+                Port mappings on Windows use the ``NetNAT`` gateway address rather than ``localhost`` . There is no loopback for port mappings on Windows, so you cannot access a container's mapped port from the host itself. 
 
                  
 
@@ -6113,11 +6272,11 @@ Client
 
                  
 
-                If using the Fargate launch type, the ``sourceVolume`` parameter is not supported.
+                This parameter maps to ``Volumes`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--volume`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
                  
 
-                This parameter maps to ``Volumes`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--volume`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+                Windows containers can mount whole directories on the same drive as ``$env:ProgramData`` . Windows containers cannot mount directories on a different drive, and mount point cannot be across drives.
 
                 
                 
@@ -6131,7 +6290,7 @@ Client
 
                   - **sourceVolume** *(string) --* 
 
-                    The name of the volume to mount. If using the Fargate launch type, the ``sourceVolume`` parameter is not supported.
+                    The name of the volume to mount.
 
                     
                   
@@ -6184,7 +6343,17 @@ Client
 
               - **linuxParameters** *(dict) --* 
 
-                Linux-specific modifications that are applied to the container, such as Linux  KernelCapabilities . This field is not valid for containers in tasks using the Fargate launch type.
+                Linux-specific modifications that are applied to the container, such as Linux  KernelCapabilities .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers or tasks using the Fargate launch type.
+
+                   
 
                 
                 
@@ -6287,6 +6456,16 @@ Client
 
                 The user name to use inside the container. This parameter maps to ``User`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--user`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
               
 
@@ -6301,12 +6480,32 @@ Client
 
                 When this parameter is true, networking is disabled within the container. This parameter maps to ``NetworkDisabled`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ .
 
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
               
 
               - **privileged** *(boolean) --* 
 
                 When this parameter is true, the container is given elevated privileges on the host container instance (similar to the ``root`` user). This parameter maps to ``Privileged`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--privileged`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers or tasks using the Fargate launch type.
+
+                   
 
                 
               
@@ -6315,12 +6514,32 @@ Client
 
                 When this parameter is true, the container is given read-only access to its root file system. This parameter maps to ``ReadonlyRootfs`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--read-only`` option to ``docker run`` .
 
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
               
 
               - **dnsServers** *(list) --* 
 
                 A list of DNS servers that are presented to the container. This parameter maps to ``Dns`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--dns`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
 
                 
                 
@@ -6333,6 +6552,16 @@ Client
 
                 A list of DNS search domains that are presented to the container. This parameter maps to ``DnsSearch`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--dns-search`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
                 
 
@@ -6343,6 +6572,16 @@ Client
               - **extraHosts** *(list) --* 
 
                 A list of hostnames and IP address mappings to append to the ``/etc/hosts`` file on the container. If using the Fargate launch type, this may be used to list non-Fargate hosts you want the container to talk to. This parameter maps to ``ExtraHosts`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--add-host`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
 
                 
                 
@@ -6388,6 +6627,10 @@ Client
 
                    
 
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
                 
 
@@ -6413,6 +6656,16 @@ Client
               - **ulimits** *(list) --* 
 
                 A list of ``ulimits`` to set in the container. This parameter maps to ``Ulimits`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--ulimit`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ . Valid naming values are displayed in the  Ulimit data type. This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: ``sudo docker version | grep "Server API version"``  
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
 
                 
                 
@@ -6536,6 +6789,10 @@ Client
 
             The ARN of the IAM role that containers in this task can assume. All containers in this task are granted the permissions that are specified in this role.
 
+             
+
+            IAM roles for tasks on Windows require that the ``-EnableTaskIAMRole`` option is set when you launch the Amazon ECS-optimized Windows AMI. Your containers must also run some configuration code in order to take advantage of the feature. For more information, see `Windows IAM Roles for Tasks <http://docs.aws.amazon.com/AmazonECS/latest/developerguide/windows_task_IAM_roles.html>`__ in the *Amazon Elastic Container Service Developer Guide* .
+
             
           
 
@@ -6560,7 +6817,21 @@ Client
 
              
 
+            .. note::
+
+               
+
+              Currently, only the Amazon ECS-optimized AMI, other Amazon Linux variants with the ``ecs-init`` package, or AWS Fargate infrastructure support the ``awsvpc`` network mode. 
+
+               
+
+             
+
             If the network mode is ``host`` , you can't run multiple instantiations of the same task on a single container instance when port mappings are used.
+
+             
+
+            Docker for Windows uses different network modes than Docker for Linux. When you register a task definition with Windows containers, you must not specify a network mode. If you use the console to register a task definition with Windows containers, you must choose the ``<default>`` network mode object. 
 
              
 
@@ -6611,7 +6882,7 @@ Client
 
                  
 
-                If you are using the Fargate launch type, the ``host`` parameter is not supported.
+                Windows containers can mount whole directories on the same drive as ``$env:ProgramData`` . Windows containers cannot mount directories on a different drive, and mount point cannot be across drives. For example, you can mount ``C:\my\path:C:\my\path`` and ``D:\:D:\`` , but not ``D:\my\path:C:\my\path`` or ``D:\:C:\my\path`` .
 
                 
                 
@@ -6622,7 +6893,7 @@ Client
 
                    
 
-                  If you are using the Fargate launch type, the ``host`` parameter is not supported.
+                  If you are using the Fargate launch type, the ``sourcePath`` parameter is not supported.
 
                   
             
@@ -9794,6 +10065,10 @@ Client
 
        
 
+      Docker for Windows uses different network modes than Docker for Linux. When you register a task definition with Windows containers, you must not specify a network mode.
+
+       
+
       For more information, see `Network settings <https://docs.docker.com/engine/reference/run/#network-settings>`__ in the *Docker run reference* .
 
       
@@ -9842,11 +10117,11 @@ Client
         
         - **cpu** *(integer) --* 
 
-          The number of ``cpu`` units reserved for the container. If your containers will be part of a task using the Fargate launch type, this field is optional and the only requirement is that the total amount of CPU reserved for all containers within a task be lower than the task ``cpu`` value.
+          The number of ``cpu`` units reserved for the container. This parameter maps to ``CpuShares`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--cpu-shares`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
            
 
-          For containers that will be part of a task using the EC2 launch type, a container instance has 1,024 ``cpu`` units for every CPU core. This parameter specifies the minimum amount of CPU to reserve for a container, and containers share unallocated CPU units with other containers on the instance with the same ratio as their allocated amount. This parameter maps to ``CpuShares`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--cpu-shares`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+          This field is optional for tasks using the Fargate launch type, and the only requirement is that the total amount of CPU reserved for all containers within a task be lower than the task-level ``cpu`` value.
 
            
 
@@ -9864,7 +10139,11 @@ Client
 
            
 
-          The Docker daemon on the container instance uses the CPU value to calculate the relative CPU share ratios for running containers. For more information, see `CPU share constraint <https://docs.docker.com/engine/reference/run/#cpu-share-constraint>`__ in the Docker documentation. The minimum valid CPU share value that the Linux kernel allows is 2; however, the CPU parameter is not required, and you can use CPU values below 2 in your container definitions. For CPU values below 2 (including null), the behavior varies based on your Amazon ECS container agent version:
+          Linux containers share unallocated CPU units with other containers on the container instance with the same ratio as their allocated amount. For example, if you run a single-container task on a single-core instance type with 512 CPU units specified for that container, and that is the only task running on the container instance, that container could use the full 1,024 CPU unit share at any given time. However, if you launched another copy of the same task on that container instance, each task would be guaranteed a minimum of 512 CPU units when needed, and each container could float to higher CPU usage if the other container was not using it, but if both tasks were 100% active all of the time, they would be limited to 512 CPU units.
+
+           
+
+          On Linux container instances, the Docker daemon on the container instance uses the CPU value to calculate the relative CPU share ratios for running containers. For more information, see `CPU share constraint <https://docs.docker.com/engine/reference/run/#cpu-share-constraint>`__ in the Docker documentation. The minimum valid CPU share value that the Linux kernel will allow is 2; however, the CPU parameter is not required, and you can use CPU values below 2 in your container definitions. For CPU values below 2 (including null), the behavior varies based on your Amazon ECS container agent version:
 
            
 
@@ -9873,6 +10152,10 @@ Client
            
           * **Agent versions greater than or equal to 1.2.0:** Null, zero, and CPU values of 1 are passed to Docker as 2. 
            
+
+           
+
+          On Windows container instances, the CPU limit is enforced as an absolute limit, or a quota. Windows containers only have access to the specified amount of CPU that is described in the task definition.
 
           
 
@@ -9913,7 +10196,17 @@ Client
         
         - **links** *(list) --* 
 
-          The ``link`` parameter allows containers to communicate with each other without the need for port mappings, using the ``name`` parameter and optionally, an ``alias`` for the link. This construct is analogous to ``name:alias`` in Docker links. This field is not valid for containers in tasks using the Fargate launch type. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed for each ``name`` and ``alias`` . For more information on linking Docker containers, see `https\://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/ <https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/>`__ . This parameter maps to ``Links`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--link`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+          The ``link`` parameter allows containers to communicate with each other without the need for port mappings. Only supported if the network mode of a task definition is set to ``bridge`` . The ``name:internalName`` construct is analogous to ``name:alias`` in Docker links. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed. For more information about linking Docker containers, go to `https\://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/ <https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/>`__ . This parameter maps to ``Links`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--link`` option to ` ``docker run`` https://docs.docker.com/engine/reference/commandline/run/`__ .
+
+           
+
+          .. note::
+
+             
+
+            This parameter is not supported for Windows containers.
+
+             
 
            
 
@@ -9938,7 +10231,11 @@ Client
 
            
 
-          If using containers in a task with the Fargate, exposed ports should be specified using ``containerPort`` . The ``hostPort`` can be left blank or it must be the same value as the ``containerPort`` .
+          For task definitions that use the ``awsvpc`` network mode, you should only specify the ``containerPort`` . The ``hostPort`` can be left blank or it must be the same value as the ``containerPort`` .
+
+           
+
+          Port mappings on Windows use the ``NetNAT`` gateway address rather than ``localhost`` . There is no loopback for port mappings on Windows, so you cannot access a container's mapped port from the host itself. 
 
            
 
@@ -10118,11 +10415,11 @@ Client
 
            
 
-          If using the Fargate launch type, the ``sourceVolume`` parameter is not supported.
+          This parameter maps to ``Volumes`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--volume`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
            
 
-          This parameter maps to ``Volumes`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--volume`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+          Windows containers can mount whole directories on the same drive as ``$env:ProgramData`` . Windows containers cannot mount directories on a different drive, and mount point cannot be across drives.
 
           
 
@@ -10136,7 +10433,7 @@ Client
           
             - **sourceVolume** *(string) --* 
 
-              The name of the volume to mount. If using the Fargate launch type, the ``sourceVolume`` parameter is not supported.
+              The name of the volume to mount.
 
               
 
@@ -10189,7 +10486,17 @@ Client
       
         - **linuxParameters** *(dict) --* 
 
-          Linux-specific modifications that are applied to the container, such as Linux  KernelCapabilities . This field is not valid for containers in tasks using the Fargate launch type.
+          Linux-specific modifications that are applied to the container, such as Linux  KernelCapabilities .
+
+           
+
+          .. note::
+
+             
+
+            This parameter is not supported for Windows containers or tasks using the Fargate launch type.
+
+             
 
           
 
@@ -10292,6 +10599,16 @@ Client
 
           The user name to use inside the container. This parameter maps to ``User`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--user`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
+           
+
+          .. note::
+
+             
+
+            This parameter is not supported for Windows containers.
+
+             
+
           
 
         
@@ -10306,12 +10623,32 @@ Client
 
           When this parameter is true, networking is disabled within the container. This parameter maps to ``NetworkDisabled`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ .
 
+           
+
+          .. note::
+
+             
+
+            This parameter is not supported for Windows containers.
+
+             
+
           
 
         
         - **privileged** *(boolean) --* 
 
           When this parameter is true, the container is given elevated privileges on the host container instance (similar to the ``root`` user). This parameter maps to ``Privileged`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--privileged`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+
+           
+
+          .. note::
+
+             
+
+            This parameter is not supported for Windows containers or tasks using the Fargate launch type.
+
+             
 
           
 
@@ -10320,12 +10657,32 @@ Client
 
           When this parameter is true, the container is given read-only access to its root file system. This parameter maps to ``ReadonlyRootfs`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--read-only`` option to ``docker run`` .
 
+           
+
+          .. note::
+
+             
+
+            This parameter is not supported for Windows containers.
+
+             
+
           
 
         
         - **dnsServers** *(list) --* 
 
           A list of DNS servers that are presented to the container. This parameter maps to ``Dns`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--dns`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+
+           
+
+          .. note::
+
+             
+
+            This parameter is not supported for Windows containers.
+
+             
 
           
 
@@ -10338,6 +10695,16 @@ Client
 
           A list of DNS search domains that are presented to the container. This parameter maps to ``DnsSearch`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--dns-search`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
+           
+
+          .. note::
+
+             
+
+            This parameter is not supported for Windows containers.
+
+             
+
           
 
         
@@ -10348,6 +10715,16 @@ Client
         - **extraHosts** *(list) --* 
 
           A list of hostnames and IP address mappings to append to the ``/etc/hosts`` file on the container. If using the Fargate launch type, this may be used to list non-Fargate hosts you want the container to talk to. This parameter maps to ``ExtraHosts`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--add-host`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+
+           
+
+          .. note::
+
+             
+
+            This parameter is not supported for Windows containers.
+
+             
 
           
 
@@ -10393,6 +10770,10 @@ Client
 
              
 
+            This parameter is not supported for Windows containers.
+
+             
+
           
 
         
@@ -10418,6 +10799,16 @@ Client
         - **ulimits** *(list) --* 
 
           A list of ``ulimits`` to set in the container. This parameter maps to ``Ulimits`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--ulimit`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ . Valid naming values are displayed in the  Ulimit data type. This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: ``sudo docker version | grep "Server API version"``  
+
+           
+
+          .. note::
+
+             
+
+            This parameter is not supported for Windows containers.
+
+             
 
           
 
@@ -10558,7 +10949,7 @@ Client
 
            
 
-          If you are using the Fargate launch type, the ``host`` parameter is not supported.
+          Windows containers can mount whole directories on the same drive as ``$env:ProgramData`` . Windows containers cannot mount directories on a different drive, and mount point cannot be across drives. For example, you can mount ``C:\my\path:C:\my\path`` and ``D:\:D:\`` , but not ``D:\my\path:C:\my\path`` or ``D:\:C:\my\path`` .
 
           
 
@@ -10569,7 +10960,7 @@ Client
 
              
 
-            If you are using the Fargate launch type, the ``host`` parameter is not supported.
+            If you are using the Fargate launch type, the ``sourcePath`` parameter is not supported.
 
             
 
@@ -10887,11 +11278,11 @@ Client
 
               - **cpu** *(integer) --* 
 
-                The number of ``cpu`` units reserved for the container. If your containers will be part of a task using the Fargate launch type, this field is optional and the only requirement is that the total amount of CPU reserved for all containers within a task be lower than the task ``cpu`` value.
+                The number of ``cpu`` units reserved for the container. This parameter maps to ``CpuShares`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--cpu-shares`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
                  
 
-                For containers that will be part of a task using the EC2 launch type, a container instance has 1,024 ``cpu`` units for every CPU core. This parameter specifies the minimum amount of CPU to reserve for a container, and containers share unallocated CPU units with other containers on the instance with the same ratio as their allocated amount. This parameter maps to ``CpuShares`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--cpu-shares`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+                This field is optional for tasks using the Fargate launch type, and the only requirement is that the total amount of CPU reserved for all containers within a task be lower than the task-level ``cpu`` value.
 
                  
 
@@ -10909,7 +11300,11 @@ Client
 
                  
 
-                The Docker daemon on the container instance uses the CPU value to calculate the relative CPU share ratios for running containers. For more information, see `CPU share constraint <https://docs.docker.com/engine/reference/run/#cpu-share-constraint>`__ in the Docker documentation. The minimum valid CPU share value that the Linux kernel allows is 2; however, the CPU parameter is not required, and you can use CPU values below 2 in your container definitions. For CPU values below 2 (including null), the behavior varies based on your Amazon ECS container agent version:
+                Linux containers share unallocated CPU units with other containers on the container instance with the same ratio as their allocated amount. For example, if you run a single-container task on a single-core instance type with 512 CPU units specified for that container, and that is the only task running on the container instance, that container could use the full 1,024 CPU unit share at any given time. However, if you launched another copy of the same task on that container instance, each task would be guaranteed a minimum of 512 CPU units when needed, and each container could float to higher CPU usage if the other container was not using it, but if both tasks were 100% active all of the time, they would be limited to 512 CPU units.
+
+                 
+
+                On Linux container instances, the Docker daemon on the container instance uses the CPU value to calculate the relative CPU share ratios for running containers. For more information, see `CPU share constraint <https://docs.docker.com/engine/reference/run/#cpu-share-constraint>`__ in the Docker documentation. The minimum valid CPU share value that the Linux kernel will allow is 2; however, the CPU parameter is not required, and you can use CPU values below 2 in your container definitions. For CPU values below 2 (including null), the behavior varies based on your Amazon ECS container agent version:
 
                  
 
@@ -10918,6 +11313,10 @@ Client
                  
                 * **Agent versions greater than or equal to 1.2.0:** Null, zero, and CPU values of 1 are passed to Docker as 2. 
                  
+
+                 
+
+                On Windows container instances, the CPU limit is enforced as an absolute limit, or a quota. Windows containers only have access to the specified amount of CPU that is described in the task definition.
 
                 
               
@@ -10958,7 +11357,17 @@ Client
 
               - **links** *(list) --* 
 
-                The ``link`` parameter allows containers to communicate with each other without the need for port mappings, using the ``name`` parameter and optionally, an ``alias`` for the link. This construct is analogous to ``name:alias`` in Docker links. This field is not valid for containers in tasks using the Fargate launch type. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed for each ``name`` and ``alias`` . For more information on linking Docker containers, see `https\://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/ <https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/>`__ . This parameter maps to ``Links`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--link`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+                The ``link`` parameter allows containers to communicate with each other without the need for port mappings. Only supported if the network mode of a task definition is set to ``bridge`` . The ``name:internalName`` construct is analogous to ``name:alias`` in Docker links. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed. For more information about linking Docker containers, go to `https\://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/ <https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/>`__ . This parameter maps to ``Links`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--link`` option to ` ``docker run`` https://docs.docker.com/engine/reference/commandline/run/`__ .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
 
                  
 
@@ -10983,7 +11392,11 @@ Client
 
                  
 
-                If using containers in a task with the Fargate, exposed ports should be specified using ``containerPort`` . The ``hostPort`` can be left blank or it must be the same value as the ``containerPort`` .
+                For task definitions that use the ``awsvpc`` network mode, you should only specify the ``containerPort`` . The ``hostPort`` can be left blank or it must be the same value as the ``containerPort`` .
+
+                 
+
+                Port mappings on Windows use the ``NetNAT`` gateway address rather than ``localhost`` . There is no loopback for port mappings on Windows, so you cannot access a container's mapped port from the host itself. 
 
                  
 
@@ -11163,11 +11576,11 @@ Client
 
                  
 
-                If using the Fargate launch type, the ``sourceVolume`` parameter is not supported.
+                This parameter maps to ``Volumes`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--volume`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
                  
 
-                This parameter maps to ``Volumes`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--volume`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+                Windows containers can mount whole directories on the same drive as ``$env:ProgramData`` . Windows containers cannot mount directories on a different drive, and mount point cannot be across drives.
 
                 
                 
@@ -11181,7 +11594,7 @@ Client
 
                   - **sourceVolume** *(string) --* 
 
-                    The name of the volume to mount. If using the Fargate launch type, the ``sourceVolume`` parameter is not supported.
+                    The name of the volume to mount.
 
                     
                   
@@ -11234,7 +11647,17 @@ Client
 
               - **linuxParameters** *(dict) --* 
 
-                Linux-specific modifications that are applied to the container, such as Linux  KernelCapabilities . This field is not valid for containers in tasks using the Fargate launch type.
+                Linux-specific modifications that are applied to the container, such as Linux  KernelCapabilities .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers or tasks using the Fargate launch type.
+
+                   
 
                 
                 
@@ -11337,6 +11760,16 @@ Client
 
                 The user name to use inside the container. This parameter maps to ``User`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--user`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
               
 
@@ -11351,12 +11784,32 @@ Client
 
                 When this parameter is true, networking is disabled within the container. This parameter maps to ``NetworkDisabled`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ .
 
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
               
 
               - **privileged** *(boolean) --* 
 
                 When this parameter is true, the container is given elevated privileges on the host container instance (similar to the ``root`` user). This parameter maps to ``Privileged`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--privileged`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers or tasks using the Fargate launch type.
+
+                   
 
                 
               
@@ -11365,12 +11818,32 @@ Client
 
                 When this parameter is true, the container is given read-only access to its root file system. This parameter maps to ``ReadonlyRootfs`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--read-only`` option to ``docker run`` .
 
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
               
 
               - **dnsServers** *(list) --* 
 
                 A list of DNS servers that are presented to the container. This parameter maps to ``Dns`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--dns`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
 
                 
                 
@@ -11383,6 +11856,16 @@ Client
 
                 A list of DNS search domains that are presented to the container. This parameter maps to ``DnsSearch`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--dns-search`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
 
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
                 
 
@@ -11393,6 +11876,16 @@ Client
               - **extraHosts** *(list) --* 
 
                 A list of hostnames and IP address mappings to append to the ``/etc/hosts`` file on the container. If using the Fargate launch type, this may be used to list non-Fargate hosts you want the container to talk to. This parameter maps to ``ExtraHosts`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--add-host`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ .
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
 
                 
                 
@@ -11438,6 +11931,10 @@ Client
 
                    
 
+                  This parameter is not supported for Windows containers.
+
+                   
+
                 
                 
 
@@ -11463,6 +11960,16 @@ Client
               - **ulimits** *(list) --* 
 
                 A list of ``ulimits`` to set in the container. This parameter maps to ``Ulimits`` in the `Create a container <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container>`__ section of the `Docker Remote API <https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/>`__ and the ``--ulimit`` option to `docker run <https://docs.docker.com/engine/reference/run/>`__ . Valid naming values are displayed in the  Ulimit data type. This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: ``sudo docker version | grep "Server API version"``  
+
+                 
+
+                .. note::
+
+                   
+
+                  This parameter is not supported for Windows containers.
+
+                   
 
                 
                 
@@ -11586,6 +12093,10 @@ Client
 
             The ARN of the IAM role that containers in this task can assume. All containers in this task are granted the permissions that are specified in this role.
 
+             
+
+            IAM roles for tasks on Windows require that the ``-EnableTaskIAMRole`` option is set when you launch the Amazon ECS-optimized Windows AMI. Your containers must also run some configuration code in order to take advantage of the feature. For more information, see `Windows IAM Roles for Tasks <http://docs.aws.amazon.com/AmazonECS/latest/developerguide/windows_task_IAM_roles.html>`__ in the *Amazon Elastic Container Service Developer Guide* .
+
             
           
 
@@ -11610,7 +12121,21 @@ Client
 
              
 
+            .. note::
+
+               
+
+              Currently, only the Amazon ECS-optimized AMI, other Amazon Linux variants with the ``ecs-init`` package, or AWS Fargate infrastructure support the ``awsvpc`` network mode. 
+
+               
+
+             
+
             If the network mode is ``host`` , you can't run multiple instantiations of the same task on a single container instance when port mappings are used.
+
+             
+
+            Docker for Windows uses different network modes than Docker for Linux. When you register a task definition with Windows containers, you must not specify a network mode. If you use the console to register a task definition with Windows containers, you must choose the ``<default>`` network mode object. 
 
              
 
@@ -11661,7 +12186,7 @@ Client
 
                  
 
-                If you are using the Fargate launch type, the ``host`` parameter is not supported.
+                Windows containers can mount whole directories on the same drive as ``$env:ProgramData`` . Windows containers cannot mount directories on a different drive, and mount point cannot be across drives. For example, you can mount ``C:\my\path:C:\my\path`` and ``D:\:D:\`` , but not ``D:\my\path:C:\my\path`` or ``D:\:C:\my\path`` .
 
                 
                 
@@ -11672,7 +12197,7 @@ Client
 
                    
 
-                  If you are using the Fargate launch type, the ``host`` parameter is not supported.
+                  If you are using the Fargate launch type, the ``sourcePath`` parameter is not supported.
 
                   
             

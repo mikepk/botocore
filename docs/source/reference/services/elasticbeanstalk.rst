@@ -1453,7 +1453,17 @@ Client
     :type Process: boolean
     :param Process: 
 
-      Preprocesses and validates the environment manifest and configuration files in the source bundle. Validating configuration files can identify issues prior to deploying the application version to an environment.
+      Preprocesses and validates the environment manifest (``env.yaml`` ) and configuration files (``*.config`` files in the ``.ebextensions`` folder) in the source bundle. Validating configuration files can identify issues prior to deploying the application version to an environment.
+
+       
+
+      .. note::
+
+         
+
+        The ``Process`` option validates Elastic Beanstalk configuration files. It doesn't validate your application's configuration files, like proxy server or Docker configuration.
+
+         
 
       
 
@@ -1767,7 +1777,7 @@ Client
     :type PlatformArn: string
     :param PlatformArn: 
 
-      The ARN of the custome platform.
+      The ARN of the custom platform.
 
       
 
@@ -2972,11 +2982,7 @@ Client
 
     
 
-    Creates the Amazon S3 storage location for the account.
-
-     
-
-    This location is used to store user log files.
+    Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, ``CreateStorageLocation`` still returns the bucket name but does not create a new bucket.
 
     
 
@@ -7825,7 +7831,7 @@ Client
 
      
 
-    Currently, Elastic Beanstalk only supports tagging Elastic Beanstalk environments.
+    Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see `Tagging Resources in Your Elastic Beanstalk Environment <http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html>`__ .
 
     
 
@@ -10737,7 +10743,23 @@ Client
 
      
 
-    Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments.
+    Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see `Tagging Resources in Your Elastic Beanstalk Environment <http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html>`__ .
+
+     
+
+    If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:
+
+      elasticbeanstalk:AddTags  
+
+    Controls permission to call ``UpdateTagsForResource`` and pass a list of tags to add in the ``TagsToAdd`` parameter.
+
+      elasticbeanstalk:RemoveTags  
+
+    Controls permission to call ``UpdateTagsForResource`` and pass a list of tag keys to remove in the ``TagsToRemove`` parameter.
+
+       
+
+    For details about creating a custom user policy, see `Creating a Custom User Policy <http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies>`__ .
 
     
 
